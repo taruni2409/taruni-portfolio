@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { triggerReingest } from "./AdminShared";
 
-const REPO      = "sabarishreddy99/jayaremala";
+const REPO      = "taruni2409/taruni-portfolio";
 const FILE_PATH = "backend/data/knowledge/profile.json";
 const API_URL   = `https://api.github.com/repos/${REPO}/contents/${FILE_PATH}`;
 const PAT_KEY   = "pumpkin_github_pat";

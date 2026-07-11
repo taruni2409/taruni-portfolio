@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useGitHubStaging } from "@/lib/githubStaging";
 
-const REPO    = "sabarishreddy99/jayaremala";
+const REPO    = "taruni2409/taruni-portfolio";
 const PAT_KEY = "pumpkin_github_pat";
 const BASE    = `https://api.github.com/repos/${REPO}/contents`;
 

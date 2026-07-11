@@ -2,7 +2,7 @@
 
 Live at **[jayaremala.com](https://jayaremala.com)**
 
-Personal AI-assisted portfolio for **Jaya Sabarish Reddy Remala**. Two entry points: a full-screen RAG-powered AI chatbot (Avocado) and a classic portfolio with experience, projects, education, blog, lab, and quotes. Content is editable via a token-gated admin panel — dynamic content (blog/lab/quotes) writes live to a DB, and file-based sections stage their edits and ship in a **single batched GitHub commit** (one push, one deploy).
+Personal AI-assisted portfolio for **Taruni Nallamothu**. Two entry points: a full-screen RAG-powered AI chatbot (Avocado) and a classic portfolio with experience, projects, education, blog, lab, and quotes. Content is editable via a token-gated admin panel — dynamic content (blog/lab/quotes) writes live to a DB, and file-based sections stage their edits and ship in a **single batched GitHub commit** (one push, one deploy).
 
 Avocado is also **agentic**: an opt-in "Agent mode" lets the model pick tools per turn (and call them live), the same read-only tools are exposed over a **public MCP server** (`/mcp/`) so a recruiter can plug their own Claude/Cursor into Jaya's portfolio, and a **book-a-call** flow surfaces real Google Calendar openings + a one-click booking link inside the chat. The model layer fails over across providers — **Gemini → Groq → OpenRouter** — so the chatbot keeps answering after any single free tier is exhausted.
 
@@ -142,7 +142,7 @@ User message
 │  Stage 1 — QUERY EXPANSION                    │
 │  Up to 4 targeted query variants:             │
 │  • Verbatim user message                      │
-│  • Name-anchored ("... Jaya Sabarish Reddy")  │
+│  • Name-anchored ("... Taruni Nallamothu")    │
 │  • Topic keyword (project / skills / award /  │
 │    experience / contact / education)          │
 │  • Recent conversation context (follow-ups)   │
@@ -684,6 +684,6 @@ The only action required for any update — portfolio data, new blog post, or co
 
 ---
 
-Built by [Jaya Sabarish Reddy Remala](https://linkedin.com/in/jayasabarishreddyr) — NYU Tandon CS MS · Qualcomm Edge AI Hackathon Winner · formerly NYU IT, Shell PLC, Wipro.
+Built by [Taruni Nallamothu](https://www.linkedin.com/in/taruninallamothu24/) — MSc Data Science, University of Hertfordshire · Google & Microsoft Certified · formerly Tata Consultancy Services.
 
-→ [Resume](https://drive.google.com/drive/u/0/folders/1vm35z-6VQjtO9A8ZBgCvvSP_7_POPTrV) · [GitHub](https://github.com/sabarishreddy99) · [LinkedIn](https://linkedin.com/in/jayasabarishreddyr)
+→ [GitHub](https://github.com/taruni2409) · [LinkedIn](https://www.linkedin.com/in/taruninallamothu24/)

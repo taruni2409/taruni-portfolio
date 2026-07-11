@@ -499,7 +499,7 @@ tech: [Next.js, FastAPI, PostgreSQL]
                 },
                 {
                   what: "Static site deployment",
-                  detail: "Frontend builds as a static export and deploys to GitHub Pages (sabarishreddy99.github.io). Backend deploys to Railway. Both trigger on push to main.",
+                  detail: "Frontend builds as a static export and deploys to Vercel. Backend deploys to a Lightsail Docker host. Both trigger on push to main.",
                 },
               ].map(({ what, detail }) => (
                 <div key={what} className="border border-border-subtle rounded-lg p-2.5 space-y-0.5">

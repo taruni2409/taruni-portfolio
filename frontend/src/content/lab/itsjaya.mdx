@@ -7,7 +7,7 @@ updatedAt: "2026-06-17"
 tech: [Next.js 16, React 19, Tailwind CSS v4, TypeScript, FastAPI, ChromaDB, Gemini 2.5 Flash, Groq, OpenRouter, Model Context Protocol, FastMCP, Function Calling, Google Calendar API, BAAI/bge-base-en-v1.5, HyDE, BM25, RRF, Knowledge Graph, FNV-1a Hash, SQLite, SlowAPI, GitHub Git Data API, Scroll Parallax, AWS Lightsail, Nginx, S3, GitHub Pages, GitHub Actions]
 links:
   - label: GitHub
-    url: https://github.com/sabarishreddy99/jayaremala
+    url: https://github.com/taruni2409/taruni-portfolio
   - label: Live
     url: https://jayaremala.com
 ---
@@ -627,7 +627,7 @@ Chatbot lives outside — no nav, no footer, full screen.
 
   The fix requires HTTPS on the backend, which requires a domain. DuckDNS was attempted but proved unreliable. The right call was purchasing `jayaremala.com` on Namecheap (~$10/year), pointing `api.jayaremala.com` to the Lightsail static IP, and running Certbot for a free Let's Encrypt certificate behind Nginx. Certbot auto-renews via a systemd timer — zero maintenance.
 
-  The domain also replaced the GitHub Pages subpath (`sabarishreddy99.github.io/jayaremala`) with a clean root domain (`jayaremala.com`). The `basePath: "/jayaremala"` in `next.config.ts` was removed, and a `CNAME` file was added to `frontend/public/` so GitHub Pages serves from the apex domain.
+  The domain also replaced the GitHub Pages subpath (`<username>.github.io/jayaremala`) with a clean root domain (`jayaremala.com`). The `basePath: "/jayaremala"` in `next.config.ts` was removed, and a `CNAME` file was added to `frontend/public/` so GitHub Pages serves from the apex domain.
 </Decision>
 
 <Decision date="2026-04-22" title="Lab page — living system design docs over static write-ups">

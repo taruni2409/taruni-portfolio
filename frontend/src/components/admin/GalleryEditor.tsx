@@ -24,7 +24,7 @@ interface QueuedFile {
   error?: string;
 }
 
-const REPO         = "sabarishreddy99/jayaremala";
+const REPO         = "taruni2409/taruni-portfolio";
 const BASE         = `https://api.github.com/repos/${REPO}/contents`;
 const GIT          = `https://api.github.com/repos/${REPO}/git`;
 const GALLERY_JSON = "backend/data/knowledge/gallery.json";

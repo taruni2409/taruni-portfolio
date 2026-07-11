@@ -28,7 +28,7 @@ const SECTIONS: { heading: string; fields: { key: keyof ProfileFields; label: st
   {
     heading: "Identity",
     fields: [
-      { key: "name",    label: "Full Name",  placeholder: "Jaya Sabarish Reddy Remala" },
+      { key: "name",    label: "Full Name",  placeholder: "Taruni Nallamothu" },
       { key: "tagline", label: "Tagline",    placeholder: "Software Engineer · …" },
       { key: "bio",     label: "Bio",        multiline: true, placeholder: "1–2 sentence bio shown in At a Glance" },
       { key: "summary", label: "Summary",    multiline: true, placeholder: "Longer summary for SEO / Pumpkin context" },
@@ -121,7 +121,7 @@ export default function ProfileEditor() {
 
   async function handleSave() {
     // Load full profile first, then merge only these fields
-    const res = await fetch(`https://api.github.com/repos/sabarishreddy99/jayaremala/contents/${FILE}`, {
+    const res = await fetch(`https://api.github.com/repos/taruni2409/taruni-portfolio/contents/${FILE}`, {
       headers: { Authorization: `Bearer ${gh.pat}`, Accept: "application/vnd.github+json" },
     });
     if (!res.ok) return;

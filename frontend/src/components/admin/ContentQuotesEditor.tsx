@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { API_BASE_URL } from "@/lib/api/client";
 import { triggerReingest } from "./AdminShared";
 
-const GITHUB_QUOTES_URL = "https://api.github.com/repos/sabarishreddy99/jayaremala/contents/backend/data/knowledge/quotes.json";
+const GITHUB_QUOTES_URL = "https://api.github.com/repos/taruni2409/taruni-portfolio/contents/backend/data/knowledge/quotes.json";
 
 interface QuoteRow {
   id: number;

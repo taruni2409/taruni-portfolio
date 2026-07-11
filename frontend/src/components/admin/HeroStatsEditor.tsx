@@ -39,7 +39,7 @@ export default function HeroStatsEditor() {
   }
 
   async function handleSave() {
-    const res = await fetch(`https://api.github.com/repos/sabarishreddy99/jayaremala/contents/${FILE}`, {
+    const res = await fetch(`https://api.github.com/repos/taruni2409/taruni-portfolio/contents/${FILE}`, {
       headers: { Authorization: `Bearer ${gh.pat}`, Accept: "application/vnd.github+json" },
     });
     if (!res.ok) return;

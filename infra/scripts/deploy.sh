@@ -5,7 +5,7 @@ set -euo pipefail
 
 ENV_FILE="/home/ubuntu/itsjaya.env"
 IMAGE="itsjaya-backend"
-GHCR_IMAGE="ghcr.io/sabarishreddy99/itsjaya-backend"
+GHCR_IMAGE="ghcr.io/taruni2409/itsjaya-backend"
 DATA_DIR="/data"
 S3_BUCKET="${ITSJAYA_BACKUP_BUCKET:-itsjaya-backups-analytics}"
 

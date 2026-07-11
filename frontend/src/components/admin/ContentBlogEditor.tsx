@@ -52,7 +52,7 @@ function readingTime(text: string) {
 }
 
 /* ── GitHub MDX sync ────────────────────────────────────────────────── */
-const GITHUB_BLOG_MDX_BASE = "https://api.github.com/repos/sabarishreddy99/jayaremala/contents/frontend/src/content/blog";
+const GITHUB_BLOG_MDX_BASE = "https://api.github.com/repos/taruni2409/taruni-portfolio/contents/frontend/src/content/blog";
 
 function buildBlogMdx(b: { title: string; date: string; published_at: string; description: string; tags: string[]; content: string }): string {
   const esc = (s: string) => s.replace(/"/g, '\\"');

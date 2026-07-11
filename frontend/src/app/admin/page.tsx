@@ -1420,11 +1420,11 @@ function SiteGuide() {
               <p className="text-[10px] text-fg-faint leading-relaxed">Everything is automated — just commit and push.</p>
               {[
                 { what: "Update portfolio data",         detail: "Edit any backend/data/knowledge/*.json → commit + push → GH Actions runs sync-knowledge.mjs (copies all JSON to frontend/src/data/knowledge/) → Railway redeploys → chatbot re-indexes (hash changed)." },
-                { what: "Publish a new blog post",       detail: "Write MDX → commit + push → GH Actions runs sync-knowledge.mjs → generates blog.json + copies all JSON → auto-commits with [skip ci] → Railway redeploys → chatbot indexes the new post." },
+                { what: "Publish a new blog post",       detail: "Write MDX → commit + push → GH Actions runs sync-knowledge.mjs → generates blog.json + copies all JSON → auto-commits with [skip ci] → backend redeploys on Lightsail → chatbot indexes the new post." },
                 { what: "What sync-knowledge.mjs does",  detail: "1) Reads all *.mdx from frontend/src/content/blog/, strips MDX, writes blog.json. 2) Copies ALL backend/data/knowledge/*.json → frontend/src/data/knowledge/. Run: node scripts/sync-knowledge.mjs from repo root." },
                 { what: "GH Actions auto-commit",        detail: "Workflow (deploy.yml) needs contents: write, pages: write, id-token: write permissions. Auto-commits synced files with [skip ci] tag to prevent infinite loops." },
                 { what: "Chatbot re-ingest (hash-based)", detail: "Backend computes SHA-256 of all knowledge JSON files at startup. Re-ingests only when the hash changes — fast startup if nothing changed. Hash stored at chroma_db/.ingest_hash." },
-                { what: "Static site deployment",        detail: "Frontend builds as a static export and deploys to GitHub Pages (sabarishreddy99.github.io). Backend deploys to Railway. Both trigger on push to main." },
+                { what: "Static site deployment",        detail: "Frontend builds as a static export and deploys to Vercel. Backend deploys to a Lightsail Docker host. Both trigger on push to main." },
               ].map(({ what, detail }) => (
                 <div key={what} className="border border-border-subtle rounded p-2.5 space-y-0.5">
                   <p className="text-[11px] font-semibold text-fg-muted">{what}</p>
@@ -2031,7 +2031,7 @@ function BlogEditor() {
         reader.readAsDataURL(file);
       });
       const filename = file.name.replace(/[^a-zA-Z0-9._-]/g, "-");
-      const apiURL   = `https://api.github.com/repos/sabarishreddy99/jayaremala/contents/frontend/public/blog/${filename}`;
+      const apiURL   = `https://api.github.com/repos/taruni2409/taruni-portfolio/contents/frontend/public/blog/${filename}`;
       const headers  = { Authorization: `Bearer ${githubPat.trim()}`, Accept: "application/vnd.github+json", "Content-Type": "application/json" };
       const getRes   = await fetch(apiURL, { headers });
       const body: Record<string, string> = { message: `blog: upload image ${filename}`, content: b64, branch: "main" };
@@ -2084,7 +2084,7 @@ function BlogEditor() {
     setPublishing(true);
     setResult(null);
     const filePath = `frontend/src/content/blog/${slug}.mdx`;
-    const apiURL   = `https://api.github.com/repos/sabarishreddy99/jayaremala/contents/${filePath}`;
+    const apiURL   = `https://api.github.com/repos/taruni2409/taruni-portfolio/contents/${filePath}`;
     const headers  = { Authorization: `Bearer ${githubPat.trim()}`, Accept: "application/vnd.github+json", "Content-Type": "application/json" };
     const fullMDX  = buildFrontmatter() + content;
     try {
@@ -2126,7 +2126,7 @@ function BlogEditor() {
     setPostsResult(null);
     try {
       const res = await fetch(
-        "https://api.github.com/repos/sabarishreddy99/jayaremala/contents/frontend/src/content/blog",
+        "https://api.github.com/repos/taruni2409/taruni-portfolio/contents/frontend/src/content/blog",
         { headers: { Authorization: `Bearer ${githubPat.trim()}`, Accept: "application/vnd.github+json" } }
       );
       if (!res.ok) { setPostsResult({ ok: false, message: `GitHub: ${res.status} ${res.statusText}` }); return; }
@@ -2148,7 +2148,7 @@ function BlogEditor() {
     setPostsResult(null);
     try {
       const res = await fetch(
-        `https://api.github.com/repos/sabarishreddy99/jayaremala/contents/frontend/src/content/blog/${slug}.mdx`,
+        `https://api.github.com/repos/taruni2409/taruni-portfolio/contents/frontend/src/content/blog/${slug}.mdx`,
         { headers: { Authorization: `Bearer ${githubPat.trim()}`, Accept: "application/vnd.github+json" } }
       );
       if (!res.ok) { setPostsResult({ ok: false, message: `Could not load ${slug}.mdx — ${res.status}` }); return; }
@@ -2185,7 +2185,7 @@ function BlogEditor() {
     setDeletingSlug(slug);
     try {
       const res = await fetch(
-        `https://api.github.com/repos/sabarishreddy99/jayaremala/contents/frontend/src/content/blog/${slug}.mdx`,
+        `https://api.github.com/repos/taruni2409/taruni-portfolio/contents/frontend/src/content/blog/${slug}.mdx`,
         {
           method: "DELETE",
           headers: { Authorization: `Bearer ${githubPat.trim()}`, Accept: "application/vnd.github+json", "Content-Type": "application/json" },
@@ -2233,7 +2233,7 @@ function BlogEditor() {
       if (!post || !githubPat.trim()) continue;
       try {
         const res = await fetch(
-          `https://api.github.com/repos/sabarishreddy99/jayaremala/contents/frontend/src/content/blog/${slug}.mdx`,
+          `https://api.github.com/repos/taruni2409/taruni-portfolio/contents/frontend/src/content/blog/${slug}.mdx`,
           { method: "DELETE", headers: { Authorization: `Bearer ${githubPat.trim()}`, Accept: "application/vnd.github+json", "Content-Type": "application/json" },
             body: JSON.stringify({ message: `blog: delete ${slug}`, sha: post.sha, branch: "main" }) }
         );
@@ -3137,7 +3137,7 @@ function QuotesEditor() {
   const [editingId, setEditingId]   = useState<string | null>(null);
   const [editFields, setEditFields] = useState<Partial<QuoteEntry>>({});
 
-  const API_URL = "https://api.github.com/repos/sabarishreddy99/jayaremala/contents/backend/data/knowledge/quotes.json";
+  const API_URL = "https://api.github.com/repos/taruni2409/taruni-portfolio/contents/backend/data/knowledge/quotes.json";
 
   function apiHeaders() {
     return {

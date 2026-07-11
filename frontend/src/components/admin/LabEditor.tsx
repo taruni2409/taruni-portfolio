@@ -12,7 +12,7 @@ import { triggerReingest } from "./AdminShared";
    when a GitHub PAT is set, synced to the MDX file + aggregate lab.json.
 ──────────────────────────────────────────────────────────────────────────── */
 
-const GITHUB_REPO = "https://api.github.com/repos/sabarishreddy99/jayaremala/contents";
+const GITHUB_REPO = "https://api.github.com/repos/taruni2409/taruni-portfolio/contents";
 const GITHUB_LAB_MDX_BASE = `${GITHUB_REPO}/frontend/src/content/lab`;
 const GITHUB_LAB_JSON = `${GITHUB_REPO}/backend/data/knowledge/lab.json`;
 

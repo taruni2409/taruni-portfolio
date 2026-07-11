@@ -6,8 +6,8 @@ import remarkGfm from "remark-gfm";
 import { API_BASE_URL } from "@/lib/api/client";
 import { triggerReingest } from "./AdminShared";
 
-const GITHUB_LAB_URL = "https://api.github.com/repos/sabarishreddy99/jayaremala/contents/backend/data/knowledge/lab.json";
-const GITHUB_LAB_MDX_BASE = "https://api.github.com/repos/sabarishreddy99/jayaremala/contents/frontend/src/content/lab";
+const GITHUB_LAB_URL = "https://api.github.com/repos/taruni2409/taruni-portfolio/contents/backend/data/knowledge/lab.json";
+const GITHUB_LAB_MDX_BASE = "https://api.github.com/repos/taruni2409/taruni-portfolio/contents/frontend/src/content/lab";
 
 function buildLabMdx(b: { title: string; status: string; description: string; started_at: string; updated_at: string; tech: string[]; links: { label: string; url: string }[]; content: string }): string {
   const esc = (s: string) => s.replace(/"/g, '\\"');

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-const REPO    = "sabarishreddy99/jayaremala";
+const REPO    = "taruni2409/taruni-portfolio";
 const PAT_KEY = "pumpkin_github_pat";
 
 interface Props {
