@@ -1,0 +1,122 @@
+[
+  {
+    "id": "q1",
+    "text": "The best way to predict the future is to invent it.",
+    "author": "Alan Kay",
+    "source": "1971 PARC Staff Meeting",
+    "category": "Technology",
+    "favorite": true,
+    "featured": false,
+    "addedAt": "2026-05-25"
+  },
+  {
+    "id": "q2",
+    "text": "Stay hungry, stay foolish.",
+    "author": "Steve Jobs",
+    "source": "Stanford Commencement 2005",
+    "category": "Mindset",
+    "favorite": true,
+    "featured": false,
+    "addedAt": "2026-05-25"
+  },
+  {
+    "id": "q5",
+    "text": "The only way to do great work is to love what you do.",
+    "author": "Steve Jobs",
+    "source": "Stanford Commencement 2005",
+    "category": "Work",
+    "favorite": true,
+    "featured": false,
+    "addedAt": "2026-05-25"
+  },
+  {
+    "id": "q10",
+    "text": "The impediment to action advances action. What stands in the way becomes the way.",
+    "author": "Marcus Aurelius",
+    "source": "Meditations",
+    "category": "Philosophy",
+    "favorite": true,
+    "featured": false,
+    "addedAt": "2026-05-25"
+  },
+  {
+    "id": "q3",
+    "text": "Any sufficiently advanced technology is indistinguishable from magic.",
+    "author": "Arthur C. Clarke",
+    "source": "Profiles of the Future",
+    "category": "Technology",
+    "favorite": false,
+    "featured": false,
+    "addedAt": "2026-05-25"
+  },
+  {
+    "id": "q4",
+    "text": "We cannot solve our problems with the same thinking we used when we created them.",
+    "author": "Albert Einstein",
+    "source": "",
+    "category": "Philosophy",
+    "favorite": false,
+    "featured": false,
+    "addedAt": "2026-05-25"
+  },
+  {
+    "id": "q6",
+    "text": "Creativity is intelligence having fun.",
+    "author": "Albert Einstein",
+    "source": "",
+    "category": "Creativity",
+    "favorite": false,
+    "featured": false,
+    "addedAt": "2026-05-25"
+  },
+  {
+    "id": "q7",
+    "text": "Life is what happens when you're busy making other plans.",
+    "author": "John Lennon",
+    "source": "Beautiful Boy",
+    "category": "Life",
+    "favorite": false,
+    "featured": false,
+    "addedAt": "2026-05-25"
+  },
+  {
+    "id": "q8",
+    "text": "It is not the strongest of the species that survive, nor the most intelligent, but the one most responsive to change.",
+    "author": "Charles Darwin",
+    "source": "",
+    "category": "Mindset",
+    "favorite": false,
+    "featured": false,
+    "addedAt": "2026-05-25"
+  },
+  {
+    "id": "q9",
+    "text": "Move fast and break things. Unless you are breaking stuff, you are not moving fast enough.",
+    "author": "Mark Zuckerberg",
+    "source": "",
+    "category": "Work",
+    "favorite": false,
+    "featured": false,
+    "addedAt": "2026-05-25"
+  },
+  {
+    "id": "q11",
+    "text": "Imagination is more important than knowledge. Knowledge is limited. Imagination encircles the world.",
+    "author": "Albert Einstein",
+    "source": "What Life Means to Einstein",
+    "category": "Creativity",
+    "favorite": false,
+    "featured": false,
+    "addedAt": "2026-05-25"
+  },
+  {
+    "id": "q12",
+    "text": "In three words I can sum up everything I've learned about life: it goes on.",
+    "author": "Robert Frost",
+    "source": "",
+    "category": "Life",
+    "favorite": false,
+    "featured": false,
+    "addedAt": "2026-05-25"
+  }
+]

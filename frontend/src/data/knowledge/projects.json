@@ -1,0 +1,56 @@
+[
+  {
+    "title": "Intelligent Medical Text Analyser",
+    "description": "NLP pipeline extracting clinical insights from medical text datasets, with models for automated text classification, summarisation, and knowledge extraction to improve information retrieval efficiency from clinical narratives.",
+    "tags": [
+      "Python",
+      "NLTK",
+      "SpaCy",
+      "Transformers (BERT)",
+      "Scikit-learn",
+      "Streamlit"
+    ],
+    "featured": true,
+    "sourceLinks": [],
+    "note": ""
+  },
+  {
+    "title": "EcoCast – Hybrid GDP Forecasting System",
+    "description": "Hybrid forecasting system combining ARIMA models with machine learning algorithms to predict GDP trends, processing macroeconomic datasets with feature engineering to improve forecasting accuracy.",
+    "tags": [
+      "Python",
+      "Pandas",
+      "NumPy",
+      "Scikit-learn",
+      "ARIMA",
+      "Statsmodels"
+    ],
+    "featured": true,
+    "sourceLinks": [],
+    "note": ""
+  },
+  {
+    "title": "Traffic Flow Prediction System Using LSTM",
+    "description": "LSTM deep learning model forecasting hourly traffic volume from historical transportation datasets, with engineered weather features to improve predictive performance.",
+    "tags": [
+      "Python",
+      "TensorFlow",
+      "Keras"
+    ],
+    "featured": false,
+    "sourceLinks": [],
+    "note": ""
+  },
+  {
+    "title": "LeafCare – Plant Disease Detection Using CNN",
+    "description": "Convolutional neural network detecting plant diseases from leaf images, trained on labelled plant pathology datasets to enable automated agricultural diagnostics.",
+    "tags": [
+      "Python",
+      "TensorFlow",
+      "Azure Machine Learning"
+    ],
+    "featured": false,
+    "sourceLinks": [],
+    "note": ""
+  }
+]

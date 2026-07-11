@@ -1,0 +1,51 @@
+[
+  {
+    "company": "Hansvonlehwalt",
+    "role": "Freelance Data Engineer, Machine Learning Engineer",
+    "start": "Sep 2024",
+    "end": "Present",
+    "location": "Remote",
+    "description": "Freelance data engineering and ML work across retail and SaaS clients — ETL pipelines, forecasting dashboards, and NLP-based support analytics.",
+    "tech": "Python, SQL, Power BI, ETL, NLP",
+    "bullets": [
+      "Sales Reporting Automation (Retail Chain, Hyderabad) — developed Python-based ETL pipelines extracting POS datasets into centralized SQL data warehouses, with automated pipelines processing daily transactions across multiple stores for centralised analytics reporting.",
+      "Built Power BI dashboards visualising revenue, product performance, and inventory movement, reducing manual reporting workload by 60% while improving sales data accuracy and accessibility.",
+      "Inventory Monitoring System (Supermarket, Vijayawada) — optimised SQL queries, improving inventory analytics performance by 35% across operational dashboards, and built dashboards tracking turnover, stock availability, and demand trends.",
+      "Customer Support Ticket Analytics (SaaS Startup, Hyderabad) — implemented NLP-based text analysis to identify customer complaints and improve issue categorisation, with analytics dashboards tracking resolution time, issue categories, and satisfaction metrics."
+    ]
+  },
+  {
+    "company": "Tata Consultancy Services",
+    "role": "Systems Engineer",
+    "start": "Dec 2021",
+    "end": "Aug 2024",
+    "location": "India",
+    "description": "Engineered scalable ETL pipelines and machine learning systems processing 500GB+ of enterprise data daily for large-scale operational and financial analytics.",
+    "tech": "Python, SQL, Azure Data Factory, Azure Functions, Power BI, Scikit-learn, Azure DevOps",
+    "bullets": [
+      "Engineered scalable ETL pipelines using Python, SQL and Azure Data Factory, processing 500GB+ enterprise datasets daily and improving data processing efficiency by 35%.",
+      "Optimised SQL queries and indexing strategies, reducing analytical workload execution time by 40%.",
+      "Automated data cleansing and transformation pipelines using Python Azure Functions, reducing manual effort by 50%.",
+      "Built real-time Power BI dashboards tracking 20+ operational and financial KPIs across multiple business units.",
+      "Developed predictive machine learning models using Python Scikit-learn, improving forecasting accuracy from 78% to 92%.",
+      "Implemented anomaly detection models to identify abnormal events and data inconsistencies, achieving 95% accuracy.",
+      "Implemented feature engineering pipelines generating 100+ features, improving model AUC score from 0.71 to 0.86.",
+      "Designed data validation frameworks, ensuring 99.9% data accuracy across datasets exceeding 1M+ records.",
+      "Used Azure DevOps CI/CD pipelines to automate data pipeline deployment, reducing operational errors.",
+      "Led root cause analysis for pipeline failures, improving system reliability and platform uptime by 20%."
+    ]
+  },
+  {
+    "company": "Civil Engineering Projects",
+    "role": "IT Consultant",
+    "start": "Oct 2019",
+    "end": "Nov 2021",
+    "location": "India",
+    "description": "Supported civil engineering infrastructure projects with geospatial data collection and technical documentation.",
+    "tech": "Geospatial Survey Data, Technical Reporting",
+    "bullets": [
+      "Collected and processed geospatial survey data supporting civil engineering infrastructure projects.",
+      "Assisted in the preparation of technical reports and documentation for project stakeholders."
+    ]
+  }
+]

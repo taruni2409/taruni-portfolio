@@ -1,0 +1,24 @@
+[
+  {
+    "institution": "University of Hertfordshire",
+    "school": "",
+    "degree": "Master of Science",
+    "field": "Data Science",
+    "location": "United Kingdom",
+    "start": "",
+    "end": "",
+    "gpa": "3.91 / 4.0",
+    "highlights": []
+  },
+  {
+    "institution": "V.R Siddhartha Engineering College",
+    "school": "Affiliated to JNTUK",
+    "degree": "Bachelor of Technology",
+    "field": "Civil Engineering",
+    "location": "Vijayawada, Andhra Pradesh, India",
+    "start": "",
+    "end": "",
+    "gpa": "8.17 / 10.0",
+    "highlights": []
+  }
+]

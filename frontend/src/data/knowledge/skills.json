@@ -1,0 +1,96 @@
+[
+  {
+    "category": "Languages, Libraries & Databases",
+    "items": [
+      "Python",
+      "Pandas",
+      "NumPy",
+      "Scikit-learn",
+      "TensorFlow",
+      "Hugging Face",
+      "PySpark",
+      "JavaScript",
+      "jQuery",
+      "ASP.NET",
+      "SQL",
+      "SQL Server",
+      "MongoDB",
+      "Oracle",
+      "MySQL"
+    ]
+  },
+  {
+    "category": "Machine Learning",
+    "items": [
+      "Predictive Modelling",
+      "Supervised Learning",
+      "Unsupervised Learning",
+      "Feature Engineering",
+      "Anomaly Detection",
+      "Natural Language Processing (NLP)",
+      "Large Language Models (LLMs)",
+      "K-Nearest Neighbours (KNN)",
+      "Linear Regression",
+      "Logistic Regression",
+      "Random Forest",
+      "Support Vector Machines (SVM)",
+      "K-Means",
+      "Naive Bayes"
+    ]
+  },
+  {
+    "category": "Cloud Platforms",
+    "items": [
+      "Microsoft Azure",
+      "Azure Data Factory",
+      "Azure Blob Storage",
+      "Azure Synapse",
+      "Azure Kubernetes Service (AKS)",
+      "Azure Functions",
+      "Azure Monitor",
+      "Azure DevOps",
+      "Google Cloud Platform",
+      "BigQuery",
+      "Vertex AI",
+      "Cloud Functions",
+      "Pub/Sub",
+      "IAM"
+    ]
+  },
+  {
+    "category": "Big Data & ETL",
+    "items": [
+      "Apache Airflow",
+      "Apache Spark",
+      "Hadoop",
+      "Kafka",
+      "ETL/ELT Pipelines",
+      "Data Validation",
+      "Dimensional Modelling",
+      "Data Warehousing"
+    ]
+  },
+  {
+    "category": "Visualisation & Delivery",
+    "items": [
+      "Tableau",
+      "Looker Studio",
+      "Power BI",
+      "Agile",
+      "SDLC",
+      "Jira",
+      "Slack",
+      "Git",
+      "GitHub",
+      "GitLab",
+      "Bitbucket"
+    ]
+  },
+  {
+    "category": "Certifications",
+    "items": [
+      "Google Certified: Associate Cloud Engineer",
+      "Microsoft Certified: Azure Data Scientist Associate"
+    ]
+  }
+]

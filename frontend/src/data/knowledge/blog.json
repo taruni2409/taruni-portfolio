@@ -1,0 +1,40 @@
+[
+  {
+    "slug": "sys-design-jayaremala",
+    "title": "System Architecture of jayaremala.com",
+    "date": "2026-06-08",
+    "description": "How the system you are currently experiencing was designed!",
+    "tags": [
+      "System Design",
+      "design",
+      "architecture"
+    ],
+    "content": "!System Architecture - jayaremala.com\n\nTo be continued!"
+  },
+  {
+    "slug": "thanks-for-stopping-by",
+    "title": "Thanks for stopping by!",
+    "date": "2026-05-26",
+    "description": "My heartfelt thanks to everyone landing here!",
+    "tags": [
+      "thanks",
+      "feedback"
+    ],
+    "content": "Hi there,\n\nI built this blog platform from the ground up to keep things fast, custom, and dependency-light. Because it's a homegrown engine, there might still be a few digital cobwebs hiding in the corners.\n\nIf you spot any bugs, broken layouts, or weird responsiveness issues, I would love to hear about them! Drop me a quick line at jr6421@nyu.edu or submit it directly through the form. Your QA eyes help make this platform better for everyone.\n\nBest,  \nJaya"
+  },
+  {
+    "slug": "welcome",
+    "title": "Are you the real one who you think you are..?",
+    "date": "2026-06-01",
+    "description": "A reflection on self-discovery, purpose, and the kind of person you're becoming through the choices you make every day.",
+    "tags": [
+      "self-improvement",
+      "self-awareness",
+      "reality",
+      "self",
+      "thoughts-and-feelings",
+      "life"
+    ],
+    "content": "So, you're thinking that now… honestly, me too!\n\nHey, I'm Jaya and one of your well-wishers — not because you're here reading this article, but because you genuinely deserve to have one!\n\nMore often than not, we find ourselves wondering if we're heading in the right direction — whether it's in our studies, careers, relationships or family responsibilities. We constantly question our capabilities and whether we've made the right decisions when things don't go as planned.\n\nWell, that's perfectly normal — because we're all human, after all.\n\nExpecting nothing in return for the good you do is a remarkable quality everyone should cultivate. Because whenever you act selflessly, you open yourself to learning more and becoming willing to take risks.\n\nLife is a Rainbow\n\nLife is nothing short of a rainbow, full of colours. We usually see just a thin white light and it's boring, right..?\n\nIf you wanna see its true side, your good deeds should shine on others' life droplet, where the prism with seven colours would showcase the one you actually are!\n\n<BlogImage\n  src=\"/blog/blog_welcome_2.webp\"\n  alt=\"Colourful rainbow over a landscape\"\n  caption=\"Life in full colour\"\n/>\n\nOn the occasion of Diwali, the festival of lights, I wish you joy, prosperity, and happiness. I never imagined I would pen an article like this and express myself in the GPT era. That said, being human, I truly believe emotions carry trust and hope.\n\nIf you've come this far, thank you so much for investing your valuable time in this.\n\nHappy Diwali! 🪔\n\nI hope it made you feel better!"
+  }
+]

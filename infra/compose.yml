@@ -1,0 +1,33 @@
+services:
+  backend:
+    build:
+      context: ..
+      dockerfile: infra/docker/backend.Dockerfile
+    env_file:
+      - ../.env
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../backend:/app/backend
+    command: >
+      uvicorn app.main:app
+      --app-dir backend/src
+      --host 0.0.0.0
+      --port 8000
+      --reload
+
+  frontend:
+    build:
+      context: ..
+      dockerfile: infra/docker/frontend.Dockerfile
+    env_file:
+      - ../.env
+    ports:
+      - "3000:3000"
+    volumes:
+      - ../frontend:/app/frontend
+    command: >
+      sh -lc "cd frontend && npm run dev -- --hostname 0.0.0.0 --port 3000"
+    depends_on:
+      - backend
+

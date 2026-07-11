@@ -1,0 +1,918 @@
+---
+title: "itsjaya — AI Portfolio"
+status: "active"
+description: "AI-powered personal portfolio with a RAG chatbot (Pumpkin), an agentic tool-calling mode, a public MCP server, in-chat book-a-call, MDX blog, engagement analytics, and a fully automated deploy pipeline. Every layer is production-grade — not a toy."
+startedAt: "2025-11-01"
+updatedAt: "2026-06-17"
+tech: [Next.js 16, React 19, Tailwind CSS v4, TypeScript, FastAPI, ChromaDB, Gemini 2.5 Flash, Groq, OpenRouter, Model Context Protocol, FastMCP, Function Calling, Google Calendar API, BAAI/bge-base-en-v1.5, HyDE, BM25, RRF, Knowledge Graph, FNV-1a Hash, SQLite, SlowAPI, GitHub Git Data API, Scroll Parallax, AWS Lightsail, Nginx, S3, GitHub Pages, GitHub Actions]
+links:
+  - label: GitHub
+    url: https://github.com/sabarishreddy99/jayaremala
+  - label: Live
+    url: https://jayaremala.com
+---
+
+## Overview
+
+Most portfolios are static pages someone scrolls past in 30 seconds. This one starts a conversation.
+
+**Pumpkin** is an AI assistant backed by a hybrid RAG pipeline. It answers questions about experience, projects, skills, and blog posts in real time — with tokens streaming directly to the browser. Ask it *"what's your strongest AI project?"* and it retrieves the most relevant knowledge chunks, reranks them, and streams a grounded answer through Gemini.
+
+The portfolio half is a full static Next.js site — experience, education, projects, and a blog with per-post views and claps tracked in SQLite. The whole system auto-deploys on every `git push` with zero manual steps. Content (blog posts, lab entries, quotes) can also be managed via a token-gated admin panel without any git commits.
+
+Pumpkin is also **agentic**. An opt-in *Agent mode* lets the model pick tools per turn and shows its steps live; the same read-only tools are published over a **public MCP server** so a recruiter can wire their own Claude or Cursor straight into this portfolio; and a **book-a-call** flow drops real Google Calendar openings and a one-click booking link into the conversation. Under the hood the model layer fails over across providers — **Gemini → Groq → OpenRouter** — so the chatbot keeps answering even after a free tier runs dry.
+
+### Why build it this way
+
+A traditional portfolio is a one-way broadcast. You decide what to highlight, the visitor reads what you chose, end of story. The problem is that the actual question someone wants answered — "does this person have experience with distributed caching?" — almost never aligns with the section you happened to emphasise.
+
+An AI-backed portfolio inverts this. The visitor asks in natural language, the system surfaces the most relevant evidence, and Gemini synthesises an answer grounded in real data. The net effect is that a 30-second scroll becomes a conversation that can go as deep as the person wants.
+
+<Status status="active" />
+
+---
+
+## System Architecture
+
+```arch
+┌──────────────────────────────────────────────────────────────────────────┐
+│                            CLIENT BROWSER                                │
+│                                                                          │
+│  ┌─────────────────────────────┐   ┌──────────────────────────────────┐  │
+│  │       Pumpkin Chatbot       │   │   Portfolio + Blog + Lab + More  │  │
+│  │   /  (full-screen)          │   │  /portfolio  /experience         │  │
+│  │   /chat  (nav-accessible)   │   │  /education  /projects           │  │
+│  │                             │   │  /blog  /blog/[slug]             │  │
+│  │  ChatInterface              │   │  /lab   /lab/[slug]              │  │
+│  │  ChatMessage (md renderer)  │   │  /quotes                         │  │
+│  │  Model badge  ·  Stats      │   │                                  │  │
+│  │  SSE ReadableStream         │   │  BlogPostList  BlogEngagement    │  │
+│  │                             │   │  BlogIndexStats  BlogGuideDrawer │  │
+│  │                             │   │  QuotesFeed                      │  │
+│  └──────────────┬──────────────┘   └──────────────────┬───────────────┘  │
+│                 │                                      │                  │
+│  ┌──────────────────────────────────────────────────┐  │                  │
+│  │  /admin  (token-gated, no-index)                 │  │                  │
+│  │  Stats dashboard · Content editors               │  │                  │
+│  │  (blog, lab, quotes, knowledge base)             │  │                  │
+│  └──────────────────────────────────────────────────┘  │                  │
+└─────────────────┼────────────────────────────────────────┼───────────────┘
+                  │  HTTPS + SSE                           │  HTTPS REST
+                  ▼                                        ▼
+┌──────────────────────────────────────────────────────────────────────────┐
+│          api.jayaremala.com  (Nginx :443 → Docker :8000)                │
+│               AWS Lightsail 2GB  ·  Ubuntu 24.04 LTS                    │
+│               SlowAPI rate limiter (10 req/min on /ai/chat/stream)       │
+│                                                                          │
+│  POST /ai/chat/stream  ──►  RAG pipeline  ──►  Gemini SSE               │
+│  POST /ai/chat         ──►  RAG pipeline  ──►  Gemini sync              │
+│  POST /ai/feedback     ──►  thumbs up/down + satisfaction metrics        │
+│  POST /blog/{slug}/view  ──►  unique view per IP                        │
+│  POST /blog/{slug}/clap  ──►  cumulative claps (max 50 / user / post)   │
+│  GET  /blog/{slug}/stats                                                 │
+│  GET  /blog/stats/summary                                                │
+│  GET  /stats              total_responses · unique_visitors              │
+│  GET  /stats/overview     7d / 30d / 1y / all-time for all metrics      │
+│  POST /stats/visit        record site visit + page + geo                 │
+│  POST /stats/experience-rating  1–5 star UX rating                      │
+│  GET  /stats/admin        full breakdown (auth-gated)                    │
+│  GET  /content/blog       public blog post list                          │
+│  GET  /content/blog/{slug}                                               │
+│  POST /content/blog       create post (ADMIN_TOKEN)                      │
+│  PUT  /content/blog/{slug}  update (ADMIN_TOKEN)                        │
+│  DELETE /content/blog/{slug}  (ADMIN_TOKEN)                             │
+│  GET  /content/lab        lab entry list                                 │
+│  POST /content/lab · PUT · DELETE  (ADMIN_TOKEN)                        │
+│  GET  /content/quotes     quotes list                                    │
+│  POST /content/quotes · PUT · DELETE  (ADMIN_TOKEN)                     │
+│  POST /admin/reingest     start background re-embed (ADMIN_TOKEN)        │
+│  GET  /admin/reingest/status  poll {running, result, error}              │
+│  GET  /health             api · analytics_db · content_db · rag         │
+│                                                                          │
+│  ┌──────────────────────────┐   ┌──────────────────────────────────────┐ │
+│  │        RAG Store         │   │  SQLite  analytics.db                │ │
+│  │                          │   │  /data/analytics.db                  │ │
+│  │  ChromaDB PersistentClient│  │  (Lightsail SSD  60 GB)             │ │
+│  │  HNSW cosine similarity  │   │                                      │ │
+│  │  bge-base-en-v1.5 (768d) │   │  interactions  (chat analytics)     │ │
+│  │  LRU cache (256 entries) │   │  site_visits   (page + geo)         │ │
+│  │  Knowledge Graph (static)│   │  blog_views    (unique/IP/post)     │ │
+│  │  BM25Okapi (rank_bm25)   │   │  blog_claps    (≤50/user/post)     │ │
+│  │  HyDE parallel retrieval │   │  feedback      (thumbs + hash)      │ │
+│  │  RRF merge  k=60         │   │  questions     (top-N tracking)     │ │
+│  └──────────────────────────┘   │  experience_ratings (1–5 UX)       │ │
+│                                  └──────────────────────────────────────┘ │
+│  ┌──────────────────────────┐   ┌──────────────────────────────────────┐ │
+│  │  /data  (Lightsail SSD)  │   │  SQLite  content.db                  │ │
+│  │  ├── analytics.db        │   │  /data/content.db                    │ │
+│  │  ├── content.db          │   │                                      │ │
+│  │  ├── chroma_db/          │   │  blog_posts  (slug, title, content,  │ │
+│  │  └── logs/               │   │               tags, published_at,    │ │
+│  └──────────────────────────┘   │               published bool)        │ │
+│                 │                │  lab_entries (slug, title, status,  │ │
+│                 │ daily 02:00 UTC│               tech, links, content)  │ │
+│                 ▼                │  quotes      (quote_id, text,       │ │
+│  ┌──────────────────────────┐   │               author, category,     │ │
+│  │  S3: itsjaya-backups-    │   │               favorite, featured)   │ │
+│  │  analytics               │   │  Seeded from JSON on first run.     │ │
+│  │  7-day timestamped       │   │  sync_blog/lab_json_to_db() pulls   │ │
+│  │  + latest_analytics.db   │   │  new MDX slugs → DB before regen.  │ │
+│  │                          │   │  Writes auto-regenerate JSON +      │ │
+│  │                          │   │  trigger run_ingest() in BG.        │ │
+│  └──────────────────────────┘   └──────────────────────────────────────┘ │
+│                                                                          │
+│  ┌──────────────────────────────────────────────────────────────────┐   │
+│  │  Knowledge Base  backend/data/knowledge/                         │   │
+│  │  profile.json · experience.json · education.json                 │   │
+│  │  projects.json · skills.json · testimonials.json · gallery.json  │   │
+│  │  quotes.json · blog.json · lab.json                              │   │
+│  │  (quotes · blog · lab auto-regenerated from content.db)          │   │
+│  └──────────────────────────────────────────────────────────────────┘   │
+└──────────────────────────────────────────────────────────────────────────┘
+                  │
+                  │  Google AI API  (HTTPS)
+                  ▼
+┌─────────────────────────────────────┐
+│  Cross-provider fallback chain      │
+│  Gemini 2.0 Flash    (primary)      │
+│  + Gemini 2.5 / lite / flash-latest │
+│  → Groq (llama-3.x)   [if key set]  │
+│  → OpenRouter (deepseek/llama)      │
+│  auto-retry on 503 / 429 / 404      │
+└─────────────────────────────────────┘
+```
+
+---
+
+## RAG Pipeline — Deep Dive
+
+The streaming retrieval pipeline runs before every Gemini call. Six stages, several in parallel:
+
+```arch
+User message: "what's your strongest AI project?"
+        │
+        ▼
+┌───────────────────────────────────────────────────────────┐
+│  STAGE 1 — Query Expansion                               │
+│                                                           │
+│  Query 1 (verbatim):                                      │
+│    "what's your strongest AI project?"                    │
+│                                                           │
+│  Query 2 (name-anchored):                                 │
+│    "what's your strongest AI project? Taruni              │
+│     Nallamothu"                                            │
+│                                                           │
+│  Query 3 (topic keyword — detected: project/built):       │
+│    "projects built SnapLog CodeCollab Multi-Agent         │
+│     GeneCart"                                             │
+│                                                           │
+│  Query 4 (conversation context):                          │
+│    injected only if prior message exists                  │
+│                                                           │
+│  Result: up to 4 query strings                            │
+└──────────────────────┬────────────────────────────────────┘
+                       │ 4 queries
+          ┌────────────┴──────────────────────────┐
+          ▼ (async, parallel)                     │
+┌────────────────────────────────────────┐        │
+│  STAGE 2a — HyDE                       │        │
+│  (Gao et al. 2022)                     │        │
+│                                        │        │
+│  Generate a short hypothetical answer  │        │
+│  to the user's question via Gemini.    │        │
+│  4s hard timeout; skipped for greetings│        │
+│  and messages < 15 chars.              │        │
+│                                        │        │
+│  Hypothetical answers sit closer in   │        │
+│  embedding space to real KB chunks    │        │
+│  than the raw question — higher cosine │        │
+│  similarity without any model change. │        │
+│  Embed HyDE doc → top-8 dense chunks. │        │
+└────────────────┬───────────────────────┘        │
+                 │                                │
+                 │                 ┌──────────────┘
+                 │                 ▼
+                 │    ┌──────────────────────────────┐
+                 │    │  STAGE 2b — Dense Retrieval  │
+                 │    │  (async, parallel with HyDE) │
+                 │    │                              │
+                 │    │  Batched encode: all 4 queries│
+                 │    │  in a single ONNX forward pass│
+                 │    │  ~160ms vs ~400ms for serial  │
+                 │    │                              │
+                 │    │  bge-base-en-v1.5            │
+                 │    │  768-dim ONNX, HNSW cosine   │
+                 │    │  top-6 per query (deduped)   │
+                 │    └──────────────┬───────────────┘
+                 │                   │
+                 │    ┌──────────────┘
+                 │    │  STAGE 2c — BM25 Lexical
+                 │    │  (sync, while async tasks run)
+                 │    │
+                 │    │  BM25Okapi scoring
+                 │    │  Catches exact matches:
+                 │    │  "3000 RPS", "SnapLog",
+                 │    │  "Qualcomm", "78%"
+                 │    │  top-15 results
+                 │    │  in-memory, rebuilt on startup
+                 └────┴───────────┐
+                                  ▼
+┌───────────────────────────────────────────────────────────┐
+│  STAGE 3 — Reciprocal Rank Fusion                        │
+│                                                           │
+│  Merges: Dense chunks + HyDE chunks + BM25 results       │
+│  score(doc) = sum of  1 / (k + rank_i)    k = 60        │
+│  Cormack, Clarke, Buettcher 2009                         │
+│                                                           │
+│  Docs in both HyDE + dense get a double rank bonus.      │
+│  Output: up to 20 candidates ranked by RRF score         │
+└──────────────────────┬────────────────────────────────────┘
+                       ▼
+┌───────────────────────────────────────────────────────────┐
+│  STAGE 4 — Top-5 by RRF Score                            │
+│                                                           │
+│  Picks the 5 highest-scoring chunks from the RRF-20 pool │
+│  (cross-encoder reranker scaffolded, gated on 4GB RAM)   │
+└──────────────────────┬────────────────────────────────────┘
+                       ▼
+┌───────────────────────────────────────────────────────────┐
+│  STAGE 5 — Knowledge Graph Expansion                     │
+│                                                           │
+│  1-hop traversal from retrieved doc IDs:                 │
+│  • project doc → skill category docs                     │
+│  • experience doc → related project docs                 │
+│  • project doc → related experience doc                  │
+│                                                           │
+│  Pulls ≤2 related docs from RRF-20 pool                  │
+│  No extra ChromaDB call — zero latency                   │
+│  Injected into Gemini alongside top-5                    │
+└───────────────────────────────────────────────────────────┘
+                       │
+              Up to 7 chunks as Gemini context
+                       │
+              SSE tokens streamed to client
+```
+
+---
+
+## Agentic Mode, MCP & Tools
+
+Classic chat answers questions. The agentic layer lets the model *act* — and lets other models
+act on Jaya's data too. It all hangs off **one shared tool registry**
+(`backend/src/app/agent/tools.py`): each tool is a name, a description, a plain Python handler,
+and a JSON-Schema for its arguments. **The handlers do pure data / retrieval — no LLM calls** — so
+they're cheap and safe to expose publicly. That single registry is consumed three ways:
+
+```arch
+                    backend/src/app/agent/tools.py
+                    TOOLS  (search_knowledge, get_profile, get_experience,
+                            get_projects, get_project, get_skills, get_education,
+                            get_now, get_blog, get_lab, get_resume,
+                            check_availability, get_booking_link)
+                                         │
+            ┌────────────────────────────┼────────────────────────────┐
+            ▼                            ▼                            ▼
+┌───────────────────────┐   ┌───────────────────────────┐  ┌──────────────────────────┐
+│  MCP server  /mcp/    │   │  Agent mode               │  │  REST playground          │
+│  mcp_server.py        │   │  POST /ai/chat/agentic    │  │  GET /tools               │
+│  FastMCP streamable   │   │                           │  │  POST /tools/{name}       │
+│  -HTTP, stateless     │   │  Gemini native function-  │  │                           │
+│                       │   │  calling; falls over to   │  │  Browsers can't speak MCP │
+│  Client's OWN model   │   │  Groq/OpenRouter OpenAI   │  │  → the /mcp page playground│
+│  (Claude Desktop /    │   │  tool-calling. Streams    │  │  invokes tools here. Same │
+│  Cursor) reasons and  │   │  visible `step` chips per │  │  handlers, no login, no    │
+│  calls the tools.     │   │  tool, then the answer.   │  │  LLM cost.                │
+└───────────────────────┘   └───────────────────────────┘  └──────────────────────────┘
+```
+
+**Mental model:** a knowledge base → wrapped as read-only tools → exposed to *external models* over
+MCP, to *Pumpkin's own model* in agent mode, and to *browsers* via a REST shim.
+
+The MCP server is **public and stateless**: `mcp.http_app(path="/", stateless_http=True)` drops the
+per-session handshake so any client can POST without an `Mcp-Session-Id` header, and it's mounted in
+`main.py` behind a permissive CORS layer scoped to just `/mcp` (the main API stays domain-locked). The
+endpoint is `https://api.jayaremala.com/mcp/` — **trailing slash required** (`/mcp` 307-redirects). The
+`/mcp` page generates ready-to-paste Claude Desktop / Cursor configs and runs a live tool playground.
+
+### Book a call — in-chat scheduling
+
+When a visitor wants to talk — keyword-detected in classic chat (`_is_calendar_query`) or the model
+calling `get_booking_link` in agent mode — Pumpkin surfaces a **booking card**:
+
+```arch
+"can we set up a call?"
+        │
+        ▼
+get_booking_card()
+   ├── Google Calendar Freebusy API (read-only OAuth) → real open 30-min slots (cached ~3 min)
+   └── booking_url + availability.open  ← profile.json
+        │
+        ▼
+SSE `booking_card` event → <BookingCard>
+   ├── open slots, each a clickable link
+   └── "Book on Google Calendar" CTA → existing Google Appointment Schedule page
+        │
+        ▼
+Google sends the invite + Meet link + reminders.  No calendar-write scope needed.
+```
+
+It **degrades gracefully** — if the calendar isn't connected the slots list is empty but the booking
+CTA still works — and the whole fetch is timeout-bounded so it never stalls the token stream.
+
+---
+
+## Deploy Pipeline
+
+```arch
+developer: git push origin main
+         │
+         ▼
+GitHub Actions (.github/workflows/deploy.yml)
+         │
+         ├── npm install + npm run build
+         │     └── prebuild: sync-knowledge.mjs
+         │           ├── parses MDX frontmatter + body
+         │           ├── writes blog.json + lab.json
+         │           └── copies JSON → frontend/src/data/knowledge/
+         │
+         ├── git commit "chore: sync knowledge base [skip ci]"
+         │
+         ├── upload frontend/out/ → GitHub Pages (jayaremala.com)
+         │
+         └── SSH → AWS Lightsail (infra/scripts/deploy.sh)
+               │
+               ├── git pull origin main
+               │
+               ├── AUTO-RESTORE: if /data/analytics.db missing
+               │     └── aws s3 cp latest_analytics.db /data/analytics.db
+               │
+               ├── docker tag :latest → :previous  (rollback safety)
+               │
+               ├── docker build → itsjaya-backend:latest
+               │
+               ├── docker run --name itsjaya-backend-new -p 8001:8000
+               │     (staging container — old container still serves :8000)
+               │
+               ├── health check loop (5s × 24 attempts = 120s max)
+               │     ├── PASS → stop old :8000, start new :8000
+               │     └── FAIL → rm staging, old container untouched
+               │
+               └── docker image prune -f
+
+Rollback: bash /home/ubuntu/itsjaya/infra/scripts/rollback.sh
+  └── starts :previous image on :8000 in under 10s
+
+Backup:   cron 0 2 * * * → infra/scripts/backup.sh
+  └── aws s3 cp /data/analytics.db → s3://itsjaya-backups-analytics/
+  └── prunes backups older than 7 days
+```
+
+---
+
+## Analytics Architecture
+
+All engagement data lives in `analytics.db`. Content (posts, lab, quotes) lives in `content.db`. IPs are SHA-256 hashed before storage.
+
+```arch
+analytics.db  (/data/analytics.db — Lightsail SSD)
+│
+├── interactions               ← chat analytics (per completed stream)
+│   ├── ip_hash  TEXT          SHA-256 or x-visitor-id device UUID
+│   └── created_at  TIMESTAMP
+│   Indexed: idx_ip ON ip_hash
+│
+├── site_visits                ← page view tracking
+│   ├── ip_hash  TEXT
+│   ├── page  TEXT             e.g. "/portfolio", "/blog/post-slug"
+│   ├── country  TEXT          resolved async via geo API
+│   ├── city  TEXT
+│   └── created_at  TIMESTAMP
+│
+├── blog_views                 ← unique views per post per IP
+│   ├── slug  TEXT
+│   ├── ip_hash  TEXT
+│   └── created_at  TIMESTAMP
+│   UNIQUE(slug, ip_hash)      idempotent — INSERT OR IGNORE
+│
+├── blog_claps                 ← cumulative claps per post per IP
+│   ├── slug  TEXT
+│   ├── ip_hash  TEXT
+│   ├── count  INTEGER          capped at 50 per user per post
+│   └── updated_at  TIMESTAMP
+│   ON CONFLICT: count = count + excluded.count
+│
+├── feedback                   ← thumbs up/down per message
+│   ├── message_hash  TEXT
+│   ├── rating  INTEGER        +1 (positive) or -1 (negative)
+│   └── created_at  TIMESTAMP
+│
+├── questions                  ← top-N question tracking
+│   ├── text  TEXT
+│   ├── count  INTEGER
+│   └── updated_at  TIMESTAMP
+│
+└── experience_ratings         ← 1–5 star UX ratings
+    ├── rating  INTEGER
+    └── created_at  TIMESTAMP
+
+content.db  (/data/content.db — Lightsail SSD)
+│
+├── blog_posts   (id, slug, title, date, published_at, description,
+│                 tags, image, content, published, created_at, updated_at)
+│   Indexes: published_at DESC, published
+│
+├── lab_entries  (id, slug, title, status, description, started_at,
+│                 updated_at, tech, links, content, created_at)
+│   Index: status  (active → paused → shipped ordering)
+│
+└── quotes       (id, quote_id, text, author, source, category,
+                   favorite, featured, added_at, created_at)
+
+Backup flow:
+  02:00 UTC → backup.sh
+    ├── aws s3 cp /data/analytics.db → analytics_db/TIMESTAMP_analytics.db
+    ├── aws s3 cp /data/analytics.db → analytics_db/latest_analytics.db
+    └── prune files with date < 7 days ago
+
+Restore (disaster recovery):
+  aws s3 cp s3://itsjaya-backups-analytics/analytics_db/latest_analytics.db /data/analytics.db
+  docker restart itsjaya-backend
+```
+
+---
+
+## Content API — CRUD without git
+
+Blog posts, lab entries, and quotes are stored in `content.db` and served via the `/content/*` API. Public `GET` endpoints return live data. Write endpoints require a `Bearer ADMIN_TOKEN` header.
+
+After every write, a background task:
+1. Calls the matching `regenerate_*_json()` function to sync content.db → JSON in `backend/data/knowledge/`
+2. Calls `run_ingest()` — only changed documents are re-embedded (incremental ingest), zero user-visible latency
+
+`run_ingest()` calls `_sync_content_db()` which runs a **two-step sync** before the hash diff:
+
+- **Step 1 — pull**: `sync_blog_json_to_db()` and `sync_lab_json_to_db()` read `blog.json` / `lab.json` (committed by GH Actions from MDX files) and `INSERT OR IGNORE` any slugs missing from `content.db`. Without this, blog posts and lab entries written as MDX and pushed via git are invisible to the knowledge base after the initial seeding (which only runs on an empty table).
+- **Step 2 — regenerate**: `regenerate_blog_json()`, `regenerate_lab_json()`, `regenerate_quotes_json()` rewrite the JSON files from the now-complete `content.db`.
+
+`POST /admin/reingest` now returns `{"status": "started"}` immediately and runs the full rebuild as a background `asyncio.to_thread` task — the admin UI polls `GET /admin/reingest/status` every 2 seconds until `running === false`. This prevents the HTTP connection from timing out on the proxy during the 30–60 second rebuild on the 2 GB production server.
+
+Embedding is batched at 16 documents per `collection.upsert()` call with `gc.collect()` + 50 ms sleep between batches — the BAAI/bge-base-en-v1.5 ONNX model (~440 MB) would otherwise spike peak RAM to ~1.5 GB in a single forward pass, enough to OOM-kill the process on a 2 GB instance.
+
+```
+POST /content/blog   (ADMIN_TOKEN)
+  body: { slug, title, date, published_at, description, tags, content, published }
+  → creates row in content.db
+  → background: regenerate_blog_json() → run_ingest()
+
+PUT /content/blog/{slug}   → update row → regenerate → re-ingest
+DELETE /content/blog/{slug} → delete row → regenerate → re-ingest
+
+/content/lab/* → regenerate_lab_json() → run_ingest()
+/content/quotes/* → regenerate_quotes_json() → run_ingest()
+```
+
+The database is seeded on first startup from the existing JSON files in `backend/data/knowledge/` — existing content migrates automatically with no manual step.
+
+---
+
+## Frontend Architecture
+
+```arch
+jayaremala.com  (GitHub Pages — static export, no basePath)
+│
+├── /                    Pumpkin — full-screen, no nav/footer
+├── /chat                Same chatbot, portfolio nav accessible
+├── /portfolio           Hero + domain chips + projects + skills
+├── /experience          Timeline
+├── /education           Cards
+├── /projects            Grid with source link pill buttons
+├── /blog                Index sorted by publishedAt
+├── /blog/[slug]         Source Serif 4 font + engagement
+├── /lab                 Living system design index
+├── /lab/[slug]          This page
+├── /quotes              Curated quotes — QuotesFeed with categories
+├── /gallery             Photo grid — milestones, events, and achievements
+├── /now                 What I'm currently building, learning, reading
+├── /mcp                 Public MCP server explainer + live tool playground + connect configs
+├── /system              Live observability — latency percentiles, RAG timing, model fallback
+└── /admin               Stats dashboard + content editors (no-index)
+
+All portfolio routes share layout via (portfolio) route group.
+Chatbot lives outside — no nav, no footer, full screen.
+/admin is not linked in nav; robots.txt: no-index, no-follow.
+```
+
+---
+
+## Tech Stack
+
+<Stack items={["Next.js 16 (App Router)", "React 19", "Tailwind CSS v4", "TypeScript", "MDX + next-mdx-remote", "gray-matter", "FastAPI", "Python 3.11", "Pydantic Settings", "SlowAPI (rate limiting)", "ChromaDB", "fastembed (BAAI/bge-base-en-v1.5 ONNX, 768-dim)", "rank-bm25 (BM25Okapi)", "HyDE (Hypothetical Document Embeddings)", "Knowledge Graph (static, in-memory)", "google-genai SDK", "Gemini 2.5 Flash", "Groq (OpenAI-compatible)", "OpenRouter (OpenAI-compatible)", "Function calling / tool use", "FastMCP (Model Context Protocol)", "Google Calendar API (Freebusy)", "SQLite3 (analytics.db)", "SQLite3 (content.db)", "AWS Lightsail 2GB", "Nginx + Let's Encrypt", "Amazon S3", "Docker", "GitHub Pages", "GitHub Actions"]} />
+
+---
+
+## Key Decisions
+
+<Decision date="2026-06-14" title="Book a call — smart handoff over building a scheduler">
+  Recruiters who get interested mid-conversation shouldn't have to leave the chat to find a calendar
+  link. The question was how far to take it. Option A: a full in-chat scheduler — collect name/email/slot
+  and *create* the calendar event directly. Option B: a smart handoff — show real open slots and hand off
+  to Jaya's existing Google booking page for the actual booking.
+
+  Option B won. The endpoint is public and unauthenticated, so writing events to Jaya's calendar would
+  mean a `calendar.events` OAuth scope, spam guards, rate limiting, and a confirmation-email path — a lot
+  of surface for a portfolio. The handoff needs only **read-only Freebusy** plus a static booking link:
+  `get_booking_card()` pulls real open 30-min slots (cached ~3 min) and bundles them with `booking_url`
+  from `profile.json`. The booking card renders in both classic chat (keyword-detected via
+  `_is_calendar_query`) and agent mode (the model calls `get_booking_link`), and Google handles the
+  invite, Meet link, and reminders. It degrades gracefully — no calendar connection just means an empty
+  slot list with the booking CTA still live — and the fetch is timeout-bounded so it never stalls the
+  stream.
+</Decision>
+
+<Decision date="2026-06-14" title="Public MCP server — stateless HTTP, one registry, three surfaces">
+  A recruiter who lives in Claude Desktop or Cursor should be able to point *their own* model at Jaya's
+  portfolio. That's exactly what the Model Context Protocol is for. The implementation reuses the same
+  `TOOLS` registry that powers agent mode and the REST playground — no duplicate logic, and the handlers
+  make no LLM calls, so a public endpoint costs nothing per request.
+
+  The key decision was **stateless** transport: `mcp.http_app(path="/", stateless_http=True)`. The default
+  stateful mode issues an `Mcp-Session-Id` on `initialize` that every later POST must echo — which broke
+  connect-from-anywhere clients with "Missing session ID". Stateless makes each request independent (also
+  load-balancer friendly). It's mounted behind a CORS layer scoped to `/mcp` only, so browser clients work
+  while the main API stays locked to Jaya's domains. One gotcha worth recording: the endpoint is `/mcp/`
+  **with a trailing slash** — `/mcp` 307-redirects (and the proxy downgrades the redirect to `http://`),
+  which surfaces in clients as a confusing "Method Not Allowed".
+</Decision>
+
+<Decision date="2026-06-13" title="Cross-provider model fallback — Gemini → Groq → OpenRouter">
+  Gemini's free tier has a daily quota. Once it's gone, a Gemini-only chatbot is just down until midnight
+  Pacific. The fix is to stack other free tiers behind it. Groq and OpenRouter both speak the OpenAI API,
+  so one client type covers both, and the chain is expressed as ordered `provider:model` entries in
+  `settings.model_chain` (bare Gemini names auto-prefixed `gemini:`). Each provider is included only when
+  its API key is set, so nothing changes when keys are absent.
+
+  `_generate()` and `_stream_tokens()` walk the chain on any capacity error (503 / 429 / deprecated-model
+  404). Streaming fallback can switch *mid-answer*: if a model dies after emitting partial tokens, a
+  `reset` event tells the frontend to discard them before the next model starts. The green pill badge shows
+  which `provider:model` actually answered — transparent, without reading as a failure.
+</Decision>
+
+<Decision date="2026-06-13" title="Agent mode — visible tool-calling over the shared registry">
+  Classic RAG does one retrieval pass then answers. Some questions want more than that — "compare his
+  fintech and healthcare work" needs multiple targeted lookups. Agent mode (`/ai/chat/agentic`, an opt-in
+  toggle) lets the model pick tools per turn over up to 4 rounds. Rather than hide the reasoning, the
+  backend streams a visible `step` chip per tool (running → done with timing) before the answer — the
+  "glass box" ethos the answer-trace waterfall already established.
+
+  It runs on the same multi-provider fallback as classic chat: Gemini uses native function-calling, and on
+  exhaustion (or a `thought_signature` error from a thinking model in a manual tool loop) the request falls
+  over to the Groq/OpenRouter OpenAI-style tool-calling agents — identical registry, identical visible
+  steps. Reusing `TOOLS` means a tool added for the chatbot is instantly available to MCP clients too.
+</Decision>
+
+<Decision date="2026-05-28" title="Content DB (SQLite) for CRUD — edit content without git commits">
+  Every blog post and lab entry previously required a git commit and a full deploy to appear on the site. That's a high-friction loop when you want to fix a typo or publish a draft at midnight. It also made the Pumpkin knowledge base stale until the next deploy.
+
+  The solution is a separate `content.db` SQLite database on the Lightsail SSD. A token-gated REST API (`/content/*`) handles full CRUD for blog posts, lab entries, and quotes. After every write, a background task regenerates the corresponding JSON and calls `run_ingest()` — only changed documents are re-embedded (incremental ingest already handles this), so the knowledge base is up-to-date within seconds of saving in the admin panel.
+
+  The database is seeded from existing JSON files on first startup, so nothing breaks on deploy. Two separate databases (analytics + content) means content schema migrations never lock analytics writes — SQLite's write lock applies per-file, not server-wide.
+</Decision>
+
+<Decision date="2026-05-28" title="HyDE (Hypothetical Document Embeddings) for retrieval precision">
+  Vague queries like "tell me about his AI experience" sit far from real knowledge-base chunks in embedding space. The raw question embedding retrieves semantically adjacent docs but often misses the most specific evidence a recruiter would want.
+
+  HyDE (Gao et al. 2022) generates a short hypothetical answer to the question first, then embeds *that* for retrieval. A hypothetical answer ("Jaya built SnapLog at Qualcomm...") has much higher cosine similarity to the real project chunk than the question ("tell me about AI experience") does. The HyDE query runs in parallel with the original dense retrieval via `asyncio.gather()` — no added serial latency. A 4-second hard timeout and a character-length guard ensure greetings and simple follow-ups skip the Gemini call entirely. HyDE chunks are prepended to the dense pool before RRF so docs retrieved by both signals get a double rank bonus.
+</Decision>
+
+<Decision date="2026-05-28" title="Rate limiting via SlowAPI — protect Gemini quota from abuse">
+  The `/ai/chat/stream` endpoint is public and calls Gemini on every request. Without rate limiting, a single automated client could exhaust the API quota in minutes, taking Pumpkin down for legitimate visitors. SlowAPI adds a 10 req/min limit per IP with correct `X-Forwarded-For` extraction behind Nginx. The middleware is added globally but limits are applied per-decorator — only the streaming endpoint is gated today. The limit is intentionally generous for human use but punishing for bots.
+</Decision>
+
+<Decision date="2026-05-28" title="Admin panel at /admin — operational visibility without SSH">
+  Operating the site previously required SSH + SQLite CLI to query analytics. The admin panel consolidates: conversation counts (week/month/all), top questions, feedback satisfaction, site visitor counts with geo + page breakdown, blog engagement (unique readers, revisit rate), and live content editors for blog, lab, and quotes. It's a standard Next.js route with `robots: { index: false }` in the layout metadata — no nav link. The admin stats endpoint (`GET /stats/admin`) is gated behind the same `ADMIN_TOKEN` as the content write endpoints.
+</Decision>
+
+<Decision date="2026-05-28" title="Background startup thread — API serves immediately during ONNX warmup">
+  The original startup sequence blocked the FastAPI lifespan on `run_ingest()`, which includes ONNX model loading, ChromaDB writes, and BM25 index rebuilding. The health check loop during blue-green deploy could wait up to 120 seconds before the old container was replaced.
+
+  Moving the ingest to a `daemon=True` background thread means the API starts serving `/health` immediately. The health endpoint returns `rag: "degraded"` while ingest is in progress, but `api: "ok"` — the health check loop can be shortened for cases where only the API availability matters. The warmup call (`query("warmup", n_results=1)`) pre-loads the ONNX model into memory so the first real user request doesn't pay the cold-load penalty.
+</Decision>
+
+<Decision date="2026-05-22" title="AWS Lightsail over Railway — $10/month VPS beats PaaS trial limits">
+  Railway's free trial ended and stopped all backend services. The migration decision came down to minimum cost with maximum control. App Runner and ECS Fargate cost $20–40/month and add EFS complexity for a single SQLite file. Lightsail 2GB ($10/month) gives 2 vCPUs, 60GB SSD, and a static IP — all the resources the backend needs and nothing it doesn't.
+
+  The 2GB plan was chosen over 1GB (EC2 t2.micro free tier) because the fastembed ONNX model + ChromaDB + FastAPI peaks at 400–600MB under load. The 1GB option leaves no headroom for the 120-second ONNX warmup window at startup. A cold-start OOM kill during a recruiter demo would be worse than the $2/month difference.
+
+  What this means for the system: the backend is now a Docker container on a VPS with persistent SSD storage, Nginx reverse proxy, and Let's Encrypt HTTPS — a standard production setup that doesn't depend on any PaaS billing cycle.
+</Decision>
+
+<Decision date="2026-05-22" title="Zero-downtime blue-green deploy via staging port 8001">
+  The original deploy script stopped the old container, then started the new one. During the gap — up to 120 seconds for the ONNX model to warm up — the API was completely down. For a portfolio chatbot, downtime during a deploy is especially bad: the visitor who opens the page while a deploy is running gets an error on their first message.
+
+  The fix is blue-green deployment at the container level. The new image starts on port 8001 while the old container keeps serving port 8000 through Nginx. A health check loop polls `localhost:8001/health` every 5 seconds for up to 120 seconds. Only if the check passes does the script stop the old container and start the new one on port 8000. If the health check fails, the staging container is removed and the old one continues serving — zero downtime, zero user impact.
+
+  The entire logic lives in `infra/scripts/deploy.sh` in the repo. GitHub Actions calls it with a single SSH command, keeping the workflow YAML thin and the deploy logic version-controlled and independently testable.
+</Decision>
+
+<Decision date="2026-05-22" title="S3 backup for analytics.db over Lightsail additional disk">
+  Two options existed for protecting analytics.db from instance loss. Option A: Lightsail additional disk ($2/month) — a separate volume that survives instance replacement automatically. Option B: daily S3 backup (< $0.01/month) — a cron job copies the file to S3 and keeps 7 days of history.
+
+  Option B wins for this workload. The analytics.db file is under 1MB. Storing 7 daily copies costs fractions of a cent per month. The restore path is one command. The additional disk would add 20% to the monthly bill for a file that changes by kilobytes per day.
+
+  The one scenario where Option A wins is if the instance is destroyed and rebuilt frequently. That doesn't apply here. The S3 backup cron runs at 02:00 UTC daily via `infra/scripts/backup.sh`. The deploy script auto-restores from S3 if `/data/analytics.db` is missing — so a fresh instance recovers all analytics data on the first deploy with no manual step.
+</Decision>
+
+<Decision date="2026-05-22" title="Custom domain jayaremala.com — necessary for HTTPS mixed content">
+  Moving the backend from Railway (which gave a free HTTPS URL) to a raw Lightsail IP created a mixed content problem. The frontend is served over HTTPS from GitHub Pages. Modern browsers block `http://IP:8000` calls from an HTTPS page — Pumpkin would silently fail on every message.
+
+  The fix requires HTTPS on the backend, which requires a domain. DuckDNS was attempted but proved unreliable. The right call was purchasing `jayaremala.com` on Namecheap (~$10/year), pointing `api.jayaremala.com` to the Lightsail static IP, and running Certbot for a free Let's Encrypt certificate behind Nginx. Certbot auto-renews via a systemd timer — zero maintenance.
+
+  The domain also replaced the GitHub Pages subpath (`sabarishreddy99.github.io/jayaremala`) with a clean root domain (`jayaremala.com`). The `basePath: "/jayaremala"` in `next.config.ts` was removed, and a `CNAME` file was added to `frontend/public/` so GitHub Pages serves from the apex domain.
+</Decision>
+
+<Decision date="2026-04-22" title="Lab page — living system design docs over static write-ups">
+  The standard portfolio write-up is a polished post-hoc rationalisation. The real decisions — dead-ends, alternatives considered, constraints that forced your hand — disappear.
+
+  A living MDX page that gets amended as the system evolves preserves the actual reasoning. The `Decision` and `Update` timeline components make it natural to add entries in-place instead of rewriting history. The constraint that forced MDX over a database-backed CMS is meaningful: the whole frontend is a static export. There is no database write path. MDX files committed to the repo are the only durable storage available at build time.
+</Decision>
+
+<Decision date="2026-05-22" title="Incremental per-document ingest over collection-level hash wipe">
+  The collection-level hash approach had one critical failure mode: editing a single FAQ document or publishing one blog post triggered a full re-embed of all ~80 documents — a ~30-second ChromaDB wipe-and-rebuild on every deploy with any content change. As the knowledge base grows with more blog posts and lab entries, this gets worse linearly.
+
+  The replacement tracks a SHA-256 hash per document in `.doc_hashes.json` (stored on the Lightsail SSD alongside ChromaDB). On each startup, `run_ingest()` diffs the current document set against the stored hashes: new or changed documents are upserted, documents removed from the source are deleted from ChromaDB, unchanged documents are skipped entirely. Adding one blog post now embeds one document instead of eighty.
+
+  Per-document tracking also enables precise deletion — when a post or FAQ entry is removed, its vector is deleted from ChromaDB immediately rather than lingering as stale dead weight. A forced full re-embed is available via `POST /admin/reingest?force=true` (bearer token-gated via `ADMIN_TOKEN` env var) for cases where the hash file is lost or a clean slate is needed.
+</Decision>
+
+<Decision date="2026-05-22" title="BAAI/bge-base-en-v1.5 over all-MiniLM-L6-v2 — better retrieval, same ONNX runtime">
+  The original embedding model was `all-MiniLM-L6-v2` — a 6-layer distilled model producing 384-dim vectors. It was chosen for speed and the ~45MB ONNX binary size. The problem: distilled models sacrifice retrieval quality for size. On BEIR benchmarks, `BAAI/bge-base-en-v1.5` outperforms MiniLM by 8–12 recall points across task types. For a portfolio chatbot, missed recall means a recruiter asks "does he have Redis caching experience?" and the retrieval returns a profile doc instead of the exact 78% latency reduction bullet.
+
+  The switch stays fully ONNX via fastembed — no PyTorch dependency, no RAM regression beyond ~30–50MB for the larger 768-dim model. Critically, switching embedding models requires wiping ChromaDB and rebuilding from scratch because stored 384-dim vectors are incompatible with 768-dim queries. The auto-wipe mechanism handles this transparently on deploy.
+</Decision>
+
+<Decision date="2026-05-22" title="Auto-wipe ChromaDB on embedding model change — zero manual steps on deploy">
+  Changing the embedding model from 384-dim to 768-dim makes every stored vector incompatible. A naive deploy would crash with `InvalidArgumentError: Collection expecting dimension of 384, got 768`. The fix: `run_ingest()` stores the current `EMBED_MODEL` string under `__embed_model__` in `.doc_hashes.json`. On startup, if the stored model name differs from the constant, `reset_collection()` is called and all documents are re-embedded. No environment variable, no manual SSH, no pre-deploy migration step required.
+</Decision>
+
+<Decision date="2026-05-22" title="Static knowledge graph for context expansion — no graph library, no LLM extraction">
+  After retrieval, Pumpkin sometimes has all the pieces but not the connections. A user asks "what did he build at NYU IT?" — the experience doc is retrieved, but the Multi-Agent project doc sits at rank 12 in the RRF pool. Without graph expansion, Gemini gets the job description but not the specific system built there.
+
+  Full GraphRAG was evaluated and rejected. It's designed for corpora with millions of nodes. For ~90 documents with completely known structure, the extraction step is pure overhead. The implementation is a static in-memory graph built at startup. Three relationship maps: `project → skill category docs`, `experience → project docs`, `project → experience doc`. After the RRF top-5 is selected, `expand_context()` follows 1-hop edges and pulls in at most 2 related docs from the RRF-20 pool — no extra ChromaDB call, zero added latency.
+</Decision>
+
+<Decision date="2026-04-10" title="BM25 hybrid retrieval alongside ChromaDB dense search">
+  Dense retrieval fails on specific identifiers. "Qualcomm" isn't weighted by the embedding model. "115 GB/day" and "3000 RPS" retrieve semantically similar documents, not the exact project. These failures matter for a portfolio because the most important recruiter queries are about specifics.
+
+  BM25 handles exact term recall with no model overhead — pure in-memory frequency calculation rebuilt from the document list on every startup (~5ms). The hybrid catches both failure modes.
+</Decision>
+
+<Decision date="2026-04-05" title="SQLite over managed Postgres for analytics">
+  The analytics workload is narrow: INSERT a view, INSERT OR UPDATE clap count, SELECT COUNT with a WHERE on timestamp. No joins. No concurrent writers. SQLite on the Lightsail SSD is zero-cost, same-process, and the entire database is one file that can be backed up with a single `aws s3 cp` command.
+</Decision>
+
+<Decision date="2026-03-10" title="Single source of truth: backend JSON as canonical data">
+  Before this refactor, portfolio data lived in two places: TypeScript files in `frontend/src/data/` for the UI, and JSON files in `backend/data/knowledge/` for RAG. They drifted. New projects appeared on the website but not in the chatbot's knowledge base.
+
+  The sync script makes backend JSON canonical and generates everything else from it. The TypeScript data files are thin typed wrappers over synced JSON copies. The sync runs before every build — there is no path where UI and chatbot knowledge are out of sync.
+</Decision>
+
+<Decision date="2026-02-28" title="Gemini fallback chain instead of surfacing capacity errors">
+  Gemini 2.5 Flash hits 503 and 429 capacity limits at peak times. A portfolio chatbot that returns an error on the first message is worse than no chatbot. The fallback chain retries through three additional models automatically. The frontend shows which model answered via a green pill badge — transparent without reading as a failure.
+</Decision>
+
+<Decision date="2026-02-15" title="Synthesised FAQ documents — highest-ROI knowledge addition (later made fully dynamic)">
+  The questions that matter most in the first 30 seconds — "What makes Jaya stand out?", "How do I hire him?" — are not well-served by retrieval from raw experience data alone. Pre-synthesised FAQ documents answer these at query time instead of requiring Gemini to infer them from scattered bullet points. When a FAQ doc is retrieved, Gemini gets the answer already formed.
+
+  Initially these were 12 handwritten static strings in `ingest.py`. The failure mode: add a new job and `faq_nyu_work` silently becomes stale. Pumpkin continues citing the old role count, old company list, old achievements — not what's in the JSON files.
+
+  Replaced (2026-06-06) with `_build_faq_documents()` and `_build_system_faq_documents()` — all personal-content FAQs (`faq_who`, `faq_experience_summary`, `faq_projects_summary`, `faq_education_summary`, `faq_awards`, `faq_resume`, `faq_contact_hire`, `faq_blog`, `faq_lab`, `faq_quotes_collection`) are now generated at ingest time from the live JSON files. Per-employer documents (`faq_company_*`) replace the manually maintained `faq_nyu_work` / `faq_shell_wipro` — one doc per experience entry, stable IDs, auto-created and auto-deleted as experience.json changes. Blog, lab, and quotes FAQs include live counts. Architecture FAQs (pipeline, deployment, data persistence) remain in `_build_system_faq_documents()` — they describe the tech stack, not personal data, so they change when the infrastructure changes, not when content changes.
+</Decision>
+
+---
+
+## Progress Log
+
+<Update date="2026-06-17">
+  **Admin → one batched GitHub commit.** Each file-based section editor (Profile, Experience,
+  Education, Projects, Skills, Testimonials, Gallery, Hero stats, Availability, Knowledge base)
+  previously committed its own JSON straight to the repo on save — editing five sections meant five
+  commits and five CI deploys. Introduced a shared **staging layer** (`lib/githubStaging.tsx`): a
+  section's *Save* now stages the change, and a sticky **"Publish all (N)"** bar commits everything
+  in a single commit via the GitHub **Git Data API** (read base tree → build one new tree with every
+  changed file → one commit → move `main`). One push, one deploy. Blog/lab/quotes still write to
+  `content.db` and render live via client fetch, untouched.
+</Update>
+
+<Update date="2026-06-17">
+  **Apple-style motion layer.** Added a reusable `Parallax` primitive (GPU `translate3d`,
+  rAF-throttled, `prefers-reduced-motion` aware) driving subtle depth on the hero backgrounds; tuned
+  the shared `ScrollReveal` to a longer, softer ease with a **blur-in** so sections arrive
+  cinematically; added a site-wide **scroll-progress** bar (hidden on blog/lab posts where
+  `ReadingProgress` already runs); and a `ParallaxImage` for card covers. All layered *on top* of the
+  existing editorial identity and the `StackSection` sticky-stacking scroll — motion polish, no
+  redesign.
+</Update>
+
+<Update date="2026-06-17">
+  **gradeVITian relaunched on the same infrastructure.** The 6-year, 17K-MAU VIT student-tools app was
+  rebuilt as a route segment (`app/gradevitian/**`) in this same Next.js app and FastAPI backend, and
+  served at **gradevitian.jayaremala.com** — the Lightsail Nginx points that host's document root at
+  the exported `out/gradevitian/` folder (a CI step rsyncs the static export to the box). It adds its
+  own SQLite store (`gradevitian.db`, S3-backed): accounts (stdlib scrypt + HMAC tokens, no new deps),
+  per-user autosave of calculator inputs + personal notes, a feedback wall with a two-pass moderation
+  pipeline (keyword filter → LLM toxicity check, escalate-only), referrals, notifications, and a
+  dedicated subdomain sitemap/robots/JSON-LD. Honest criticism stays published; abuse is held or blocked.
+</Update>
+
+<Update date="2026-06-14">
+  **Structured `get_blog` / `get_lab` tools.** Blog and lab entries were previously reachable over MCP
+  and agent mode only through `search_knowledge` (semantic) — there was no way to *enumerate* them.
+  Added two getters to the shared registry: called with no args they return a lightweight metadata list
+  (slug, title, date/status, description, tags/tech); passed a `slug` they return the full entry
+  including content. Because every surface reads the same `TOOLS`, they lit up on MCP, agent mode, and
+  the `/tools` playground at once. Handlers read `blog.json` / `lab.json` fresh per call, so new posts
+  appear automatically — no MCP restart.
+</Update>
+
+<Update date="2026-06-14">
+  **Book a call — in-chat smart handoff.** Pumpkin now surfaces a booking card when a visitor wants to
+  schedule. New `get_booking_link` tool (in the shared registry, so it works in both agent mode and over
+  MCP) and `get_booking_card()` in `integrations/calendar.py` pull real open 30-min slots from the Google
+  Calendar Freebusy API (read-only OAuth, cached ~3 min) and bundle them with `booking_url` + `availability.open`
+  from `profile.json`. Classic chat triggers it via keyword detection (`_is_calendar_query`); agent mode lets
+  the model call the tool. Both emit a `booking_card` SSE event that renders `<BookingCard>` — clickable open
+  slots plus a "Book on Google Calendar" CTA to Jaya's existing Appointment Schedule page (Google handles the
+  invite, Meet link, reminders). Degrades gracefully to just the booking link if the calendar isn't connected,
+  and the fetch is timeout-bounded so it never stalls the token stream. No calendar-write scope required.
+</Update>
+
+<Update date="2026-06-14">
+  **Public MCP server went stateless + CORS-enabled.** `mcp_server.py` now returns
+  `mcp.http_app(path="/", transport="http", stateless_http=True)` — dropping the per-session handshake that
+  was failing connect-from-anywhere clients with "Missing session ID". The `/mcp` mount in `main.py` is
+  wrapped in a permissive CORS layer scoped to that mount only, so browser-based MCP clients work while the
+  main API keeps its domain-locked policy. Endpoint is `https://api.jayaremala.com/mcp/` (trailing slash
+  required — `/mcp` 307-redirects). Verified live: `initialize` and `tools/list` return 200 with no session
+  ID needed.
+</Update>
+
+<Update date="2026-06-13">
+  **Agent mode + public MCP server + multi-provider fallback.** Three connected additions, all over one
+  shared read-only tool registry (`agent/tools.py`): (1) **Agent mode** (`POST /ai/chat/agentic`, opt-in
+  toggle) — the model picks tools per turn over up to 4 rounds and streams visible `step` chips before the
+  answer; Gemini native function-calling with fall-over to Groq/OpenRouter OpenAI-style tool-calling. (2) A
+  **public MCP server** at `/mcp/` (FastMCP streamable-HTTP) so recruiters can connect their own Claude/Cursor,
+  plus a browser-friendly REST shim (`/tools`, `/tools/{name}`) powering the `/mcp` page's live playground.
+  (3) **Cross-provider model fallback** — `settings.model_chain` stacks Gemini → Groq → OpenRouter as ordered
+  `provider:model` entries (each included only if its key is set), with mid-stream `reset` on failure and the
+  serving model shown in the pill badge. Also added the `/system` observability page (latency percentiles, RAG
+  timing, model fallback).
+</Update>
+
+<Update date="2026-06-08">
+  Three admin panel improvements targeting content consistency and operational efficiency:
+
+  **1. Content API editors now commit MDX to GitHub.** Previously, creating, updating, or deleting a blog post or lab entry via the Content API admin editors only wrote to `content.db` — the corresponding `.mdx` file in the repo was not touched. This meant MDX-rendered routes (`/blog/[slug]`, `/lab/[slug]`) and the frontend static build could fall out of sync with what Pumpkin knew. Each save now fires a fire-and-forget GitHub Contents API call: `GET` the existing file SHA, then `PUT` the new MDX (built from the form fields via `buildBlogMdx()` / `buildLabMdx()`). Deletes fire a `DELETE` call against the same path. All calls are non-fatal — the API save succeeds independently regardless of whether the GitHub call succeeds.
+
+  **2. All editors trigger immediate Pumpkin re-index on save.** The nine GitHub-only editors (Profile, Experience, Education, Projects, Skills, Testimonials, HeroStats, Now, Availability) and GalleryEditor previously had no reingest call after save. A successful save to GitHub would update the static site on the next GH Actions deploy but leave Pumpkin's ChromaDB knowledge base stale until that deploy. Every successful save across all editors now fires `POST /admin/reingest` (incremental, no force) immediately. For GitHub-only editors this is a no-op until the JSON files land on the server from the next deploy, but it acts as a safety net for any pending `content.db` changes and primes the path for future content delivery improvements.
+
+  **3. Bulk delete across all admin list views.** All four list views with deletable items now support checkbox multi-select: ContentBlogEditor (Content API blog posts), ContentLabEditor (Content API lab entries), ContentQuotesEditor (Content API quotes), and the BlogEditor published posts list (GitHub MDX path). Each view adds a "Select all" checkbox in the list header and per-row checkboxes. When any items are checked a "Delete selected (N)" button appears. First click changes it to "Confirm delete" / "Cancel" (two-step confirm to prevent accidents); second click executes all deletes sequentially, preserving every side effect from the single-item path — MDX deletion from GitHub, JSON sync to GitHub, Pumpkin eviction, reingest trigger.
+</Update>
+
+<Update date="2026-06-06">
+  Three production reliability fixes for the re-ingest pipeline on the 2 GB / 2 CPU Lightsail server:
+
+  **1. Background re-ingest with polling.** `POST /admin/reingest` previously blocked the HTTP connection for 30–60 s while embedding ran synchronously — Railway/Lightsail proxy timeouts caused the connection to drop silently, leaving the admin spinner running forever. The endpoint now returns `{"status": "started"}` immediately and runs `run_ingest()` via `asyncio.to_thread` in a FastAPI `BackgroundTask`. The admin UI polls `GET /admin/reingest/status` every 2 s until `running === false`, then displays the result.
+
+  **2. Batched embedding to prevent OOM.** Embedding all 124 documents in a single `collection.upsert()` call passes the full list to the BAAI/bge-base-en-v1.5 ONNX model (~440 MB) in one forward pass — peak RAM ~1.5 GB on top of the baseline server, enough to OOM-kill the process. Upserts are now batched at 16 documents per call with `gc.collect()` + 50 ms sleep between batches, keeping peak RAM safely under 1 GB.
+
+  **3. Two-step content sync fixes missing MDX content.** `content.db` is seeded from JSON only on first startup (empty table). New blog posts and lab entries written as MDX and pushed via GH Actions went into `blog.json` / `lab.json` but never reached `content.db` after that initial seed — Pumpkin never knew they existed. Fixed with `sync_blog_json_to_db()` and `sync_lab_json_to_db()`: called at the start of every `_sync_content_db()`, they `INSERT OR IGNORE` any new slugs from the committed JSON files into `content.db` before the regeneration step runs. The full two-step order: pull (JSON → DB) then regenerate (DB → JSON), ensuring the knowledge base always reflects every piece of content on the site.
+</Update>
+
+<Update date="2026-06-06">
+  Knowledge base is now fully dynamic — no hardcoded personal content anywhere in `ingest.py`. Replaced 22 hardcoded FAQ strings with two builder functions: `_build_faq_documents(p, exp_list, edu_list, proj_list, skills_list)` generates 16 personal-content FAQ docs at ingest time from the live JSON files (per-employer `faq_company_*` docs replace the manually maintained `faq_nyu_work` / `faq_shell_wipro`; blog/lab/quotes counts read from live JSON), and `_build_system_faq_documents()` holds 8 architecture docs that describe the tech stack rather than personal data. Added `regenerate_quotes_json()` to `content.py` (mirrors the existing `regenerate_blog_json()` / `regenerate_lab_json()` pattern) so all three content types sync content.db → JSON before every ingest via `_sync_content_db()`. Total knowledge base: **124 atomic documents across 11 types**. Adding a new job, project, blog post, or quote now automatically flows into the knowledge base on the next ingest — no file edits in `ingest.py` required.
+</Update>
+
+<Update date="2026-06-06">
+  Full typography audit across all routes. Calibrated h1 letter-spacing (`-0.02em`) and line-height (`1.1`) for correct appearance at 30–36px page heading sizes — the previous values were tuned for the 80px+ hero and looked over-compressed at normal heading scale. h2 base switched from Playfair Display to Geist Sans (`-0.012em` tracking): 95% of h2 elements in the site are UI card headings at 14–16px where serif makes no sense. Prose h2s inside `.prose` blocks are protected by an explicit `font-family` override that runs after the base layer. Removed a dead `[data-theme="midnight"] #hero` rule left over from before HeroName was rewritten.
+</Update>
+
+<Update date="2026-06-06">
+  Blog index redesigned as a 2-column card grid (`sm:grid-cols-2`). Each card has an `aspect-2/1` cover — an `<img>` if the post has an image field, otherwise `BlogCoverSVG`. The SVG generator uses an FNV-1a hash on the slug to deterministically select one of four patterns: dot constellation (grid + dots + connecting edges + radial gradient focal point), sine waves (7 overlapping waves + accent rings), geometric rings (16 circles and rotated rectangles + concentric focal rings), circuit traces (L-shaped PCB-style paths + circular nodes + square pads). All SVG elements use `style={{ fill: "var(--accent)" }}` so patterns adapt to light and dark mode automatically. Each card also shows a reading-time badge, tag chips, post title, description, and a footer row with publish date, view/clap counts, and a share button.
+</Update>
+
+<Update date="2026-06-06">
+  Sort controls added to the blog index: Latest (publishedAt desc), Oldest (publishedAt asc), Popular (engagement score = views + claps × 3). Three pill buttons with directional icons, `aria-pressed` state, and active highlight. Tag filter row switches from `flex-wrap` (creates a tall multi-row tag cloud on small screens) to `flex-nowrap overflow-x-auto` on mobile, reverting to `sm:flex-wrap sm:overflow-x-visible` on tablet+. All filter/sort buttons have `shrink-0` to prevent compression inside the horizontal scroll container.
+</Update>
+
+<Update date="2026-06-06">
+  Admin page descriptions extended to full coverage. ProfileEditor now manages description paragraphs for every page on the site. Blog, Lab, Gallery, and Quotes pages previously had hardcoded description strings in their component files. Those are replaced with `{profile.page_blog}`, `{profile.page_lab}`, `{profile.page_gallery}`, `{profile.page_quotes}` — four new optional string fields added to `profile.json`, `Profile` TypeScript interface, and the ProfileEditor "Page Descriptions" section. Every visible text element on the site is now editable from admin without a code change.
+</Update>
+
+<Update date="2026-05-28">
+  Added Content CRUD API (`/content/*`). Blog posts, lab entries, and quotes are now stored in `content.db` (SQLite on Lightsail SSD). Public GET endpoints; write endpoints require ADMIN_TOKEN bearer auth. After every write, a background task regenerates the corresponding JSON and calls run_ingest() — only changed documents are re-embedded.
+</Update>
+
+<Update date="2026-05-28">
+  Built admin panel at `/admin`. Consolidates: conversation analytics (week/month/all), feedback satisfaction %, top questions, site visitor stats with geo + page breakdown, blog engagement (unique readers, revisit rate), and content editors for blog posts, lab entries, and quotes. Not linked in nav; robots.txt no-index.
+</Update>
+
+<Update date="2026-05-28">
+  Added HyDE (Hypothetical Document Embeddings, Gao et al. 2022) to the streaming RAG pipeline. HyDE generates a hypothetical answer to the user query and uses it for an additional dense retrieval pass — both run in parallel via asyncio.gather(). HyDE chunks are prepended before RRF so docs retrieved by both signals get a double rank bonus. 4s hard timeout; skipped for greetings and messages under 15 chars.
+</Update>
+
+<Update date="2026-05-28">
+  Added SlowAPI rate limiting middleware. `/ai/chat/stream` is limited to 10 req/min per IP with correct X-Forwarded-For extraction behind Nginx.
+</Update>
+
+<Update date="2026-05-28">
+  Added `/quotes` portfolio route. QuotesFeed component displays curated quotes by category (Philosophy, Engineering, Science, etc.) with favorite/featured flags. Quotes stored in `content.db` and `quotes.json`; served from static JSON on the frontend.
+</Update>
+
+<Update date="2026-05-28">
+  Expanded analytics: site visit tracking (POST /stats/visit + async geo lookup), feedback recording (POST /ai/feedback + satisfaction %), top-questions table, experience ratings (1–5 star). GET /stats/admin returns full breakdown by week/month/all.
+</Update>
+
+<Update date="2026-05-28">
+  Moved RAG ingest to a background daemon thread at startup. FastAPI now serves /health immediately while ONNX loads and ingest runs. Health endpoint reports rag: "degraded" during warmup.
+</Update>
+
+<Update date="2026-05-22">
+  Upgraded embedding model from all-MiniLM-L6-v2 (384-dim, 6-layer) to BAAI/bge-base-en-v1.5 (768-dim, 12-layer BERT) via fastembed ONNX. Same runtime, significantly better retrieval recall on BEIR benchmarks (+8–12 points). No PyTorch dependency added.
+</Update>
+
+<Update date="2026-05-22">
+  Added auto-wipe on embedding model change. run_ingest() now stores the current EMBED_MODEL in .doc_hashes.json. If the stored model name differs on startup, reset_collection() is called automatically and all docs are re-ingested with the new model.
+</Update>
+
+<Update date="2026-05-22">
+  Added static knowledge graph (graph.py). build_graph() constructs three relationship maps from knowledge JSON at startup: project→skills, experience→projects, project→experience. expand_context() does 1-hop traversal after RRF top-5 rerank, pulling up to 2 related docs from the RRF-20 pool into the Gemini context window. Zero extra ChromaDB calls, zero latency penalty.
+</Update>
+
+<Update date="2026-05-22">
+  Added entity_type metadata field to all ChromaDB documents (experience_overview, experience_bullet, project_tech, education_highlight, etc.) via new _entity_type() helper in ingest.py. Enables future metadata-filtered queries without requiring a full reingest.
+</Update>
+
+<Update date="2026-05-21">
+  Replaced collection-level hash re-ingest with per-document incremental sync. Adding a blog post or lab entry now embeds only that one document rather than wiping and rebuilding the entire collection. Stale documents removed from source are deleted from ChromaDB automatically.
+</Update>
+
+<Update date="2026-05-21">
+  Migrated backend from Railway to AWS Lightsail 2GB ($10/month). Set up Nginx + Let's Encrypt for HTTPS on api.jayaremala.com. Purchased jayaremala.com domain — frontend now at root domain instead of GitHub Pages subpath. Removed basePath from next.config.ts, added CNAME file to public/.
+</Update>
+
+<Update date="2026-05-21">
+  Implemented zero-downtime blue-green deployment. New container health-checked on port 8001 before old :8000 is stopped. deploy.sh, rollback.sh, and backup.sh moved into infra/scripts/ and version-controlled in the repo.
+</Update>
+
+<Update date="2026-05-21">
+  Set up daily S3 backup of analytics.db to itsjaya-backups-analytics bucket with 7-day retention. Deploy script auto-restores from S3 if /data/analytics.db is missing on a fresh instance. Docker log rotation configured: json-file driver, 10MB max, 3 files. CHROMA_DB_PATH made configurable via settings.py.
+</Update>
+
+<Update date="2026-04-22">
+  Built /lab section. MDX-based living system design docs with custom components: Status, Arch, Decision, Update, Stack, Metric. Added Lab to nav. First entry: itsjaya itself.
+</Update>
+
+<Update date="2026-04-22">
+  Blog guide drawer now shows live stats dashboard — unique visitors, Pumpkin responses, blog views, claps with 7d / 30d / 1y / all-time breakdown. New GET /stats/overview endpoint returns all periods in one API call.
+</Update>
+
+<Update date="2026-04-18">
+  Blog engagement fully live: views (unique per IP per post), claps (max 50/user, 1.5s debounced batching), per-post stats on index cards, totals in blog header. Backed by SQLite.
+</Update>
+
+<Update date="2026-04-10">
+  BM25 hybrid retrieval added. GET /stats/overview with period filtering (7d / 30d / 1y / all-time) added to both analytics and blog stats modules.
+</Update>
+
+<Update date="2026-04-05">
+  Chat markdown rendering rewritten — handles headings, bullets, numbered lists, bold, italic, inline code, links, dividers.
+</Update>
+
+<Update date="2026-04-03">
+  Gemini model fallback chain implemented. Model indicator badge added to chatbot.
+</Update>
+
+<Update date="2026-03-25">
+  Blog deployed with MDX, Source Serif 4 reading font, publishedAt-based sort. Sync script auto-generates blog.json so Pumpkin can answer questions about published posts.
+</Update>
+
+<Update date="2026-03-10">
+  Single source of truth refactor complete. Backend JSON is canonical — TypeScript files are typed re-exports. sync-knowledge.mjs runs before every build.
+</Update>
+
+<Update date="2025-11-01">
+  Project started. Basic FastAPI + ChromaDB + Next.js skeleton. First working Pumpkin response.
+</Update>
+
+---
+
+## What's next
+
+- Cross-encoder reranking (`cross-encoder/ms-marco-MiniLM-L-6-v2`) — scaffolded in `rerank_cross_encoder()`, gated on Lightsail upgrade to 4GB ($20/month) for the ~250MB RAM headroom
+- Entity-aware ChromaDB pre-filtering using the metadata fields (entity_type, company_key, project_key)
+- Full-text search within blog posts (cmd+K modal already has site-wide search; per-post content search is the next layer)
+- Pumpkin voice input (Web Speech API — already prototyped)
+- Monitoring dashboard (uptime + response time over time)
+- S3 backup for `content.db` alongside `analytics.db`
+- Blog image upload via admin (currently images require a git commit to `frontend/public/blog/`)

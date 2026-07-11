@@ -1,0 +1,36 @@
+[project]
+name = "portfolio-backend"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi>=0.115",
+  "uvicorn[standard]>=0.30",
+  "pydantic>=2.7",
+  "pydantic-settings>=2.3",
+  "google-genai>=1.0",
+  "openai>=1.40",
+  "chromadb>=0.5",
+  "fastembed>=0.4",
+  "rank-bm25>=0.2",
+  "slowapi>=0.1.9",
+  # Pinned to a narrow range: 3.4.3 added Host allow-list enforcement on the
+  # public /mcp endpoint (needs FASTMCP_HTTP_ALLOWED_HOSTS in prod). Unpinned
+  # `>=3.0` previously drifted 3.4.2 -> 3.4.3 between local and the built image
+  # and broke the deployed MCP server. Bump deliberately, not implicitly.
+  "fastmcp>=3.4.3,<3.5",
+  "google-auth>=2.28",
+  "google-auth-oauthlib>=1.2",
+  "google-api-python-client>=2.120",
+  "pytz>=2024.1",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.0",
+  "httpx>=0.27",
+  "ruff>=0.5",
+]
+
+[tool.ruff]
+line-length = 100
+

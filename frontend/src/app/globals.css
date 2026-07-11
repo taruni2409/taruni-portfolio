@@ -1,0 +1,1071 @@
+@import "tailwindcss";
+
+/* Class-based dark mode for next-themes */
+@variant dark (&:where(.dark, .dark *));
+
+/* Prevent iOS Safari auto-zoom on input focus.
+   Safari zooms when font-size < 16px — enforce it on mobile only. */
+@media (max-width: 640px) {
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+}
+
+/* ── Page transition ──────────────────────────────────────────────────────── */
+@keyframes page-transition-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.page-transition { animation: page-transition-in 0.4s cubic-bezier(0.22, 1, 0.36, 1) both; }
+@media (prefers-reduced-motion: reduce) {
+  .page-transition { animation: none; }
+}
+
+/* ── Grid background ──────────────────────────────────────────────────────── */
+.grid-lines {
+  background-image:
+    linear-gradient(to right,  rgb(99 102 241 / 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(99 102 241 / 0.07) 1px, transparent 1px);
+  background-size: 46px 46px;
+  animation: grid-drift 75s linear infinite;
+  -webkit-mask-image: radial-gradient(ellipse 78% 68% at 50% 42%, #000 26%, transparent 84%);
+          mask-image: radial-gradient(ellipse 78% 68% at 50% 42%, #000 26%, transparent 84%);
+}
+.dark .grid-lines {
+  background-image:
+    linear-gradient(to right,  rgb(255 255 255 / 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(255 255 255 / 0.05) 1px, transparent 1px);
+}
+@keyframes grid-drift {
+  from { background-position: 0 0,        0 0;        }
+  to   { background-position: 46px 46px,  46px 46px;  }
+}
+
+/* Perpendicular glowing scan-lines */
+.grid-scan-h {
+  top: 0;
+  background: linear-gradient(to right, transparent 0%, rgb(99 102 241 / 0.40) 50%, transparent 100%);
+  box-shadow: 0 0 12px 1px rgb(99 102 241 / 0.18);
+  animation: grid-scan-y 22s ease-in-out infinite;
+}
+.grid-scan-v {
+  left: 0;
+  background: linear-gradient(to bottom, transparent 0%, rgb(139 92 246 / 0.32) 50%, transparent 100%);
+  box-shadow: 0 0 12px 1px rgb(139 92 246 / 0.14);
+  animation: grid-scan-x 30s ease-in-out infinite;
+}
+@keyframes grid-scan-y {
+  0%        { top: 0;    opacity: 0; }
+  18%, 82%  { opacity: 0.7; }
+  100%      { top: 100%; opacity: 0; }
+}
+@keyframes grid-scan-x {
+  0%        { left: 0;    opacity: 0; }
+  18%, 82%  { opacity: 0.7; }
+  100%      { left: 100%; opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grid-lines,
+  .grid-scan-h,
+  .grid-scan-v { animation: none !important; }
+  .grid-scan-h, .grid-scan-v { opacity: 0; }
+}
+
+/* ── Reading / Focus mode ─────────────────────────────────────────────────── */
+
+/* Box-shadow spotlight — the article dims everything around it with a giant
+   shadow. Immune to ancestor stacking contexts (e.g. PageTransition's
+   transform), so no overlay / z-index war is needed. */
+:root.reading-mode article {
+  position: relative;
+  z-index: 1;
+  background: var(--surface);
+  border-radius: 0.75rem;
+  padding: 2rem 2.5rem !important;
+  max-width: 720px;
+  margin-inline: auto;
+  box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.62);
+  transition: padding 0.35s ease, border-radius 0.35s ease;
+}
+
+/* Don't clip the spotlight shadow anywhere on the path to the viewport */
+:root.reading-mode,
+:root.reading-mode body,
+:root.reading-mode main,
+:root.reading-mode .page-transition {
+  overflow: visible !important;
+}
+
+/* Larger, more comfortable reading typography — respects user font-size preference */
+:root.reading-mode article .prose {
+  font-size: var(--blog-font-size, 1.1rem) !important;
+  line-height: 1.95 !important;
+  letter-spacing: 0.01em;
+}
+
+/* Dim the sticky nav header — NOT article's internal <header> */
+:root.reading-mode header.sticky,
+:root.reading-mode footer,
+:root.reading-mode aside {
+  opacity: 0.04;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+/* ── float-up ─────────────────────────────────────────────────────────────── */
+
+@keyframes float-up {
+  0%   { opacity: 1; transform: translateX(-50%) translateY(0);     }
+  100% { opacity: 0; transform: translateX(-50%) translateY(-28px); }
+}
+.animate-float-up { animation: float-up 0.8s ease-out forwards; }
+
+/* ── Light mode tokens — Editorial Newspaper ───────────── */
+/* Cool blue-slate off-white: quality newsprint under        */
+/* natural light. Ink colors are deep blue-black, not harsh  */
+/* neutral. Borders carry the column-rule weight of print.   */
+:root {
+  --bg:             #fefefb;
+  --surface:        #f5f4f0;
+  --surface-raised: #eceae6;
+  --surface-sunken: #e3e0da;
+  --border:         #c6c2bb;
+  --border-subtle:  #dedad3;
+  --border-strong:  #978f87;
+  --fg:             #181410;
+  --fg-muted:       #3a342c;
+  --fg-subtle:      #5a5248;
+  --fg-faint:       #8c867e;
+  --accent:           #4f46e5;
+  --accent-hover:     #4338ca;
+  --accent-light:     #eef2ff;
+  --accent-fg:        #ffffff;
+  --accent-secondary: #8b5cf6;
+}
+
+/* ── Dark mode tokens — Pure Black ──────────────────────── */
+/* True black backgrounds — OLED-ready, maximum ink contrast. */
+.dark {
+  --bg:             #000000;
+  --surface:        #0c0c0c;
+  --surface-raised: #181818;
+  --surface-sunken: #000000;
+  --border:         #252525;
+  --border-subtle:  #161616;
+  --border-strong:  #3a3a3a;
+  --fg:             #f0f0f0;
+  --fg-muted:       #cccccc;
+  --fg-subtle:      #888888;
+  --fg-faint:       #484848;
+  --accent:           #818cf8;
+  --accent-hover:     #a5b4fc;
+  --accent-light:     #1a1a2e;
+  --accent-fg:        #ffffff;
+  --accent-secondary: #a78bfa;
+}
+
+/* ── Color theme — Midnight only ───────────────────────────── */
+/* All palettes except Midnight removed. :root and .dark above  */
+/* ARE the palette. The data-theme="midnight" attribute is kept  */
+/* for the Roboto font overrides defined below.                  */
+
+/* Midnight — Google's Roboto + Material Design hierarchy     */
+/* Redefining the font vars (same pattern as the colour       */
+/* tokens) swaps the serif pairing to Roboto everywhere it    */
+/* cascades: HeroName (inline var), base-layer headings, and  */
+/* prose — no per-component edits needed.                     */
+[data-theme="midnight"] {
+  --font-display: var(--font-roboto);  /* section headings (h1/h2) */
+  --font-sans:    var(--font-roboto);  /* body + h3 + UI chrome */
+  /* --font-blog intentionally NOT overridden — it falls back to its
+     default (Source Serif 4) so blog/reading content keeps the elegant
+     antique serif, per design. */
+}
+[data-theme="midnight"] body {
+  font-family: var(--font-roboto), system-ui, Arial, sans-serif;
+  line-height: 1.55;
+  letter-spacing: 0;
+}
+/* Material type rhythm — Roboto wants tighter display tracking,
+   neutral on body, slightly looser on the all-caps micro-labels.    */
+[data-theme="midnight"] h1 { letter-spacing: -0.022em; }
+[data-theme="midnight"] h2 { letter-spacing: -0.014em; }
+[data-theme="midnight"] h3 { letter-spacing: -0.006em; font-weight: 500; }
+
+/* Hero name: HeroName renders var(--font-display) inline, so it follows */
+/* the heading face — Inter by default, Roboto under this midnight theme. */
+
+/* Blog/reading prose — match antique's serif rhythm (Source Serif 4     */
+/* via the un-overridden --font-blog).                                  */
+[data-theme="midnight"] .prose {
+  font-size: 1.1rem;
+  line-height: 1.9;
+}
+[data-theme="midnight"] .prose a { text-underline-offset: 3px; }
+
+/* ── Type scale — 5 semantic sizes ─────────────────────── */
+:root {
+  /* Semantic type scale — covers the 10–11px micro-UI and main body */
+  --text-nano:    0.625rem;    /* 10px — chips, eyebrows, section labels  */
+  --text-micro:   0.6875rem;  /* 11px — captions, timestamps, hints      */
+  --text-body:    0.9375rem;  /* 15px — card/body text (bumped from 14px)*/
+  --text-lead:    1.0625rem;  /* 17px — intro paragraphs, bios           */
+  /* Aliases kept for backward compatibility */
+  --text-label:   var(--text-nano);
+  --text-caption: var(--text-micro);
+}
+
+/* ── Radius scale — 3 semantic corners ─────────────────── */
+:root {
+  --radius-card:  1rem;      /* cards — the canonical content-card corner   */
+  --radius-panel: 0.75rem;   /* dropdowns, drawers, code blocks             */
+  --radius-chip:  0.5rem;    /* chips, tags, small controls                 */
+}
+
+/* ── Elevation scale — card + section stacking shadows ─── */
+/* Single source of truth; dark variants override the token */
+:root {
+  --shadow-card:       none;
+  --shadow-card-hover: 0 12px 32px -8px rgb(0 0 0 / 0.08);
+  --shadow-stack:      0 -16px 48px -8px rgb(0 0 0 / 0.12);
+}
+.dark {
+  --shadow-card:
+    0 1px 3px 0 rgb(5 3 15 / 0.5),
+    0 1px 2px -1px rgb(5 3 15 / 0.35);
+  --shadow-card-hover:
+    0 4px 16px -2px rgb(5 3 15 / 0.65),
+    0 8px 32px -4px rgb(5 3 15 / 0.50),
+    0 1px 3px 0 rgb(5 3 15 / 0.35);
+  --shadow-stack: 0 -16px 48px -8px rgb(0 0 0 / 0.50);
+}
+
+@theme inline {
+  /* Colors */
+  --color-background:     var(--bg);
+  --color-foreground:     var(--fg);
+  --color-bg:             var(--bg);
+  --color-surface:        var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-sunken: var(--surface-sunken);
+  --color-border:         var(--border);
+  --color-border-subtle:  var(--border-subtle);
+  --color-border-strong:  var(--border-strong);
+  --color-fg:             var(--fg);
+  --color-fg-muted:       var(--fg-muted);
+  --color-fg-subtle:      var(--fg-subtle);
+  --color-fg-faint:       var(--fg-faint);
+  --color-accent:           var(--accent);
+  --color-accent-hover:     var(--accent-hover);
+  --color-accent-light:     var(--accent-light);
+  --color-accent-fg:        var(--accent-fg);
+  --color-accent-secondary: var(--accent-secondary);
+  /* Radii — rounded-card / rounded-panel / rounded-chip */
+  --radius-card:  var(--radius-card);
+  --radius-panel: var(--radius-panel);
+  --radius-chip:  var(--radius-chip);
+  /* Fonts */
+  /* --font-display (h1 + hero wordmark) is provided directly by the Inter    */
+  /* binding in layout.tsx as a real custom property, so it is intentionally  */
+  /* not redeclared here (and can be overridden per-theme, e.g. midnight).    */
+  --font-sans:     var(--font-geist-sans);
+  --font-mono:     var(--font-geist-mono);
+  --font-blog:     var(--font-source-serif);  /* Source Serif 4 — long-form  */
+  --font-garamond: var(--font-eb-garamond);   /* EB Garamond — editorial serif */
+  /* Type-scale utilities — text-nano, text-micro, text-body, text-lead */
+  --text-nano:  0.625rem;
+  --text-micro: 0.6875rem;
+  --text-body:  0.9375rem;
+  --text-lead:  1.0625rem;
+}
+
+* { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: clip; /* clip at html level so iOS Safari doesn't widen the scroll area */
+  width: 100%;
+  background: var(--bg); /* match body so the root element never shows as white */
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  min-height: 100dvh;
+  transition: background-color 0.25s ease, color 0.25s ease,
+              border-color 0.25s ease, box-shadow 0.25s ease;
+  overflow-x: clip;
+  width: 100%;
+  max-width: 100%;
+}
+
+/* ── Paper grain — subtle newsprint texture ──────────────── */
+/* Very fine noise overlay on all pages, like quality paper   */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9998;
+  opacity: 0.028;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.dark body::after {
+  mix-blend-mode: screen;
+  opacity: 0.018;
+}
+
+/* ── Typography defaults ──────────────────────────────────── */
+/* Applied via @layer base; Tailwind utility classes always win. */
+/* h1 gets the Inter grotesque (--font-display, from layout.tsx) for the  */
+/* oversized editorial page headings; h2–h6 use Geist Sans for clean UI   */
+/* readability. Prose headings override via .prose rules.                 */
+@layer base {
+  h1 {
+    font-family: var(--font-display), "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+  h2 {
+    font-family: var(--font-sans), system-ui, sans-serif;
+    line-height: 1.2;
+    letter-spacing: -0.012em;
+  }
+  h3 {
+    font-family: var(--font-sans), system-ui, sans-serif;
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: -0.015em;
+  }
+  h4, h5, h6 {
+    font-family: var(--font-sans), system-ui, sans-serif;
+    font-weight: 600;
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+  }
+  p {
+    line-height: 1.8;
+  }
+}
+
+/* ── Global focus rings (keyboard nav / WCAG 2.1 AA) ───── */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+:focus:not(:focus-visible) { outline: none; }
+
+/* Inputs/textareas inside styled containers handle focus via the container */
+textarea:focus-visible,
+input:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+@media (max-width: 639px) {
+  body.mobile-no-bg { background: transparent; }
+  .dark body.mobile-no-bg { background: var(--bg); }
+}
+
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: var(--border-strong); }
+
+/* ── Scroll reveal ─────────────────────────────────────────── */
+.sr-reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+.sr-reveal.sr-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .sr-reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+}
+
+/* ── Global button active state ────────────────────────────── */
+button:not(:disabled):active,
+a[role="button"]:active {
+  transform: scale(0.97);
+  transition-duration: 75ms !important;
+}
+
+/* ── Card depth + lift ─────────────────────────────────────── */
+.card-lift {
+  box-shadow: var(--shadow-card);
+  transition:
+    box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    transform   0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.3s ease;
+}
+.card-lift:active {
+  transform: translateY(0px) scale(0.99);
+  transition-duration: 75ms;
+}
+.card-lift:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-card-hover);
+}
+
+/* ── Blog prose ───────────────────────────────────────── */
+/* Base prose — Source Serif 4 body, EB Garamond headings */
+.prose {
+  color: var(--fg-muted);
+  max-width: 68ch;
+  font-size: 1.0625rem;
+  line-height: 1.85;
+  /* Pull opening quotes/bullets into the margin for a cleaner text edge (Safari) */
+  hanging-punctuation: first allow-end last;
+}
+/* Accent-tinted highlight while reading — a small branded delight */
+.prose ::selection { background: color-mix(in srgb, var(--accent) 24%, transparent); }
+
+/* EB Garamond for prose headings — echoes Cormorant Garamond on  */
+/* the hero; same humanist Garamond skeleton, warmer than Playfair */
+.prose h1 {
+  font-family: var(--font-garamond), Georgia, serif;
+  font-size: 2.2rem; font-weight: 700; letter-spacing: -0.01em;
+  line-height: 1.1; color: var(--fg); margin-top: 0; margin-bottom: 0.65em;
+}
+.prose h2 {
+  font-family: var(--font-garamond), Georgia, serif;
+  font-size: 1.55rem; font-weight: 700; letter-spacing: -0.008em;
+  line-height: 1.2; color: var(--fg);
+  margin-top: 2.5em; margin-bottom: 0.65em;
+  padding-bottom: 0.45em; border-bottom: 1px solid var(--border);
+}
+.prose h3 {
+  font-family: var(--font-garamond), Georgia, serif;
+  font-size: 1.2rem; font-weight: 600; letter-spacing: -0.005em;
+  line-height: 1.3; color: var(--fg); margin-top: 1.9em; margin-bottom: 0.45em;
+}
+.prose h4 {
+  font-size: 0.875rem; font-weight: 700; color: var(--fg-muted);
+  text-transform: uppercase; letter-spacing: 0.07em;
+  margin-top: 1.7em; margin-bottom: 0.35em;
+}
+
+/* Balanced heading wraps (no lonely last word) + clearance under the sticky nav
+   so TOC/anchor jumps land the heading in view, not hidden behind the header. */
+.prose h1, .prose h2, .prose h3, .prose h4 { text-wrap: balance; }
+.prose h2, .prose h3, .prose h4 { scroll-margin-top: 6rem; }
+
+.prose p { margin-bottom: 1.4em; }
+.prose p:last-child { margin-bottom: 0; }
+/* Better line breaks: avoid orphans and ragged short last lines */
+.prose p, .prose li { text-wrap: pretty; }
+
+/* Lead / standfirst — the opening paragraph runs slightly larger to ease the
+   reader in (pairs with the drop cap below). */
+.prose > p:first-of-type {
+  font-size: 1.09em;
+  line-height: 1.72;
+  color: var(--fg-subtle);
+}
+
+/* Drop cap — an editorial "settle in" signal on the opening paragraph,
+   set in the heading Garamond and the site's indigo accent. */
+.prose > p:first-of-type::first-letter {
+  float: left;
+  font-family: var(--font-garamond), Georgia, serif;
+  font-weight: 700;
+  font-size: 3.1em;
+  line-height: 0.78;
+  margin: 0.02em 0.12em 0 0;
+  color: var(--accent);
+}
+
+.prose a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: color-mix(in srgb, var(--accent) 38%, transparent);
+  text-underline-offset: 3px;
+  font-weight: 500;
+  transition: color 0.15s, text-decoration-color 0.15s;
+}
+.prose a:hover { color: var(--accent-hover); text-decoration-color: var(--accent-hover); }
+
+.prose strong { color: var(--fg); font-weight: 700; }
+.prose em { color: var(--fg-subtle); font-style: italic; }
+
+.prose ul { padding-left: 1.4em; margin-bottom: 1.4em; list-style-type: disc; }
+.prose ol { padding-left: 1.4em; margin-bottom: 1.4em; list-style-type: decimal; }
+.prose li { margin-bottom: 0.45em; line-height: 1.75; }
+.prose li::marker { color: var(--fg-faint); }
+
+.prose blockquote {
+  position: relative;
+  border-left: 3px solid var(--accent);
+  padding: 0.55em 1.3em 0.55em 1.6em;
+  margin: 2em 0;
+  background: var(--accent-light);
+  border-radius: 0 0.6rem 0.6rem 0;
+  color: var(--accent-hover);
+  font-style: italic;
+  font-size: 1.05em;
+  line-height: 1.7;
+}
+/* Oversized watermark quote glyph — a literary, pull-quote feel */
+.prose blockquote::before {
+  content: "\201C";
+  position: absolute;
+  top: -0.12em;
+  left: 0.34em;
+  font-family: var(--font-garamond), Georgia, serif;
+  font-size: 2.6em;
+  line-height: 1;
+  color: var(--accent);
+  opacity: 0.16;
+  pointer-events: none;
+}
+.prose blockquote p { margin-bottom: 0; }
+
+/* ── Inline code (backtick) — NOT inside a pre block ── */
+.prose :not(pre) > code {
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 0.15em 0.45em;
+  font-size: 0.85em;
+  font-family: var(--font-mono), monospace;
+  color: #c026d3;
+}
+.dark .prose :not(pre) > code { color: #e879f9; }
+
+/* ── Code blocks — Shiki handles token colors ── */
+.prose pre {
+  background: #f6f8fa;
+  border: 1px solid #e1e4e8;
+  border-radius: 0.875rem;
+  overflow-x: auto;
+  margin: 1.6em 0;
+  font-size: 0.875em;
+  line-height: 1.65;
+  padding: 1.3em 1.5em;
+}
+.dark .prose pre {
+  background: #22272e;
+  border-color: #30363d;
+}
+/* Reset prose pre decorations inside not-prose containers (e.g. ArchBlock, custom code widgets).
+   .not-prose only guards against Tailwind Typography's :where() selectors, not custom CSS. */
+.prose .not-prose pre {
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  font-size: inherit !important;
+  line-height: inherit !important;
+}
+.prose pre code {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
+}
+
+/* ── Shiki dual-theme token colours (next-themes uses .dark on <html>) ── */
+code[data-theme*=" "],
+code[data-theme*=" "] span {
+  color: var(--shiki-light);
+}
+.dark code[data-theme*=" "],
+.dark code[data-theme*=" "] span {
+  color: var(--shiki-dark);
+}
+
+/* ── Code block title / file name ── */
+figcaption[data-rehype-pretty-code-title] {
+  background: #eaeef2;
+  border: 1px solid #e1e4e8;
+  border-bottom: none;
+  border-radius: 0.875rem 0.875rem 0 0;
+  padding: 0.35em 1.2em;
+  font-size: 0.72em;
+  font-family: var(--font-mono), monospace;
+  color: #57606a;
+  letter-spacing: 0.01em;
+}
+.dark figcaption[data-rehype-pretty-code-title] {
+  background: #2d333b;
+  border-color: #30363d;
+  color: #8b949e;
+}
+figcaption[data-rehype-pretty-code-title] + pre {
+  border-radius: 0 0 0.875rem 0.875rem;
+  border-top: none;
+  margin-top: 0;
+}
+
+/* ── figure wrapper emitted by rehype-pretty-code ── */
+[data-rehype-pretty-code-figure] {
+  margin: 1.6em 0;
+}
+[data-rehype-pretty-code-figure] > pre {
+  margin: 0;
+}
+
+/* ── Highlighted lines ({1,3-5} syntax in code fence) ── */
+.prose pre [data-highlighted-line] {
+  background: rgba(99, 102, 241, 0.08);
+  border-left: 2px solid #6366f1;
+  display: block;
+  padding-left: calc(1.2em - 2px);
+  padding-right: 1.2em;
+  margin-left: -1.5em;
+  margin-right: -1.5em;
+}
+
+/* ── Highlighted words (::highlight syntax) ── */
+.prose pre mark[data-highlighted-chars] {
+  background: rgba(99, 102, 241, 0.18);
+  border-radius: 3px;
+  padding: 0.1em 0.15em;
+  color: inherit;
+}
+
+.prose hr { border: none; border-top: 1px solid var(--border); margin: 2.5em 0; }
+
+.prose img {
+  width: 100%;
+  border-radius: 0.875rem;
+  border: 1px solid var(--border);
+  margin: 1.8em 0 0.5em;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+}
+/* Image figures (from BlogImage component) get their own margin — not code figures */
+.prose figure:not([data-rehype-pretty-code-figure]) { margin: 1.8em 0; }
+.prose figcaption:not([data-rehype-pretty-code-title]) { text-align: center; font-size: 0.8rem; color: var(--fg-faint); margin-top: 0.5em; font-style: italic; }
+
+.prose table { width: 100%; border-collapse: collapse; font-size: 0.9em; margin: 1.6em 0; }
+.prose th { background: var(--surface-raised); font-weight: 700; color: var(--fg); padding: 0.6em 1em; text-align: left; border: 1px solid var(--border); }
+.prose td { padding: 0.55em 1em; border: 1px solid var(--border); color: var(--fg-muted); }
+.prose tr:nth-child(even) td { background: var(--bg); }
+
+/* ── Footnotes (GFM [^1] syntax) ───────────────────────── */
+/* Inline reference superscript */
+.prose [data-footnote-ref] {
+  font-weight: 600;
+  font-size: 0.72em;
+  text-decoration: none;
+  padding: 0 0.12em;
+  vertical-align: super;
+  line-height: 0;
+}
+.prose [data-footnote-ref]:hover { text-decoration: underline; }
+
+/* Footnotes section at the end of the article */
+.prose .footnotes,
+.prose section[data-footnotes] {
+  margin-top: 3.5em;
+  padding-top: 1.6em;
+  border-top: 1px solid var(--border);
+  font-size: 0.9em;
+  color: var(--fg-subtle);
+}
+/* "Footnotes" label — small uppercase tag, not a full prose heading */
+.prose [id="footnote-label"] {
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--fg-faint);
+  border: none;
+  padding: 0;
+  margin: 0 0 1em;
+}
+.prose .footnotes ol { margin-bottom: 0; }
+.prose .footnotes li { margin-bottom: 0.6em; line-height: 1.6; }
+.prose .footnotes li:last-child { margin-bottom: 0; }
+.prose [data-footnote-backref] {
+  margin-left: 0.35em;
+  text-decoration: none;
+  color: var(--accent);
+}
+.prose [data-footnote-backref]:hover { color: var(--accent-hover); }
+
+/* Animations */
+@keyframes pumpkin-float {
+  0%, 100% { transform: translateY(0px)   rotate(0deg); }
+  30%      { transform: translateY(-18px) rotate(2deg); }
+  70%      { transform: translateY(-10px) rotate(-1.5deg); }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(100px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-100px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes blink {
+  0%,100% { opacity: 1; }
+  50%     { opacity: 0; }
+}
+@keyframes marquee-left {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+@keyframes marquee-right {
+  from { transform: translateX(-50%); }
+  to   { transform: translateX(0); }
+}
+@keyframes twinkle {
+  0%, 100% { opacity: var(--star-opacity, 0.6); }
+  50%      { opacity: 0.1; }
+}
+@keyframes orbit {
+  from { transform: rotate(0deg) translateX(var(--orbit-r, 60px)) rotate(0deg); }
+  to   { transform: rotate(360deg) translateX(var(--orbit-r, 60px)) rotate(-360deg); }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%      { transform: translateY(-8px); }
+}
+@keyframes drift-left {
+  from { transform: translateX(0px); }
+  to   { transform: translateX(-120px); }
+}
+@keyframes drift-right {
+  from { transform: translateX(0px); }
+  to   { transform: translateX(90px); }
+}
+.animate-fade-up    { animation: fadeUp 0.5s ease-out both; }
+.animate-slide-right { animation: slideInRight 1s cubic-bezier(.16,1,.3,1) both; }
+.animate-slide-left  { animation: slideInLeft  1s cubic-bezier(.16,1,.3,1) both; }
+.cursor-blink { animation: blink 1s step-end infinite; }
+.animate-pumpkin-float  { animation: pumpkin-float 4s ease-in-out infinite; }
+.animate-float      { animation: float    3.5s ease-in-out infinite; }
+
+/* Hero name — full-bleed marquee scrolling right → left */
+.hero-name-band {
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);
+          mask-image: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);
+}
+.hero-name-track {
+  /* Transform is driven per-frame in JS (HeroName.tsx) so the marquee can
+     react to scroll velocity — no CSS animation, which would override it. */
+  will-change: transform;
+}
+.hero-name-word {
+  letter-spacing: -0.035em;
+}
+.hero-name-dot {
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.5s ease;
+}
+
+/* Hover — the title settles, breathes, and warms to life */
+.hero-name-band:hover { cursor: default; }
+.hero-name-band:hover .hero-name-word {
+  animation: hero-name-breathe 4.5s ease-in-out infinite;
+}
+.hero-name-band:hover .hero-name-dot {
+  transform: scale(1.4);
+  opacity: 0.85;
+}
+@keyframes hero-name-breathe {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-1.2%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-name-track { animation: none; }
+  .hero-name-band:hover .hero-name-word { animation: none; }
+}
+
+@keyframes bubble-in {
+  from { opacity: 0; transform: translateY(10px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0)    scale(1);    }
+}
+.animate-bubble-in  { animation: bubble-in  0.38s cubic-bezier(.16,1,.3,1) both; }
+@keyframes bubble-out {
+  from { opacity: 1; transform: translateY(0)    scale(1);    }
+  to   { opacity: 0; transform: translateY(8px)  scale(0.96); }
+}
+.animate-bubble-out { animation: bubble-out 0.22s ease-in both; }
+
+/* ── Chat FAB ── dot-grid rotation inside the button circle */
+@keyframes fab-dot-rotate {
+  from { transform: rotate(0deg)   scale(1.72); }
+  to   { transform: rotate(360deg) scale(1.72); }
+}
+.fab-dot-rotate { animation: fab-dot-rotate 32s linear infinite; }
+
+/* ── Chat FAB ── outer ring gently breathes */
+@keyframes fab-ring-pulse {
+  0%, 100% { opacity: 0.28; transform: scale(1);    }
+  50%       { opacity: 0.65; transform: scale(1.08); }
+}
+.fab-ring-pulse { animation: fab-ring-pulse 3.6s ease-in-out infinite; }
+
+/* ── Hero hang tag ── */
+.hero-tag-anchor {
+  transform: translateX(-50%);
+}
+@media (max-width: 640px) {
+  .hero-tag-anchor {
+    transform: translateX(-150%);
+  }
+}
+
+@keyframes hero-tag-drop {
+  0%   { opacity: 0; transform: translateY(-10px); }
+  50%  { opacity: 1; }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes hero-tag-swing-in {
+  0%   { transform: rotate(-34deg); }
+  38%  { transform: rotate(5deg);   }
+  58%  { transform: rotate(-10deg); }
+  74%  { transform: rotate(-1deg);  }
+  87%  { transform: rotate(-4deg);  }
+  100% { transform: rotate(-3deg);  }
+}
+@keyframes hero-tag-sway {
+  0%, 100% { transform: rotate(-3deg);  }
+  50%       { transform: rotate(0.5deg); }
+}
+
+@keyframes confetti-burst {
+  0%   { opacity: 1; transform: translate(0, 0) rotate(0deg) scale(1); }
+  100% { opacity: 0; transform: translate(var(--tx, 0px), var(--ty, -50px)) rotate(var(--rot, 360deg)) scale(0.25); }
+}
+.confetti-particle {
+  animation: confetti-burst var(--dur, 700ms) cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+@keyframes pumpkin-glow {
+  0%, 100% { box-shadow: 0 8px 28px rgba(34,110,20,0.35), 0 2px 8px rgba(0,0,0,0.18); }
+  50%      { box-shadow: 0 10px 38px rgba(34,110,20,0.55), 0 2px 8px rgba(0,0,0,0.18); }
+}
+.animate-pumpkin-glow { animation: pumpkin-glow 3s ease-in-out infinite; }
+
+@keyframes spin-ccw {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(-360deg); }
+}
+.animate-spin-ccw { animation: spin-ccw 3s linear infinite; }
+
+@keyframes think-wave {
+  0%, 55%, 100% { transform: scaleY(0.28); }
+  27%            { transform: scaleY(1); }
+}
+.animate-think-wave { animation: think-wave 1.3s ease-in-out infinite; }
+
+@keyframes pumpkin-3d-spin {
+  0%   { transform: perspective(320px) rotateY(0deg)   scale(1);    }
+  35%  { transform: perspective(320px) rotateY(180deg) scale(1.14); }
+  100% { transform: perspective(320px) rotateY(360deg) scale(1);    }
+}
+.pumpkin-3d-svg { animation: pumpkin-3d-spin 0.82s cubic-bezier(.36,.07,.19,.97) forwards; }
+
+/* ── Liquid wave — fixed bottom of every screen ───────────── */
+@keyframes lw-morph {
+  0%, 100% { d: path("M -80,85 C 360,15 1080,158 1520,60 L 1520,200 L -80,200 Z"); }
+  40%       { d: path("M -80,108 C 360,40 1080,172 1520,82 L 1520,200 L -80,200 Z"); }
+  75%       { d: path("M -80,68 C 360,0 1080,138 1520,44 L 1520,200 L -80,200 Z"); }
+}
+
+.lw-path {
+  opacity: 0.38;
+  animation: lw-morph 22s ease-in-out infinite;
+}
+.dark .lw-path { opacity: 0.55; }
+
+/* ── Pipeline connector flow ────────────────────────────── */
+@keyframes flow {
+  0%   { transform: translateY(-100%); opacity: 0; }
+  30%  { opacity: 1; }
+  70%  { opacity: 1; }
+  100% { transform: translateY(200%);  opacity: 0; }
+}
+
+/* ── Section stacking depth shadow ─────────────────────── */
+.stack-sect {
+  box-shadow: var(--shadow-stack);
+}
+
+/* ── Mobile: disable the sticky card-stacking entirely ──────
+   On phones the pinned sections + content-scrubbing fight native
+   momentum scroll and cause "bumps". Below 768px we render them as
+   normal flow blocks for buttery-smooth native scrolling. The JS
+   scroll listener is also skipped on mobile (see StackSection.tsx). */
+@media (max-width: 767px) {
+  .stack-pin {
+    position: static !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+  .stack-pin > div {
+    transform: none !important;
+  }
+  .stack-spacer {
+    display: none !important;
+  }
+}
+
+/* ── Pumpkin hero blobs ─────────────────────────────────── */
+@keyframes blob {
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  33%       { transform: translate(18px, -22px) scale(1.07); }
+  66%       { transform: translate(-14px, 14px) scale(0.95); }
+}
+.animate-blob { animation: blob 8s ease-in-out infinite; }
+.animation-delay-2000 { animation-delay: 2s; }
+.animation-delay-4000 { animation-delay: 4s; }
+
+/* ── Hero section background ─────────────────────────────── */
+/* Light: deeper cool gradient — crisper editorial contrast   */
+/* Dark: subtle depth gradient from slightly elevated surface */
+.hero-section-bg {
+  background: linear-gradient(155deg, var(--surface) 0%, var(--bg) 100%);
+}
+.dark .hero-section-bg { background: var(--bg); }
+
+/* hero-dot-cursor removed — HeroDotGrid now uses a canvas  */
+
+/* ── Hero name — lift shadow + accent glow ──────────────── */
+/* Lift: subtle dark shadow to pop text off the dot bg      */
+.hero-name-lift {
+  text-shadow:
+    0 2px 16px rgba(0,0,0,0.10),
+    0 1px 3px  rgba(0,0,0,0.07);
+}
+/* Glow: accent-coloured halo around the surname            */
+/* Uses CSS relative-color so it follows every theme token  */
+.hero-name-glow {
+  filter:
+    drop-shadow(0 0 18px rgba(from var(--accent) r g b / 0.32))
+    drop-shadow(0 0  6px rgba(from var(--accent) r g b / 0.18));
+}
+
+/* ── Dot grid (footer + hero shared) ───────────────────── */
+.hero-dot-grid {
+  background-image: radial-gradient(circle, var(--border) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* ── Hero dot pattern — border-strong so dots are visible   */
+/*    on bg-surface across all light/dark themes            */
+.hero-dot-pattern {
+  background-image: radial-gradient(circle, var(--border-strong) 1.5px, transparent 1.5px);
+  background-size: 24px 24px;
+}
+
+/* ── Hero floating dot grid ─────────────────────────────── */
+/* Animates background-position through a slow multi-        */
+/* directional drift — no layout/paint cost, just compositing */
+@keyframes hero-dot-float {
+  0%   { background-position: 0px 0px; }
+  20%  { background-position: 9px 12px; }
+  45%  { background-position: 18px 5px; }
+  70%  { background-position: 10px -8px; }
+  100% { background-position: 0px 0px; }
+}
+
+.hero-dot-float {
+  background-image: radial-gradient(circle, var(--border) 1px, transparent 1px);
+  background-size: 24px 24px;
+  animation: hero-dot-float 18s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-dot-float { animation: none; }
+}
+
+/* ── Chat textarea — hide scrollbar ─────────────────────── */
+.chat-textarea { scrollbar-width: none; }
+.chat-textarea::-webkit-scrollbar { display: none; }
+
+/* ── Generic scrollbar-hidden scroller (e.g. mobile chip rows) ── */
+.no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
+/* ── Ask Pumpkin button — pumpkin icon ──────────────────── */
+.pumpkin-icon {
+  display: inline-block;
+}
+
+/* ── Hanging punctuation on blockquotes / pull-quotes ───── */
+.prose blockquote,
+.hanging-quote {
+  hanging-punctuation: first;
+}
+
+/* ── Gradient section micro-labels ─────────────────────── */
+.label-gradient {
+  background: linear-gradient(90deg, var(--accent) 0%, var(--accent-secondary, #8b5cf6) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Reduced motion — disable ambient animations ────────── */
+@media (prefers-reduced-motion: reduce) {
+  .animate-blob,
+  .animate-pumpkin-float,
+  .animate-pumpkin-glow,
+  .animate-float,
+  .lw-path,
+  .animate-spin-ccw,
+  .animate-think-wave {
+    animation: none !important;
+  }
+  .animate-pulse { animation: none !important; opacity: 0.8; }
+  .animate-bounce { animation: none !important; }
+}
+
+/* ── Print stylesheet ───────────────────────────────────── */
+@media print {
+  /* Hide interactive / decorative chrome */
+  header, footer, nav,
+  canvas, .fixed, .sticky,
+  [aria-label="Open sidebar"],
+  [aria-label="Ask Pumpkin AI"] { display: none !important; }
+
+  body { background: #fff !important; color: #000 !important; font-size: 11pt; }
+
+  /* Show contact info block at top */
+  body::before {
+    content: "Taruni Nallamothu  ·  taruninallamothu24@gmail.com  ·  linkedin.com/in/taruninallamothu24  ·  github.com/taruni2409";
+    display: block;
+    font-size: 9pt;
+    color: #555;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 6pt;
+    margin-bottom: 14pt;
+  }
+
+  /* Expand all sections */
+  section { position: static !important; height: auto !important; overflow: visible !important; }
+  .stack-sect { box-shadow: none !important; }
+
+  /* Reasonable link display */
+  a[href]::after { content: " (" attr(href) ")"; font-size: 8pt; color: #666; }
+  a[href^="/"]:after { content: ""; } /* skip internal links */
+
+  @page { margin: 1.5cm; }
+}
