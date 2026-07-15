@@ -12,7 +12,6 @@
     "sync": "node ../scripts/sync-knowledge.mjs"
   },
   "dependencies": {
-    "@emailjs/browser": "^4.4.1",
     "@tailwindcss/typography": "^0.5.19",
     "gray-matter": "^4.0.3",
     "next": "16.2.4",

@@ -1,9 +1,13 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import emailjs from "@emailjs/browser";
 import Link from "next/link";
 import { profile } from "@/data/profile";
+
+const GOOGLE_FORM_ID = "1FAIpQLSd2-_UD06Xkq1JVA5aXwnNTyBxAFFAxerijo-aOtX84ywveog";
+const GOOGLE_FORM_ENTRY_NAME = "entry.219529099";
+const GOOGLE_FORM_ENTRY_EMAIL = "entry.69034232";
+const GOOGLE_FORM_ENTRY_MESSAGE = "entry.382267110";
 
 type ToastType = "success" | "warning" | "error";
 
@@ -105,12 +109,17 @@ export default function ContactForm() {
 
     setSending(true);
     try {
-      await emailjs.send(
-        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
-        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
-        { from_name: name, from_email: email, message },
-        process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!
-      );
+      const body = new URLSearchParams({
+        [GOOGLE_FORM_ENTRY_NAME]: name,
+        [GOOGLE_FORM_ENTRY_EMAIL]: email,
+        [GOOGLE_FORM_ENTRY_MESSAGE]: message,
+      });
+      await fetch(`https://docs.google.com/forms/d/e/${GOOGLE_FORM_ID}/formResponse`, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body,
+      });
       sessionStorage.setItem("contact_sent", "1");
       pushToast("success", "Message sent!", "Thanks for reaching out — I'll get back to you soon.");
       setName("");
