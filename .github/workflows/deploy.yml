@@ -116,7 +116,8 @@ jobs:
 
   build-backend:
     needs: detect-changes
-    if: needs.detect-changes.outputs.backend == 'true' || github.event_name == 'workflow_dispatch'
+    # Skipped until backend hosting is set up (LIGHTSAIL_HOST secret configured).
+    if: (needs.detect-changes.outputs.backend == 'true' || github.event_name == 'workflow_dispatch') && secrets.LIGHTSAIL_HOST != ''
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -144,7 +145,8 @@ jobs:
 
   deploy-backend:
     needs: [detect-changes, build-backend]
-    if: needs.detect-changes.outputs.backend == 'true' || github.event_name == 'workflow_dispatch'
+    # Skipped until backend hosting is set up (LIGHTSAIL_HOST secret configured).
+    if: (needs.detect-changes.outputs.backend == 'true' || github.event_name == 'workflow_dispatch') && secrets.LIGHTSAIL_HOST != ''
     runs-on: ubuntu-latest
     steps:
       - name: Deploy backend via SSH
