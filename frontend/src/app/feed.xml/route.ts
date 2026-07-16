@@ -8,7 +8,7 @@ const SITE_TITLE = "Taruni Nallamothu — Blog";
 const SITE_DESC  = "Notes on data engineering, machine learning, and building analytics systems.";
 const AUTHOR     = "Taruni Nallamothu";
 const AUTHOR_EMAIL = "taruninallamothu24@gmail.com";
-const API        = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
+const API        = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
 
 function escapeXml(str: string) {
   return str
@@ -29,7 +29,7 @@ interface FeedPost {
 
 async function fetchApiPosts(): Promise<FeedPost[]> {
   try {
-    const res = await fetch(`${API}/content/blog`, { next: { revalidate: 3600 } });
+    const res = await fetch(`${API}/content/blog`, { next: { revalidate: 3600 }, signal: AbortSignal.timeout(5000) });
     if (!res.ok) return [];
     const posts = await res.json() as {
       slug: string; title: string; description: string;

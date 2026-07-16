@@ -7,7 +7,7 @@ import { siteGroups } from "@/lib/site-nav";
 export const revalidate = 3600;
 
 const BASE = "https://jayaremala.com";
-const API  = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
+const API  = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
 
 type ChangeFreq = MetadataRoute.Sitemap[number]["changeFrequency"];
 
@@ -32,7 +32,7 @@ const DEFAULT_META = { priority: 0.6, changeFrequency: "monthly" as const };
 
 async function fetchApiBlogPosts(): Promise<{ slug: string; published_at: string }[]> {
   try {
-    const res = await fetch(`${API}/content/blog`, { next: { revalidate: 3600 } });
+    const res = await fetch(`${API}/content/blog`, { next: { revalidate: 3600 }, signal: AbortSignal.timeout(5000) });
     if (!res.ok) return [];
     const posts = await res.json();
     // only published posts belong in the sitemap
@@ -43,7 +43,7 @@ async function fetchApiBlogPosts(): Promise<{ slug: string; published_at: string
 
 async function fetchApiLabEntries(): Promise<{ slug: string; updated_at: string }[]> {
   try {
-    const res = await fetch(`${API}/content/lab`, { next: { revalidate: 3600 } });
+    const res = await fetch(`${API}/content/lab`, { next: { revalidate: 3600 }, signal: AbortSignal.timeout(5000) });
     if (!res.ok) return [];
     return await res.json();
   } catch { return []; }

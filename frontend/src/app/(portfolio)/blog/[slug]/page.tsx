@@ -248,7 +248,10 @@ export async function generateStaticParams() {
   } catch {
     // API not available during build — filesystem slugs are the baseline
   }
-  return Array.from(fsslugs).map((slug) => ({ slug }));
+  // "output: export" requires at least one static param per dynamic route —
+  // fall back to a placeholder that resolves to notFound() when there are no posts yet.
+  const slugs = fsslugs.size ? Array.from(fsslugs) : ["_placeholder"];
+  return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: Props) {

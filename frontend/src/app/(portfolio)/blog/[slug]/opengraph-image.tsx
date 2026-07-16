@@ -4,7 +4,9 @@ import { getPostBySlug, getAllSlugs } from "@/lib/blog";
 export const dynamic = "force-static";
 
 export function generateStaticParams() {
-  return getAllSlugs().map((slug) => ({ slug }));
+  const slugs = getAllSlugs();
+  // "output: export" requires at least one static param per dynamic route.
+  return (slugs.length ? slugs : ["_placeholder"]).map((slug) => ({ slug }));
 }
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";

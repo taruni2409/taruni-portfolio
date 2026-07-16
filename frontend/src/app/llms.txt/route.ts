@@ -8,7 +8,7 @@ import { siteGroups } from "@/lib/site-nav";
 export const revalidate = 3600;
 
 const BASE = "https://jayaremala.com";
-const API  = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
+const API  = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
 
 interface Entry {
   slug: string;
@@ -22,7 +22,7 @@ interface Entry {
 
 async function fetchApiBlogPosts(): Promise<Entry[]> {
   try {
-    const res = await fetch(`${API}/content/blog`, { next: { revalidate: 3600 } });
+    const res = await fetch(`${API}/content/blog`, { next: { revalidate: 3600 }, signal: AbortSignal.timeout(5000) });
     if (!res.ok) return [];
     const posts = await res.json() as {
       slug: string; title: string; description: string;
@@ -41,7 +41,7 @@ async function fetchApiBlogPosts(): Promise<Entry[]> {
 
 async function fetchApiLabEntries(): Promise<Entry[]> {
   try {
-    const res = await fetch(`${API}/content/lab`, { next: { revalidate: 3600 } });
+    const res = await fetch(`${API}/content/lab`, { next: { revalidate: 3600 }, signal: AbortSignal.timeout(5000) });
     if (!res.ok) return [];
     const entries = await res.json() as {
       slug: string; title: string; description: string; updated_at: string;

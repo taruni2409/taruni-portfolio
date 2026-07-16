@@ -7,6 +7,8 @@ type Props = { params: Promise<{ tag: string }> };
 export async function generateStaticParams() {
   const posts = getAllPosts();
   const tags = [...new Set(posts.flatMap((p) => p.tags))];
+  // "output: export" requires at least one static param per dynamic route.
+  if (tags.length === 0) return [{ tag: "_placeholder" }];
   return tags.map((tag) => ({ tag: encodeURIComponent(tag) }));
 }
 
