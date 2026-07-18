@@ -1,0 +1,58 @@
+---
+title: Building an NLP Pipeline to Extract Clinical Insights from Medical Text
+date: "2026-07-14"
+publishedAt: "2026-07-14"
+description: A look at the Intelligent Medical Text Analyser — combining NLTK, SpaCy, and BERT to turn unstructured clinical narratives into structured, searchable insight.
+tags: [nlp, machine-learning, healthcare, python]
+---
+
+Clinical narratives are some of the messiest unstructured text you can work with — inconsistent abbreviations, dense domain vocabulary, and a writing style optimised for the clinician who wrote it, not for a downstream model. The Intelligent Medical Text Analyser started as a personal project to see how far a layered NLP pipeline could get toward making that text actually searchable.
+
+<Callout type="info" title="Goal">
+  Turn free-text clinical notes into structured outputs — classification, summarisation, and extracted entities — without a purpose-built clinical NLP license.
+</Callout>
+
+## Why one model wasn't enough
+
+The obvious approach is "throw a transformer at it." That works for some of the pipeline, but not all of it. Classification benefits from a fine-tuned BERT model that's actually seen clinical phrasing. Summarisation over long narratives needs a different strategy than a single-pass classifier. And a lot of the entity extraction — medication names, dosages, symptom mentions — is well served by classic rule-based NLP that's faster and more auditable than a black-box model, which matters a lot in a clinical context.
+
+So the pipeline ended up layered:
+
+```python
+import spacy
+from transformers import pipeline
+
+nlp = spacy.load("en_core_web_sm")
+classifier = pipeline("text-classification", model="emilyalsentzer/Bio_ClinicalBERT")
+
+def process_note(text: str) -> dict:
+    doc = nlp(text)
+    entities = [(ent.text, ent.label_) for ent in doc.ents]
+    classification = classifier(text[:512])[0]
+    return {"entities": entities, "classification": classification}
+```
+
+<Callout type="tip" title="Why SpaCy first">
+  Running SpaCy's rule-based NER before the transformer pass meant the classifier only had to handle genuinely ambiguous cases — cutting the volume of text that needed the expensive model call.
+</Callout>
+
+## Summarisation had a different failure mode
+
+Clinical notes tend to bury the actually-important line — a change in medication, a new symptom — somewhere in the middle of routine documentation. Naive extractive summarisation (just pulling the "most central" sentences by TF-IDF similarity) reliably missed these, because routine documentation is, definitionally, similar to itself across many notes. What worked better was weighting sentences that introduced entities not present in the patient's prior notes — novelty, not centrality, was the signal that mattered.
+
+## Where Scikit-learn still earned its place
+
+Not every stage needed deep learning. Triage-style classification — is this note urgent, routine, or follow-up — was well served by a Scikit-learn model over TF-IDF features, and it was fast enough to run on every note rather than sampling.
+
+| Pipeline stage | Approach | Why |
+|---|---|---|
+| Entity extraction | SpaCy (rule-based NER) | Fast, auditable, handles the common cases |
+| Ambiguous classification | Fine-tuned BERT | Needed for genuinely context-dependent cases |
+| Note triage | Scikit-learn (TF-IDF) | Fast enough to run on every note, good enough accuracy |
+| Summarisation | Novelty-weighted extraction | Centrality-based methods missed the important line |
+
+<Divider />
+
+## The Streamlit layer mattered more than expected
+
+I wrapped the whole thing in a Streamlit interface, mostly so I could actually look at the outputs rather than trusting metrics in isolation. It turned out to matter more than expected — seeing a wrongly-classified note next to the actual text made error patterns obvious in a way a confusion matrix alone didn't. If you're building something like this, don't skip the interface, even a rough one.

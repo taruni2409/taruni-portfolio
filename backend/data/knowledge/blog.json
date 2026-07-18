@@ -1,1 +1,41 @@
-[]
+[
+  {
+    "slug": "forecasting-accuracy-feature-engineering",
+    "title": "Pushing Forecasting Accuracy from 78% to 92% at Enterprise Scale",
+    "date": "2026-07-02",
+    "description": "How feature engineering and disciplined data validation took our forecasting models from \"good enough\" to genuinely trusted, on 500GB+ of daily enterprise data.",
+    "tags": [
+      "machine-learning",
+      "feature-engineering",
+      "forecasting",
+      "data-engineering"
+    ],
+    "content": "At Tata Consultancy Services, I inherited a forecasting model that was technically working — 78% accuracy, shipped, in production. Nobody was thrilled with it, but nobody was rewriting it either. That's the most dangerous state a model can be in.\n\nWhy 78% wasn't good enough\n\nThe model was consuming raw transactional fields more or less as they came off the source systems — a handful of aggregates, a couple of lag features, and not much else. It captured the obvious seasonality but missed the second-order signals: interaction effects between regions and product categories, rolling volatility, and how recent an anomaly was before it started dragging predictions off course.\n\nFeature engineering, not model swapping\n\nThe instinct when a model underperforms is to reach for a fancier algorithm. I didn't. Instead I built out a feature engineering pipeline that expanded the input space from a dozen raw fields to over 100 engineered features — rolling statistics at multiple windows, categorical interaction terms, and decay-weighted historical aggregates.\n\nValidation had to come first\n\nNone of this matters if the input data is unreliable. Before trusting any new feature, I put a validation framework in front of the pipeline — schema checks, null-rate thresholds, and range assertions across datasets exceeding 1M+ records, catching bad batches before they reached the model rather than after.\n\nWhat I'd tell someone starting this today\n\nModel accuracy problems are usually feature problems wearing a model-shaped disguise. Before reaching for a different algorithm, ask whether the model actually has access to the signal you're expecting it to learn. In this case, it didn't — and once it did, 92% wasn't a stretch, it was just what the data had been saying all along."
+  },
+  {
+    "slug": "intelligent-medical-text-analyser",
+    "title": "Building an NLP Pipeline to Extract Clinical Insights from Medical Text",
+    "date": "2026-07-14",
+    "description": "A look at the Intelligent Medical Text Analyser — combining NLTK, SpaCy, and BERT to turn unstructured clinical narratives into structured, searchable insight.",
+    "tags": [
+      "nlp",
+      "machine-learning",
+      "healthcare",
+      "python"
+    ],
+    "content": "Clinical narratives are some of the messiest unstructured text you can work with — inconsistent abbreviations, dense domain vocabulary, and a writing style optimised for the clinician who wrote it, not for a downstream model. The Intelligent Medical Text Analyser started as a personal project to see how far a layered NLP pipeline could get toward making that text actually searchable.\n\nWhy one model wasn't enough\n\nThe obvious approach is \"throw a transformer at it.\" That works for some of the pipeline, but not all of it. Classification benefits from a fine-tuned BERT model that's actually seen clinical phrasing. Summarisation over long narratives needs a different strategy than a single-pass classifier. And a lot of the entity extraction — medication names, dosages, symptom mentions — is well served by classic rule-based NLP that's faster and more auditable than a black-box model, which matters a lot in a clinical context.\n\nSo the pipeline ended up layered:\n\nSummarisation had a different failure mode\n\nClinical notes tend to bury the actually-important line — a change in medication, a new symptom — somewhere in the middle of routine documentation. Naive extractive summarisation (just pulling the \"most central\" sentences by TF-IDF similarity) reliably missed these, because routine documentation is, definitionally, similar to itself across many notes. What worked better was weighting sentences that introduced entities not present in the patient's prior notes — novelty, not centrality, was the signal that mattered.\n\nWhere Scikit-learn still earned its place\n\nNot every stage needed deep learning. Triage-style classification — is this note urgent, routine, or follow-up — was well served by a Scikit-learn model over TF-IDF features, and it was fast enough to run on every note rather than sampling.\n\nThe Streamlit layer mattered more than expected\n\nI wrapped the whole thing in a Streamlit interface, mostly so I could actually look at the outputs rather than trusting metrics i"
+  },
+  {
+    "slug": "retail-analytics-automation",
+    "title": "Cutting Manual Reporting by 60% for a Retail Chain, One Pipeline at a Time",
+    "date": "2026-07-10",
+    "description": "Notes from freelancing on a retail chain's reporting stack — Python ETL into a centralised warehouse, Power BI dashboards, and the SQL optimisation that made it all fast enough to trust.",
+    "tags": [
+      "data-engineering",
+      "etl",
+      "power-bi",
+      "freelance"
+    ],
+    "content": "When I started freelancing after TCS, one of the first engagements was a retail chain in Hyderabad whose \"reporting process\" was a person manually pulling POS exports from each store, every morning, into a spreadsheet. It worked, in the sense that it produced a number. It didn't scale, and nobody fully trusted the number by the time it reached leadership.\n\nCentralising before automating\n\nThe temptation is to automate the manual process as-is. I didn't — the manual process had absorbed years of ad-hoc fixes that no longer made sense once the data had a real home. Instead I built Python-based ETL pipelines that pulled the raw POS datasets into a centralised SQL warehouse, with a consistent schema across every store from day one.\n\nOnce every store landed in the same warehouse with the same shapes, the dashboards on top of it stopped needing special-casing per location — which is where most of the fragility had been hiding.\n\nPower BI as the trust layer\n\nCentralised data doesn't automatically mean trusted data. I built Power BI dashboards specifically to surface revenue, product performance, and inventory movement in a way that let store managers cross-check the numbers themselves, instead of taking the analyst's word for it.\n\nThe inventory system needed a different fix\n\nA separate engagement — a supermarket in Vijayawada — had the opposite problem. Their inventory dashboards existed, but the underlying SQL queries were slow enough that nobody opened them during the actual decision-making window. I optimised the query and indexing strategy rather than rebuilding the dashboards, and got a 35% improvement in analytics performance:\n\nSupport tickets as an unused signal\n\nA third client — a SaaS startup — had customer support tickets sitting in a system nobody was mining for signal. I added NLP-based text analysis to categorise complaints automatically and built dashboards tracking resolution time and satisfaction alongside issue category, turning an operational log into somet"
+  }
+]

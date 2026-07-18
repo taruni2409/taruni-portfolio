@@ -1,0 +1,67 @@
+---
+title: Cutting Manual Reporting by 60% for a Retail Chain, One Pipeline at a Time
+date: "2026-07-10"
+publishedAt: "2026-07-10"
+description: Notes from freelancing on a retail chain's reporting stack — Python ETL into a centralised warehouse, Power BI dashboards, and the SQL optimisation that made it all fast enough to trust.
+tags: [data-engineering, etl, power-bi, freelance]
+---
+
+When I started freelancing after TCS, one of the first engagements was a retail chain in Hyderabad whose "reporting process" was a person manually pulling POS exports from each store, every morning, into a spreadsheet. It worked, in the sense that it produced a number. It didn't scale, and nobody fully trusted the number by the time it reached leadership.
+
+<Callout type="info" title="Starting point">
+  Daily point-of-sale exports, one file per store, no shared schema guarantees, and a single analyst stitching it together by hand before 9am.
+</Callout>
+
+## Centralising before automating
+
+The temptation is to automate the manual process as-is. I didn't — the manual process had absorbed years of ad-hoc fixes that no longer made sense once the data had a real home. Instead I built Python-based ETL pipelines that pulled the raw POS datasets into a centralised SQL warehouse, with a consistent schema across every store from day one.
+
+```python
+def load_pos_export(store_id: str, path: str, conn) -> int:
+    df = pd.read_csv(path, dtype={"sku": str})
+    df["store_id"] = store_id
+    df["ingested_at"] = pd.Timestamp.utcnow()
+    df.to_sql("pos_transactions", conn, if_exists="append", index=False)
+    return len(df)
+```
+
+Once every store landed in the same warehouse with the same shapes, the dashboards on top of it stopped needing special-casing per location — which is where most of the fragility had been hiding.
+
+## Power BI as the trust layer
+
+Centralised data doesn't automatically mean trusted data. I built Power BI dashboards specifically to surface revenue, product performance, and inventory movement in a way that let store managers cross-check the numbers themselves, instead of taking the analyst's word for it.
+
+<Callout type="tip" title="Why this mattered more than the automation">
+  The 60% reduction in manual reporting workload wasn't really about saving time — it was a side effect of people trusting the dashboard enough to stop re-deriving the numbers by hand.
+</Callout>
+
+## The inventory system needed a different fix
+
+A separate engagement — a supermarket in Vijayawada — had the opposite problem. Their inventory dashboards existed, but the underlying SQL queries were slow enough that nobody opened them during the actual decision-making window. I optimised the query and indexing strategy rather than rebuilding the dashboards, and got a 35% improvement in analytics performance:
+
+```sql
+-- Before: full scan per store per day
+SELECT store_id, sku, SUM(qty) AS turnover
+FROM inventory_movements
+WHERE movement_date >= DATEADD(day, -30, GETDATE())
+GROUP BY store_id, sku;
+
+-- After: covering index on (movement_date, store_id, sku)
+CREATE INDEX idx_movements_covering
+ON inventory_movements (movement_date, store_id, sku)
+INCLUDE (qty);
+```
+
+## Support tickets as an unused signal
+
+A third client — a SaaS startup — had customer support tickets sitting in a system nobody was mining for signal. I added NLP-based text analysis to categorise complaints automatically and built dashboards tracking resolution time and satisfaction alongside issue category, turning an operational log into something the product team actually looked at weekly.
+
+| Engagement | Problem | Fix | Result |
+|---|---|---|---|
+| Retail chain | Manual daily reporting | Centralised ETL + Power BI | 60% less manual workload |
+| Supermarket | Slow inventory dashboards | SQL query + indexing optimisation | 35% faster analytics |
+| SaaS startup | Unmined support tickets | NLP-based categorisation | Resolution time now tracked |
+
+<Divider />
+
+Freelancing across a few clients back-to-back made one thing obvious: the bottleneck is rarely "we need a fancier model." It's almost always "nobody trusts the pipeline enough to stop double-checking it by hand."

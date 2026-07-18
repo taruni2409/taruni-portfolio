@@ -16,6 +16,7 @@ import SkillsSection from "@/components/SkillsSection";
 import SkillsConstellation from "@/components/SkillsConstellation";
 import MobileNoBg from "@/components/MobileNoBg";
 import HeroDotGrid from "@/components/HeroDotGrid";
+import HeroDataFlow from "@/components/HeroDataFlow";
 import SiteVitals from "@/components/SiteVitals";
 import InstallPWA from "@/components/InstallPWA";
 import SparkleIcon from "@/components/SparkleIcon";
@@ -205,6 +206,7 @@ export default function PortfolioHome() {
         {/* ── Hero background — interactive dot grid with subtle scroll parallax ── */}
         <Parallax speed={0.18} className="pointer-events-none absolute inset-0">
           <div aria-hidden className="absolute bottom-0 left-0 right-0 h-2/3 bg-gradient-to-t from-accent/[0.05] via-transparent to-transparent" />
+          <HeroDataFlow />
           <HeroDotGrid />
         </Parallax>
 
