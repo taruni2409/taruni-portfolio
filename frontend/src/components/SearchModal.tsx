@@ -93,8 +93,8 @@ export default function SearchModal({ items }: Props) {
         action: () => setTheme(resolvedTheme === "dark" ? "light" : "dark") } as SearchItem & { action: () => void },
       { type: "action", title: "Book a call",       description: "30-min intro on Google Calendar", href: "#",
         action: () => window.open(profile.booking_url ?? "https://calendar.app.google/3sScGpHpeSpvPjpSA", "_blank", "noopener") } as SearchItem & { action: () => void },
-      { type: "action", title: "Copy link to site", description: "Share jayaremala.com",            href: "#",
-        action: () => navigator.clipboard?.writeText("https://jayaremala.com").catch(() => {}) } as SearchItem & { action: () => void },
+      { type: "action", title: "Copy link to site", description: "Share taruni-portfolio.vercel.app",            href: "#",
+        action: () => navigator.clipboard?.writeText("https://taruni-portfolio.vercel.app").catch(() => {}) } as SearchItem & { action: () => void },
     ];
     if (latestPost) {
       list.push({ type: "action", title: "Latest post", description: latestPost.title, href: latestPost.href });

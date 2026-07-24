@@ -6,7 +6,7 @@ import { siteGroups } from "@/lib/site-nav";
 // Revalidate every hour so admin-published content appears without a rebuild
 export const revalidate = 3600;
 
-const BASE = "https://jayaremala.com";
+const BASE = "https://taruni-portfolio.vercel.app";
 const API  = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
 
 type ChangeFreq = MetadataRoute.Sitemap[number]["changeFrequency"];

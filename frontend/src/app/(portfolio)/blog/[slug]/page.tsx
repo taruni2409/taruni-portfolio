@@ -27,7 +27,7 @@ const prettyCodeOptions: PrettyCodeOptions = {
   defaultLang: "plaintext",
 };
 
-const SITE_URL = "https://jayaremala.com";
+const SITE_URL = "https://taruni-portfolio.vercel.app";
 
 type Props = { params: Promise<{ slug: string }> };
 

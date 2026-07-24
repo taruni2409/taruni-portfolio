@@ -5,10 +5,10 @@ export const metadata = {
   title: "Education",
   description:
     "M.Sc. Data Science, University of Hertfordshire. Academic foundation in data engineering, machine learning, and software engineering.",
-  alternates: { canonical: "https://jayaremala.com/education" },
+  alternates: { canonical: "https://taruni-portfolio.vercel.app/education" },
   openGraph: {
     type: "website" as const,
-    url: "https://jayaremala.com/education",
+    url: "https://taruni-portfolio.vercel.app/education",
     title: "Education — Taruni Nallamothu",
     description: "University of Hertfordshire — Data Science. Academic foundation in data engineering and machine learning.",
   },

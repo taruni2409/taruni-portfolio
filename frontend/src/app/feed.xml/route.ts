@@ -3,7 +3,7 @@ import { getAllPosts } from "@/lib/blog";
 // Revalidate hourly — picks up admin-published posts without a rebuild
 export const revalidate = 3600;
 
-const SITE_URL   = "https://jayaremala.com";
+const SITE_URL   = "https://taruni-portfolio.vercel.app";
 const SITE_TITLE = "Taruni Nallamothu — Blog";
 const SITE_DESC  = "Notes on data engineering, machine learning, and building analytics systems.";
 const AUTHOR     = "Taruni Nallamothu";

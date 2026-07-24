@@ -235,7 +235,7 @@ def _build_rag_queries(req: ChatRequest) -> list[str]:
 
 
 _STOP_WORDS = {"what", "tell", "about", "your", "have", "does", "that", "with", "from", "this",
-               "jaya", "his", "the", "and", "for", "you", "can", "more", "some", "any"}
+               "taruni", "her", "the", "and", "for", "you", "can", "more", "some", "any"}
 
 
 def _rerank_chunks(chunks: list[dict], user_message: str) -> list[dict]:

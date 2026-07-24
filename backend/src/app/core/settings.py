@@ -6,7 +6,7 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
     app_env: str = "dev"
-    frontend_origin: str = "http://localhost:3000,http://127.0.0.1:3000,https://jayaremala.com,https://www.jayaremala.com"
+    frontend_origin: str = "http://localhost:3000,http://127.0.0.1:3000,https://taruni-portfolio.vercel.app,https://www.taruni-portfolio.vercel.app"
     google_api_key: str = ""
     # 2.0-flash is faster to first token than 2.5-flash; since answers are grounded
     # in retrieved context the quality gap is minimal. 2.5-flash stays as a fallback.

@@ -20,7 +20,7 @@ const FIELDS: { key: keyof Omit<NowBlock, "updated">; label: string; placeholder
   {
     key: "building",
     label: "Building",
-    placeholder: "e.g. itsjaya.com — AI-powered portfolio with RAG chatbot",
+    placeholder: "e.g. taruni-portfolio.vercel.app — AI-powered portfolio with RAG chatbot",
   },
   {
     key: "learning",

@@ -141,7 +141,7 @@ jobs:
           context: ./backend
           push: true
           provenance: false
-          tags: ghcr.io/${{ github.repository_owner }}/itsjaya-backend:latest
+          tags: ghcr.io/${{ github.repository_owner }}/taruni-portfolio-backend:latest
 
   deploy-backend:
     needs: [detect-changes, build-backend]
@@ -164,7 +164,7 @@ jobs:
             -o ConnectTimeout=30 \
             ubuntu@${{ secrets.LIGHTSAIL_HOST }} \
             "export GHCR_TOKEN='${GHCR_TOKEN}' GHCR_USER='${GHCR_USER}' && \
-             cd /home/ubuntu/itsjaya && \
+             cd /home/ubuntu/taruni-portfolio && \
              git fetch origin main && \
              git reset --hard origin/main && \
              bash infra/scripts/deploy.sh"

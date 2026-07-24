@@ -6,10 +6,10 @@ export const metadata = {
   title: "Experience",
   description:
     "3+ years building production AI and distributed systems — NYU High-Speed Research Network, Shell PLC, Wipro. From maritime telemetry at 115 GB/day to 3 K+ RPS RAG pipelines.",
-  alternates: { canonical: "https://jayaremala.com/experience" },
+  alternates: { canonical: "https://taruni-portfolio.vercel.app/experience" },
   openGraph: {
     type: "website" as const,
-    url: "https://jayaremala.com/experience",
+    url: "https://taruni-portfolio.vercel.app/experience",
     title: "Experience — Taruni Nallamothu",
     description: "Career timeline: NYU IT, Shell PLC, Wipro — production AI and distributed systems at scale.",
   },

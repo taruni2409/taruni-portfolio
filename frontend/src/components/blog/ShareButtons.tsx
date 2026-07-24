@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-const SITE_URL = "https://jayaremala.com";
+const SITE_URL = "https://taruni-portfolio.vercel.app";
 
 export default function ShareButtons({ slug, title }: { slug: string; title: string }) {
   const [copied, setCopied] = useState(false);

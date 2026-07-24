@@ -9,11 +9,11 @@ const FILE = "backend/data/knowledge/projects.json";
 interface SourceLink { label: string; url: string; }
 interface Project {
   title: string; description: string; tags: string[];
-  featured: boolean; award?: string; sourceLinks: SourceLink[]; note?: string;
+  featured: boolean; award?: string; sourceLinks: SourceLink[]; liveUrl?: string; note?: string;
 }
 
 const DEFAULT: Project = {
-  title: "", description: "", tags: [], featured: false, award: "", sourceLinks: [], note: "",
+  title: "", description: "", tags: [], featured: false, award: "", sourceLinks: [], liveUrl: "", note: "",
 };
 
 export default function ProjectsEditor() {
@@ -134,6 +134,10 @@ export default function ProjectsEditor() {
             <div>
               <FieldLabel>Award (optional)</FieldLabel>
               <TextInput value={entry.award ?? ""} onChange={v => setP("award", v)} placeholder="Qualcomm Edge AI Hackathon Winner" />
+            </div>
+            <div>
+              <FieldLabel>Live URL (optional — makes the whole card clickable)</FieldLabel>
+              <TextInput value={entry.liveUrl ?? ""} onChange={v => setP("liveUrl", v)} placeholder="https://myproject.vercel.app" />
             </div>
             <div>
               <FieldLabel>Note (shown as amber callout, optional)</FieldLabel>

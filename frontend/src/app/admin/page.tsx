@@ -1097,7 +1097,7 @@ function LoginForm({ onAuth }: { onAuth: (token: string) => void }) {
           </div>
           <div className="text-center">
             <h1 className="text-base font-bold text-fg tracking-tight">Pumpkin Admin</h1>
-            <p className="text-[11px] text-fg-faint mt-0.5">jayaremala.com dashboard</p>
+            <p className="text-[11px] text-fg-faint mt-0.5">taruni-portfolio.vercel.app dashboard</p>
           </div>
         </div>
 
@@ -3727,7 +3727,7 @@ function Dashboard({
 
         {/* Sidebar footer */}
         <div className="shrink-0 px-4 pt-2 pb-3 border-t border-border" style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}>
-          <p className="text-[9px] text-fg-subtle tracking-wide">jayaremala.com</p>
+          <p className="text-[9px] text-fg-subtle tracking-wide">taruni-portfolio.vercel.app</p>
         </div>
       </aside>
 

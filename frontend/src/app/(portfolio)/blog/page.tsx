@@ -7,10 +7,10 @@ export const metadata = {
   title: "Blog",
   description:
     "Technical writing on AI systems, ML infrastructure, distributed computing, and software craft by Taruni Nallamothu. Notes on building things that actually work.",
-  alternates: { canonical: "https://jayaremala.com/blog" },
+  alternates: { canonical: "https://taruni-portfolio.vercel.app/blog" },
   openGraph: {
     type: "website" as const,
-    url: "https://jayaremala.com/blog",
+    url: "https://taruni-portfolio.vercel.app/blog",
     title: "Blog — Taruni Nallamothu",
     description: "Notes on AI systems, ML infrastructure, distributed computing, and software craft.",
   },

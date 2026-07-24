@@ -277,7 +277,7 @@ TOOLS: list[Tool] = [
     Tool(
         name="get_apps",
         description=(
-            "List every app and product Taruni hosts under her domain (jayaremala.com) — "
+            "List every app and product Taruni hosts under her domain (taruni-portfolio.vercel.app) — "
             "with name, URL, status, category, and tech. Use this for "
             "'what else has she built / what's hosted on her site / what products does she run' "
             "questions. The registry is dynamic, so future apps appear here automatically."

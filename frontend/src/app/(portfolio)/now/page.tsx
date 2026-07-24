@@ -2,7 +2,7 @@ import Link from "next/link";
 import { profile } from "@/data/profile";
 import type { Metadata } from "next";
 
-const SITE_URL = "https://jayaremala.com";
+const SITE_URL = "https://taruni-portfolio.vercel.app";
 
 export const metadata: Metadata = {
   title: "Now — Taruni Nallamothu",

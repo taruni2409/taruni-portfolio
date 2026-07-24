@@ -37,7 +37,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
             <div style={{ width: 28, height: 28, borderRadius: 8, background: "linear-gradient(135deg, #10b981, #059669)", display: "flex", alignItems: "center", justifyContent: "center" }}>
               <span style={{ color: "white", fontWeight: 700, fontSize: 14 }}>J</span>
             </div>
-            <span style={{ color: "#9590b5", fontSize: 14, letterSpacing: "0.06em" }}>jayaremala.com</span>
+            <span style={{ color: "#9590b5", fontSize: 14, letterSpacing: "0.06em" }}>taruni-portfolio.vercel.app</span>
             <div style={{ marginLeft: "auto", background: sc.bg, border: `1px solid ${sc.border}`, borderRadius: 6, padding: "4px 10px", display: "flex", alignItems: "center", gap: 6 }}>
               <div style={{ width: 6, height: 6, borderRadius: "50%", background: sc.text }} />
               <span style={{ color: sc.text, fontSize: 12, fontWeight: 600, letterSpacing: "0.08em" }}>{sc.label}</span>

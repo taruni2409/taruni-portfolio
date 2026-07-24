@@ -12,6 +12,7 @@
     ],
     "featured": true,
     "sourceLinks": [],
+    "liveUrl": "",
     "note": ""
   },
   {
@@ -27,6 +28,7 @@
     ],
     "featured": true,
     "sourceLinks": [],
+    "liveUrl": "",
     "note": ""
   },
   {
@@ -39,6 +41,7 @@
     ],
     "featured": false,
     "sourceLinks": [],
+    "liveUrl": "",
     "note": ""
   },
   {
@@ -51,6 +54,7 @@
     ],
     "featured": false,
     "sourceLinks": [],
+    "liveUrl": "",
     "note": ""
   }
 ]

@@ -52,7 +52,7 @@ const SECTIONS: { href: string; label: string; icon: string; keywords: string[] 
     icon: "⬡",
     keywords: [
       "lab", "system design", "architecture", "living doc", "in progress",
-      "decision", "progress log", "building in public", "itsjaya",
+      "decision", "progress log", "building in public", "taruni-portfolio",
     ],
   },
   {
@@ -109,7 +109,7 @@ const SOURCE_TYPE_MAP: Record<string, { href: string; label: string; icon: strin
 
 /**
  * Convert RAG source strings (e.g. "experience:exp_0_bullet_2", "blog:blog_my-post",
- * "lab:lab_itsjaya") into deduplicated NavLink pills.
+ * "lab:lab_taruni-portfolio") into deduplicated NavLink pills.
  */
 export function sourcesToNavLinks(sources: string[]): NavLink[] {
   const seen = new Set<string>();

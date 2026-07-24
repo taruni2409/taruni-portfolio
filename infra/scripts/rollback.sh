@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # Roll back to the previous Docker image.
-# Usage: bash /home/ubuntu/itsjaya/infra/scripts/rollback.sh
+# Usage: bash /home/ubuntu/taruni-portfolio/infra/scripts/rollback.sh
 set -euo pipefail
 
-ENV_FILE="/home/ubuntu/itsjaya.env"
-IMAGE="itsjaya-backend"
+ENV_FILE="/home/ubuntu/taruni-portfolio.env"
+IMAGE="taruni-portfolio-backend"
 DATA_DIR="/data"
 
 if ! docker image inspect "${IMAGE}:previous" > /dev/null 2>&1; then
@@ -13,12 +13,12 @@ if ! docker image inspect "${IMAGE}:previous" > /dev/null 2>&1; then
 fi
 
 echo "[rollback] Stopping current container..."
-docker stop itsjaya-backend 2>/dev/null || true
-docker rm   itsjaya-backend 2>/dev/null || true
+docker stop taruni-portfolio-backend 2>/dev/null || true
+docker rm   taruni-portfolio-backend 2>/dev/null || true
 
 echo "[rollback] Starting previous image..."
 docker run -d \
-  --name itsjaya-backend \
+  --name taruni-portfolio-backend \
   --restart unless-stopped \
   --env-file "$ENV_FILE" \
   -v "${DATA_DIR}:/data" \
@@ -33,5 +33,5 @@ if curl -sf http://localhost:8000/health > /dev/null 2>&1; then
   echo "[rollback] Previous version is live and healthy."
 else
   echo "[rollback] WARNING: Previous version also failed health check."
-  echo "  Check logs: docker logs itsjaya-backend --tail 50"
+  echo "  Check logs: docker logs taruni-portfolio-backend --tail 50"
 fi

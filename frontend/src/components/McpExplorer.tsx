@@ -61,14 +61,14 @@ export default function McpExplorer() {
   const claudeConfig = useMemo(
     () =>
       JSON.stringify(
-        { mcpServers: { "jaya-portfolio": { command: "npx", args: ["mcp-remote", mcpUrl] } } },
+        { mcpServers: { "taruni-portfolio": { command: "npx", args: ["mcp-remote", mcpUrl] } } },
         null,
         2,
       ),
     [mcpUrl],
   );
   const cursorConfig = useMemo(
-    () => JSON.stringify({ mcpServers: { "jaya-portfolio": { url: mcpUrl } } }, null, 2),
+    () => JSON.stringify({ mcpServers: { "taruni-portfolio": { url: mcpUrl } } }, null, 2),
     [mcpUrl],
   );
 

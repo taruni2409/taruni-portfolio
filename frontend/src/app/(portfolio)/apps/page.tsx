@@ -4,12 +4,12 @@ export const metadata = {
   title: "Apps",
   description:
     "Everything Taruni hosts and runs under her domain — live apps, products, and sub-domains.",
-  alternates: { canonical: "https://jayaremala.com/apps" },
+  alternates: { canonical: "https://taruni-portfolio.vercel.app/apps" },
   openGraph: {
     type: "website" as const,
-    url: "https://jayaremala.com/apps",
+    url: "https://taruni-portfolio.vercel.app/apps",
     title: "Apps — Taruni Nallamothu",
-    description: "Live apps and products hosted under jayaremala.com — built, shipped, and operated end-to-end.",
+    description: "Live apps and products hosted under taruni-portfolio.vercel.app — built, shipped, and operated end-to-end.",
   },
 };
 

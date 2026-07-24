@@ -1,10 +1,10 @@
-# itsjaya — AI Portfolio
+# taruni-portfolio — AI Portfolio
 
-Live at **[jayaremala.com](https://jayaremala.com)**
+Live at **[taruni-portfolio.vercel.app](https://taruni-portfolio.vercel.app)**
 
-Personal AI-assisted portfolio for **Taruni Nallamothu**. Two entry points: a full-screen RAG-powered AI chatbot (Avocado) and a classic portfolio with experience, projects, education, blog, lab, and quotes. Content is editable via a token-gated admin panel — dynamic content (blog/lab/quotes) writes live to a DB, and file-based sections stage their edits and ship in a **single batched GitHub commit** (one push, one deploy).
+Personal AI-assisted portfolio for **Taruni Nallamothu**. Two entry points: a full-screen RAG-powered AI chatbot (Pumpkin) and a classic portfolio with experience, projects, education, blog, lab, and quotes. Content is editable via a token-gated admin panel — dynamic content (blog/lab/quotes) writes live to a DB, and file-based sections stage their edits and ship in a **single batched GitHub commit** (one push, one deploy).
 
-Avocado is also **agentic**: an opt-in "Agent mode" lets the model pick tools per turn (and call them live), the same read-only tools are exposed over a **public MCP server** (`/mcp/`) so a recruiter can plug their own Claude/Cursor into Jaya's portfolio, and a **book-a-call** flow surfaces real Google Calendar openings + a one-click booking link inside the chat. The model layer fails over across providers — **Gemini → Groq → OpenRouter** — so the chatbot keeps answering after any single free tier is exhausted.
+Pumpkin is also **agentic**: an opt-in "Agent mode" lets the model pick tools per turn (and call them live), the same read-only tools are exposed over a **public MCP server** (`/mcp/`) so a recruiter can plug their own Claude/Cursor into Taruni's portfolio, and a **book-a-call** flow surfaces real Google Calendar openings + a one-click booking link inside the chat. The model layer fails over across providers — **Gemini → Groq → OpenRouter** — so the chatbot keeps answering after any single free tier is exhausted.
 
 ---
 
@@ -15,7 +15,7 @@ Avocado is also **agentic**: an opt-in "Agent mode" lets the model pick tools pe
 │                              CLIENT BROWSER                                 │
 │                                                                             │
 │  ┌────────────────────────┐        ┌────────────────────────────────────┐   │
-│  │   Avocado Chatbot      │        │  Portfolio + Blog + Lab + Quotes   │   │
+│  │   Pumpkin Chatbot      │        │  Portfolio + Blog + Lab + Quotes   │   │
 │  │   /  and  /chat        │        │  /portfolio  /blog  /experience    │   │
 │  │                        │        │  /education  /projects  /lab       │   │
 │  │  ChatInterface (SSE)   │        │  /quotes                           │   │
@@ -32,7 +32,7 @@ Avocado is also **agentic**: an opt-in "Agent mode" lets the model pick tools pe
                │ HTTPS / SSE                       │ HTTPS REST
                ▼                                   ▼
 ┌──────────────────────────────────────────────────────────────────────────────┐
-│               api.jayaremala.com  (Nginx → Docker :8000)                    │
+│               api.taruni-portfolio.vercel.app  (Nginx → Docker :8000)                    │
 │                    AWS Lightsail 2GB  ·  Ubuntu 24.04                        │
 │                    SlowAPI rate limiter (10 req/min on /ai/chat/stream)      │
 │                                                                              │
@@ -116,8 +116,8 @@ How edits reach production — including the admin **stage → one commit** flow
                               ▼                                       ▼
                  ┌──────────────────────┐              ┌──────────────────────────┐
                  │  GitHub Pages        │              │  Lightsail · Docker      │
-                 │  jayaremala.com      │              │  api.jayaremala.com :8000│
-                 │  portfolio + Avocado │              │  FastAPI                 │
+                 │  taruni-portfolio.vercel.app      │              │  api.taruni-portfolio.vercel.app :8000│
+                 │  portfolio + Pumpkin │              │  FastAPI                 │
                  │  (static  out/)      │              │  /ai /content /blog      │
                  │                      │              │  /stats /admin           │
                  └──────────────────────┘              └────────────┬─────────────┘
@@ -244,7 +244,7 @@ Adding one blog post embeds one document, not the entire corpus. A forced full r
 On 503 (UNAVAILABLE), 429 (RESOURCE_EXHAUSTED), or a deprecated-model 404, the backend retries
 through a **cross-provider** chain automatically — Gemini first, then the OpenAI-compatible free
 tiers (Groq, OpenRouter). Each provider is included only when its API key is set, so behaviour is
-unchanged when keys are absent. Stacking free tiers behind Gemini keeps Avocado answering after
+unchanged when keys are absent. Stacking free tiers behind Gemini keeps Pumpkin answering after
 Gemini's daily quota is gone. The frontend shows which `provider:model` actually answered via a
 green pill badge, and fallback can switch mid-stream (a `reset` event tells the client to discard
 partial tokens from the failed model).
@@ -264,7 +264,7 @@ type covers both in `_generate()` / `_stream_tokens()`.
 
 ## Agentic Mode, MCP & Tools
 
-Beyond classic RAG chat, Avocado exposes a **single shared tool registry** through three independent
+Beyond classic RAG chat, Pumpkin exposes a **single shared tool registry** through three independent
 surfaces. The registry lives in `backend/src/app/agent/tools.py` (`TOOLS`) — each tool is a `name`,
 `description`, a plain Python `handler`, and a JSON-Schema `parameters` block. **Handlers do pure
 data / retrieval — no LLM calls** — so the tools are cheap and abuse-safe. Add a tool once and it
@@ -273,7 +273,7 @@ lights up everywhere.
 | Surface | Entry point | Who reasons | Transport |
 |---|---|---|---|
 | **MCP server** | `mcp_server.py` → mounted at `/mcp/` | The *client's* model (Claude Desktop / Cursor) | MCP streamable-HTTP |
-| **Agent mode** | `routers/ai.py` `POST /ai/chat/agentic` | Avocado's own model (Gemini/Groq/OpenRouter function-calling) | SSE |
+| **Agent mode** | `routers/ai.py` `POST /ai/chat/agentic` | Pumpkin's own model (Gemini/Groq/OpenRouter function-calling) | SSE |
 | **REST playground** | `routers/tools.py` `GET /tools`, `POST /tools/{name}` | None — direct invocation | Plain JSON REST |
 
 ### The tools
@@ -301,7 +301,7 @@ per-session handshake, so any public client can POST without negotiating an `Mcp
 affinity. It's mounted in `main.py` at `/mcp` wrapped in a **permissive CORS layer scoped to that
 mount only** (the main API keeps its domain-locked CORS), so browser-based MCP clients aren't blocked.
 
-- **Endpoint:** `https://api.jayaremala.com/mcp/` — note the **trailing slash** (`/mcp` 307-redirects).
+- **Endpoint:** `https://api.taruni-portfolio.vercel.app/mcp/` — note the **trailing slash** (`/mcp` 307-redirects).
 - **Connect config** is generated live on the `/mcp` page (Claude Desktop + Cursor JSON snippets).
 - Browsers can't speak the MCP transport, so the `/mcp` page's live playground calls the REST shim
   (`/tools`, `/tools/{name}`, rate-limited 30/min) instead — same handlers, same results.
@@ -309,7 +309,7 @@ mount only** (the main API keeps its domain-locked CORS), so browser-based MCP c
 ### Book a call (smart handoff)
 
 When a visitor expresses scheduling intent — keyword-detected in classic chat (`_is_calendar_query`)
-or via the model calling `get_booking_link` in agent mode — Avocado surfaces a **booking card**:
+or via the model calling `get_booking_link` in agent mode — Pumpkin surfaces a **booking card**:
 
 ```
 Recruiter: "can we set up a call?"
@@ -379,21 +379,21 @@ git push origin main
         ├── commits synced files [skip ci]
         │     (prevents infinite workflow loop)
         │
-        ├── uploads frontend/out/ → GitHub Pages (jayaremala.com)
+        ├── uploads frontend/out/ → GitHub Pages (taruni-portfolio.vercel.app)
         │
         └── SSH into AWS Lightsail (infra/scripts/deploy.sh)
               │
               ├── AUTO-RESTORE: if /data/analytics.db missing
               │     └── aws s3 cp latest_analytics.db /data/analytics.db
               ├── tag :latest as :previous (enables 1-command rollback)
-              ├── docker build → itsjaya-backend:latest
+              ├── docker build → taruni-portfolio-backend:latest
               ├── docker run on port 8001 (staging container)
               ├── health check loop — up to 120s for ONNX warmup
               │     ├── PASS → stop old :8000, start new :8000, done
               │     └── FAIL → remove staging container, old stays live
               └── docker image prune -f (keep :previous)
 
-Rollback anytime:  bash /home/ubuntu/itsjaya/infra/scripts/rollback.sh
+Rollback anytime:  bash /home/ubuntu/taruni-portfolio/infra/scripts/rollback.sh
 ```
 
 ---
@@ -449,9 +449,9 @@ All engagement data lives in `analytics.db`. Content lives in `content.db`. IPs 
 ├── lab_entries  (slug, title, status, description, started_at, tech, links, content)
 └── quotes       (quote_id, text, author, source, category, favorite, featured, added_at)
 
-Daily S3 backup → s3://itsjaya-backups-analytics/analytics_db/
+Daily S3 backup → s3://taruni-portfolio-backups-analytics/analytics_db/
   Keeps 7 days of timestamped snapshots + latest_analytics.db
-  Restore: aws s3 cp s3://itsjaya-backups-analytics/analytics_db/latest_analytics.db /data/analytics.db
+  Restore: aws s3 cp s3://taruni-portfolio-backups-analytics/analytics_db/latest_analytics.db /data/analytics.db
   Auto-restore on deploy if /data/analytics.db is missing
 ```
 
@@ -463,7 +463,7 @@ Daily S3 backup → s3://itsjaya-backups-analytics/analytics_db/
 
 | Route | Notes |
 |---|---|
-| `/` | Avocado — full-screen chatbot, no nav/footer |
+| `/` | Pumpkin — full-screen chatbot, no nav/footer |
 | `/chat` | Same chatbot, accessible from portfolio nav |
 | `/portfolio` | Hero with domain chips, featured projects, skills, testimonials, contact |
 | `/experience` | Work history timeline |
@@ -475,7 +475,7 @@ Daily S3 backup → s3://itsjaya-backups-analytics/analytics_db/
 | `/lab/[slug]` | Individual system design entry |
 | `/quotes` | Curated quotes by category (Philosophy, Engineering, Science, etc.) |
 | `/gallery` | Photo grid — milestones, events, and achievements |
-| `/now` | What Jaya is currently building, learning, and reading |
+| `/now` | What Taruni is currently building, learning, and reading |
 | `/mcp` | Public MCP server explainer + live tool playground + Claude/Cursor connect configs |
 | `/system` | Live observability — latency percentiles, RAG pipeline timing, model fallback |
 | `/admin` | Stats dashboard · content editors · bulk delete · GitHub MDX sync · immediate reingest (no-index, token-gated) |
@@ -484,7 +484,7 @@ All portfolio routes share a layout via the `(portfolio)` route group — adds n
 
 ### Static export + custom domain
 
-Next.js outputs a fully static site (`output: "export"`) deployed to GitHub Pages at `jayaremala.com`. No `basePath` — the site lives at the domain root. Always use `<Link>` from `next/link` for internal navigation, never plain `<a>` tags.
+Next.js outputs a fully static site (`output: "export"`) deployed to GitHub Pages at `taruni-portfolio.vercel.app`. No `basePath` — the site lives at the domain root. Always use `<Link>` from `next/link` for internal navigation, never plain `<a>` tags.
 
 ### Blog engagement components
 
@@ -500,11 +500,11 @@ Next.js outputs a fully static site (`output: "export"`) deployed to GitHub Page
 ## Repository Layout
 
 ```
-itsjaya/
+taruni-portfolio/
 ├── frontend/
 │   ├── src/
 │   │   ├── app/
-│   │   │   ├── page.tsx                    Avocado chatbot
+│   │   │   ├── page.tsx                    Pumpkin chatbot
 │   │   │   ├── (portfolio)/layout.tsx      Nav + Footer + mobile FAB
 │   │   │   ├── (portfolio)/page.tsx        Portfolio home
 │   │   │   ├── (portfolio)/blog/page.tsx   Blog index
@@ -528,7 +528,7 @@ itsjaya/
 │   │   │   │                               KnowledgeBaseEditor, AvailabilityEditor,
 │   │   │   │                               KnowledgeDataView, ProfileEditor
 │   │   │   │                               (all page descriptions editable; all editors
-│   │   │   │                               trigger immediate Avocado reingest on save)
+│   │   │   │                               trigger immediate Pumpkin reingest on save)
 │   │   │   ├── GalleryGrid.tsx             Photo grid client component
 │   │   │   └── QuotesClient.tsx            Quotes feed with category filter
 │   │   ├── data/knowledge/                 Synced JSON copies (do not edit)
@@ -539,7 +539,7 @@ itsjaya/
 │   │   └── content/lab/*.mdx              Lab system design entries
 │   ├── public/
 │   │   ├── blog/                           Blog images
-│   │   └── CNAME                           jayaremala.com (GitHub Pages domain)
+│   │   └── CNAME                           taruni-portfolio.vercel.app (GitHub Pages domain)
 │   └── next.config.ts                      output: export (no basePath)
 │
 ├── backend/
@@ -633,10 +633,10 @@ cd backend  && ruff check src && pytest
 
 | Variable | Default | Purpose |
 |---|---|---|
-| `NEXT_PUBLIC_API_BASE_URL` | `http://localhost:8000` | Backend URL (production: `https://api.jayaremala.com`) |
+| `NEXT_PUBLIC_API_BASE_URL` | `http://localhost:8000` | Backend URL (production: `https://api.taruni-portfolio.vercel.app`) |
 | `NEXT_PUBLIC_BLOG_FONT` | `Source_Serif_4` | Documents font choice (static import in layout.tsx) |
 
-### Backend (set in `/home/ubuntu/itsjaya.env` on Lightsail)
+### Backend (set in `/home/ubuntu/taruni-portfolio.env` on Lightsail)
 
 | Variable | Default | Purpose |
 |---|---|---|
@@ -660,12 +660,12 @@ cd backend  && ruff check src && pytest
 
 | Layer | Platform | Trigger |
 |---|---|---|
-| Frontend | GitHub Pages → `jayaremala.com` | Push to `main` → GH Actions builds + deploys |
-| Backend API | AWS Lightsail 2GB (`api.jayaremala.com`) | Push to `main` → SSH → zero-downtime deploy |
+| Frontend | GitHub Pages → `taruni-portfolio.vercel.app` | Push to `main` → GH Actions builds + deploys |
+| Backend API | AWS Lightsail 2GB (`api.taruni-portfolio.vercel.app`) | Push to `main` → SSH → zero-downtime deploy |
 | Knowledge base | Lightsail SSD (`/data/chroma_db`) | Incremental ingest on startup — only changed docs re-embedded |
 | Analytics DB | Lightsail SSD (`/data/analytics.db`) | Persists on disk, daily backup to S3 |
 | Content DB | Lightsail SSD (`/data/content.db`) | Persists on disk; writes trigger background re-ingest |
-| Analytics backup | S3 `itsjaya-backups-analytics` | Daily cron at 02:00 UTC, 7-day retention |
+| Analytics backup | S3 `taruni-portfolio-backups-analytics` | Daily cron at 02:00 UTC, 7-day retention |
 
 The only action required for any update — portfolio data, new blog post, or code change — is `git push`. For content edits, the admin panel triggers updates immediately via the content API.
 

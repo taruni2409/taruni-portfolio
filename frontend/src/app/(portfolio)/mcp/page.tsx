@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import McpExplorer from "@/components/McpExplorer";
 
-const SITE_URL = "https://jayaremala.com";
+const SITE_URL = "https://taruni-portfolio.vercel.app";
 
 export const metadata: Metadata = {
   title: "MCP — Connect your LLM to my work | Taruni Nallamothu",

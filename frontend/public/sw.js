@@ -1,4 +1,4 @@
-/* Portfolio service worker (jayaremala.com / itsjaya.com).
+/* Portfolio service worker (taruni-portfolio.vercel.app / taruni-portfolio.vercel.app).
  *
  * Makes the site an installable PWA (Chromium needs a service worker with a fetch
  * handler before it offers the install prompt) and gives page navigations a light
@@ -8,7 +8,7 @@
  * calls go straight to the network untouched, so content is never stale; the cache
  * is only a fallback when the device is offline.
  */
-const CACHE = "itsjaya-cache-v1";
+const CACHE = "taruni-portfolio-cache-v1";
 
 self.addEventListener("install", () => {
   self.skipWaiting();

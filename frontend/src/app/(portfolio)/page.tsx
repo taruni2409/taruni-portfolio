@@ -26,10 +26,10 @@ export const metadata = {
   title: "Taruni Nallamothu — Data Engineer & ML Engineer",
   description:
     "Data Engineer & Machine Learning Engineer specializing in scalable ETL pipelines, predictive modelling, and cloud analytics on Azure and GCP. Google & Microsoft Certified. Previously at Tata Consultancy Services (Shell PLC).",
-  alternates: { canonical: "https://jayaremala.com/" },
+  alternates: { canonical: "https://taruni-portfolio.vercel.app/" },
   openGraph: {
     type: "website",
-    url: "https://jayaremala.com/",
+    url: "https://taruni-portfolio.vercel.app/",
     title: "Taruni Nallamothu — Data Engineer & ML Engineer",
     description:
       "Data Engineer & Machine Learning Engineer specializing in scalable ETL pipelines, predictive modelling, and cloud analytics on Azure and GCP. Google & Microsoft Certified.",
@@ -40,7 +40,7 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Person",
   name: "Taruni Nallamothu",
-  url: "https://jayaremala.com",
+  url: "https://taruni-portfolio.vercel.app",
   jobTitle: "Data Engineer & Machine Learning Engineer",
   description:
     "Data Engineer & Machine Learning Engineer specializing in scalable ETL pipelines, predictive modelling, and cloud analytics on Azure and GCP. Google & Microsoft Certified.",
@@ -48,7 +48,7 @@ const jsonLd = {
   sameAs: [
     "https://www.linkedin.com/in/taruninallamothu24/",
     "https://github.com/taruni2409",
-    "https://jayaremala.com",
+    "https://taruni-portfolio.vercel.app",
   ],
   alumniOf: {
     "@type": "EducationalOrganization",
@@ -529,7 +529,7 @@ export default function PortfolioHome() {
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {featured.map((p, i) => (
                 <ScrollReveal key={p.title} delay={i * 80} className="flex" direction="scale">
-                  {p.title.startsWith("jayaremala") ? (
+                  {p.title.startsWith("taruni-portfolio") ? (
                     <RagPipelineCard
                       title={p.title}
                       description={p.description}

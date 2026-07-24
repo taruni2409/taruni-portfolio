@@ -269,7 +269,7 @@ def _build_apps_documents(owner_name: str) -> list[tuple[str, str, str]]:
             f"app_{slug}",
             (
                 f"{name} is an application {owner_name} builds and hosts under her domain "
-                f"(jayaremala.com). Live at {url} (status: {status}, category: {cat}). "
+                f"(taruni-portfolio.vercel.app). Live at {url} (status: {status}, category: {cat}). "
                 f"{tag}. {desc} Tech stack: {tech}."
             ),
             "app",
@@ -280,7 +280,7 @@ def _build_apps_documents(owner_name: str) -> list[tuple[str, str, str]]:
         "faq_hosted_apps",
         (
             f"Beyond the portfolio itself, {owner_name} hosts {len(apps)} live "
-            f"application(s)/product(s) under her domain (jayaremala.com): {names}. "
+            f"application(s)/product(s) under her domain (taruni-portfolio.vercel.app): {names}. "
             "These are independent apps she designed, built, and operates — ask about "
             "any of them by name for details."
         ),
@@ -444,7 +444,7 @@ def _build_faq_documents(
         recent = [b["title"] for b in blog_data[:3]]
         recent_str = f" Recent posts: {', '.join(recent)}." if recent else ""
         docs.append(("faq_blog", (
-            f"{name}'s blog at jayaremala.com/blog has {count} published posts. "
+            f"{name}'s blog at taruni-portfolio.vercel.app/blog has {count} published posts. "
             + (f"{page_desc} " if page_desc else "")
             + recent_str
         ), "faq"))
@@ -461,7 +461,7 @@ def _build_faq_documents(
         ]
         active_str = f" Active: {', '.join(active_titles[:3])}." if active_titles else ""
         docs.append(("faq_lab", (
-            f"{name}'s Lab at jayaremala.com/lab documents {count} projects. "
+            f"{name}'s Lab at taruni-portfolio.vercel.app/lab documents {count} projects. "
             + (f"{page_desc} " if page_desc else "")
             + active_str
         ), "faq"))
@@ -473,7 +473,7 @@ def _build_faq_documents(
         count = len(qdata)
         page_desc = (p or {}).get("page_quotes", "")
         docs.append(("faq_quotes_collection", (
-            f"{name} curates a collection of {count} quotes at jayaremala.com/quotes. "
+            f"{name} curates a collection of {count} quotes at taruni-portfolio.vercel.app/quotes. "
             + (page_desc if page_desc else "")
         ), "faq"))
 
@@ -488,7 +488,7 @@ def _build_system_faq_documents(approx_content_docs: int, owner_name: str) -> li
 
     docs.append(("faq_portfolio_how_it_works", (
         "How does this portfolio work? How is Pumpkin built? "
-        f"jayaremala.com is {owner_name}'s AI-powered portfolio. It has two parts: "
+        f"taruni-portfolio.vercel.app is {owner_name}'s AI-powered portfolio. It has two parts: "
         f"(1) Pumpkin — a full-screen RAG-powered AI chatbot at the homepage that answers questions about {owner_name} in real time. "
         "(2) A classic portfolio with experience, projects, education, blog, lab, gallery, quotes, and a /now page. "
         "Pumpkin works like this: when you type a question, the backend runs a 4-stage hybrid retrieval pipeline — "
@@ -503,9 +503,9 @@ def _build_system_faq_documents(approx_content_docs: int, owner_name: str) -> li
     docs.append(("faq_services_connected", (
         "How are the services connected in this portfolio? What is the system architecture? "
         "The portfolio has three layers: "
-        "(1) Frontend: Next.js 16 static export hosted on GitHub Pages at jayaremala.com. "
+        "(1) Frontend: Next.js 16 static export hosted on Vercel at taruni-portfolio.vercel.app. "
         "No server-side rendering — fully static HTML/CSS/JS served from GitHub's CDN for free. "
-        "(2) Backend API: FastAPI (Python) running in Docker on AWS Lightsail 2GB VPS at api.jayaremala.com. "
+        "(2) Backend API: FastAPI (Python) running in Docker on AWS Lightsail 2GB VPS at api.taruni-portfolio.vercel.app. "
         "Nginx sits in front as a reverse proxy (port 443 → Docker port 8000) with Let's Encrypt HTTPS. "
         "(3) External AI: Google Gemini API for LLM responses. "
         "The frontend calls the backend directly from the browser — no middleman. "
@@ -539,7 +539,7 @@ def _build_system_faq_documents(approx_content_docs: int, owner_name: str) -> li
         "(numbers, names) that dense search misses. Trade-off: BM25 index is in-memory, rebuilt on every startup (~5ms). "
         "(3) SQLite instead of managed Postgres for analytics — zero cost, same-process, one file to back up. "
         "Trade-off: not suitable for concurrent writers, but the single Docker container has no concurrency issue. "
-        "(4) Static Next.js export on GitHub Pages instead of Vercel/SSR — free, CDN-served, no cold starts. "
+        "(4) Static Next.js export on Vercel instead of SSR — free, CDN-served, no cold starts. "
         "Trade-off: no server-side rendering, all dynamic data fetched client-side. "
         "(5) AWS Lightsail $10/month instead of Railway PaaS — persistent SSD storage, full control, no trial limits. "
         "Trade-off: more DevOps responsibility (Docker, Nginx, Certbot, backups). "
@@ -553,7 +553,7 @@ def _build_system_faq_documents(approx_content_docs: int, owner_name: str) -> li
         "How is the portfolio deployed? What is the CI/CD pipeline? "
         "Everything deploys automatically on every git push to main via GitHub Actions: "
         "(1) Frontend: npm build runs sync-knowledge.mjs (generates blog.json from MDX posts), "
-        "then Next.js builds a static export to frontend/out/, which is uploaded to GitHub Pages at jayaremala.com. "
+        "then Next.js builds a static export to frontend/out/, which is deployed to Vercel at taruni-portfolio.vercel.app. "
         "(2) Backend: GitHub Actions SSHes into AWS Lightsail and runs infra/scripts/deploy.sh — "
         "a zero-downtime blue-green deployment script. It builds the new Docker image, "
         "starts it on port 8001, health-checks it for up to 120 seconds (ONNX model warmup), "

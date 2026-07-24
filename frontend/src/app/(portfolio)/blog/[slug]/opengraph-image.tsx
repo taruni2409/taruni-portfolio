@@ -32,7 +32,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
             <div style={{ width: 28, height: 28, borderRadius: 8, background: "linear-gradient(135deg, #10b981, #7b72f0)", display: "flex", alignItems: "center", justifyContent: "center" }}>
               <span style={{ color: "white", fontWeight: 700, fontSize: 14, fontFamily: "system-ui, sans-serif" }}>J</span>
             </div>
-            <span style={{ color: "#9590b5", fontSize: 14, letterSpacing: "0.06em", fontFamily: "system-ui, sans-serif" }}>jayaremala.com</span>
+            <span style={{ color: "#9590b5", fontSize: 14, letterSpacing: "0.06em", fontFamily: "system-ui, sans-serif" }}>taruni-portfolio.vercel.app</span>
             <div style={{ display: "flex", marginLeft: "auto", background: "rgba(123,114,240,0.15)", border: "1px solid rgba(123,114,240,0.3)", borderRadius: 6, padding: "4px 10px" }}>
               <span style={{ color: "#7b72f0", fontSize: 12, fontWeight: 600, letterSpacing: "0.08em", fontFamily: "system-ui, sans-serif" }}>BLOG POST</span>
             </div>

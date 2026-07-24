@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-const SITE_URL = "https://jayaremala.com";
+const SITE_URL = "https://taruni-portfolio.vercel.app";
 const SHARE_TITLE = "Taruni Nallamothu — Data Engineer & ML Engineer";
 const SHARE_TEXT = "Check out Taruni's portfolio — data engineering, machine learning, and an AI assistant you can chat with.";
 

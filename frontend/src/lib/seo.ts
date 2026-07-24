@@ -2,10 +2,10 @@
  *  (Person/BlogPosting schemas live in their pages; this adds the sitewide WebSite
  *  entity and per-section breadcrumbs.) */
 
-export const SITE_URL = "https://jayaremala.com";
+export const SITE_URL = "https://taruni-portfolio.vercel.app";
 
 /** Match the existing canonical convention: home keeps a trailing slash, section
- *  pages do not (e.g. https://jayaremala.com/experience). */
+ *  pages do not (e.g. https://taruni-portfolio.vercel.app/experience). */
 export function siteUrl(path: string): string {
   const clean = path.replace(/\/+$/, "");
   return clean === "" ? `${SITE_URL}/` : `${SITE_URL}${clean}`;
@@ -29,7 +29,7 @@ export function webSiteLd() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "Taruni Nallamothu",
-    alternateName: "jayaremala.com",
+    alternateName: "taruni-portfolio.vercel.app",
     url: `${SITE_URL}/`,
     inLanguage: "en",
     publisher: { "@type": "Person", name: "Taruni Nallamothu", url: `${SITE_URL}/` },

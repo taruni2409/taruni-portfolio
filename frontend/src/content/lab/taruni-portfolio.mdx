@@ -1,5 +1,5 @@
 ---
-title: "itsjaya — AI Portfolio"
+title: "taruni-portfolio — AI Portfolio"
 status: "active"
 description: "AI-powered personal portfolio with a RAG chatbot (Pumpkin), an agentic tool-calling mode, a public MCP server, in-chat book-a-call, MDX blog, engagement analytics, and a fully automated deploy pipeline. Every layer is production-grade — not a toy."
 startedAt: "2025-11-01"
@@ -9,7 +9,7 @@ links:
   - label: GitHub
     url: https://github.com/taruni2409/taruni-portfolio
   - label: Live
-    url: https://jayaremala.com
+    url: https://taruni-portfolio.vercel.app
 ---
 
 ## Overview
@@ -60,7 +60,7 @@ An AI-backed portfolio inverts this. The visitor asks in natural language, the s
                   │  HTTPS + SSE                           │  HTTPS REST
                   ▼                                        ▼
 ┌──────────────────────────────────────────────────────────────────────────┐
-│          api.jayaremala.com  (Nginx :443 → Docker :8000)                │
+│          api.taruni-portfolio.vercel.app  (Nginx :443 → Docker :8000)                │
 │               AWS Lightsail 2GB  ·  Ubuntu 24.04 LTS                    │
 │               SlowAPI rate limiter (10 req/min on /ai/chat/stream)       │
 │                                                                          │
@@ -113,7 +113,7 @@ An AI-backed portfolio inverts this. The visitor asks in natural language, the s
 │                 │ daily 02:00 UTC│               tech, links, content)  │ │
 │                 ▼                │  quotes      (quote_id, text,       │ │
 │  ┌──────────────────────────┐   │               author, category,     │ │
-│  │  S3: itsjaya-backups-    │   │               favorite, featured)   │ │
+│  │  S3: taruni-portfolio-   │   │               favorite, featured)   │ │
 │  │  analytics               │   │  Seeded from JSON on first run.     │ │
 │  │  7-day timestamped       │   │  sync_blog/lab_json_to_db() pulls   │ │
 │  │  + latest_analytics.db   │   │  new MDX slugs → DB before regen.  │ │
@@ -163,8 +163,8 @@ User message: "what's your strongest AI project?"
 │     Nallamothu"                                            │
 │                                                           │
 │  Query 3 (topic keyword — detected: project/built):       │
-│    "projects built SnapLog CodeCollab Multi-Agent         │
-│     GeneCart"                                             │
+│    "projects built Medical Text Analyser EcoCast          │
+│     LeafCare"                                             │
 │                                                           │
 │  Query 4 (conversation context):                          │
 │    injected only if prior message exists                  │
@@ -211,8 +211,8 @@ User message: "what's your strongest AI project?"
                  │    │
                  │    │  BM25Okapi scoring
                  │    │  Catches exact matches:
-                 │    │  "3000 RPS", "SnapLog",
-                 │    │  "Qualcomm", "78%"
+                 │    │  "500GB+", "EcoCast",
+                 │    │  "TCS", "92%"
                  │    │  top-15 results
                  │    │  in-memory, rebuilt on startup
                  └────┴───────────┐
@@ -258,7 +258,7 @@ User message: "what's your strongest AI project?"
 ## Agentic Mode, MCP & Tools
 
 Classic chat answers questions. The agentic layer lets the model *act* — and lets other models
-act on Jaya's data too. It all hangs off **one shared tool registry**
+act on Taruni's data too. It all hangs off **one shared tool registry**
 (`backend/src/app/agent/tools.py`): each tool is a name, a description, a plain Python handler,
 and a JSON-Schema for its arguments. **The handlers do pure data / retrieval — no LLM calls** — so
 they're cheap and safe to expose publicly. That single registry is consumed three ways:
@@ -291,7 +291,7 @@ MCP, to *Pumpkin's own model* in agent mode, and to *browsers* via a REST shim.
 The MCP server is **public and stateless**: `mcp.http_app(path="/", stateless_http=True)` drops the
 per-session handshake so any client can POST without an `Mcp-Session-Id` header, and it's mounted in
 `main.py` behind a permissive CORS layer scoped to just `/mcp` (the main API stays domain-locked). The
-endpoint is `https://api.jayaremala.com/mcp/` — **trailing slash required** (`/mcp` 307-redirects). The
+endpoint is `https://api.taruni-portfolio.vercel.app/mcp/` — **trailing slash required** (`/mcp` 307-redirects). The
 `/mcp` page generates ready-to-paste Claude Desktop / Cursor configs and runs a live tool playground.
 
 ### Book a call — in-chat scheduling
@@ -337,7 +337,7 @@ GitHub Actions (.github/workflows/deploy.yml)
          │
          ├── git commit "chore: sync knowledge base [skip ci]"
          │
-         ├── upload frontend/out/ → GitHub Pages (jayaremala.com)
+         ├── upload frontend/out/ → Vercel (taruni-portfolio.vercel.app)
          │
          └── SSH → AWS Lightsail (infra/scripts/deploy.sh)
                │
@@ -348,9 +348,9 @@ GitHub Actions (.github/workflows/deploy.yml)
                │
                ├── docker tag :latest → :previous  (rollback safety)
                │
-               ├── docker build → itsjaya-backend:latest
+               ├── docker build → taruni-portfolio-backend:latest
                │
-               ├── docker run --name itsjaya-backend-new -p 8001:8000
+               ├── docker run --name taruni-portfolio-backend-new -p 8001:8000
                │     (staging container — old container still serves :8000)
                │
                ├── health check loop (5s × 24 attempts = 120s max)
@@ -359,11 +359,11 @@ GitHub Actions (.github/workflows/deploy.yml)
                │
                └── docker image prune -f
 
-Rollback: bash /home/ubuntu/itsjaya/infra/scripts/rollback.sh
+Rollback: bash /home/ubuntu/taruni-portfolio/infra/scripts/rollback.sh
   └── starts :previous image on :8000 in under 10s
 
 Backup:   cron 0 2 * * * → infra/scripts/backup.sh
-  └── aws s3 cp /data/analytics.db → s3://itsjaya-backups-analytics/
+  └── aws s3 cp /data/analytics.db → s3://taruni-portfolio-backups-analytics/
   └── prunes backups older than 7 days
 ```
 
@@ -435,8 +435,8 @@ Backup flow:
     └── prune files with date < 7 days ago
 
 Restore (disaster recovery):
-  aws s3 cp s3://itsjaya-backups-analytics/analytics_db/latest_analytics.db /data/analytics.db
-  docker restart itsjaya-backend
+  aws s3 cp s3://taruni-portfolio-backups-analytics/analytics_db/latest_analytics.db /data/analytics.db
+  docker restart taruni-portfolio-backend
 ```
 
 ---
@@ -478,7 +478,7 @@ The database is seeded on first startup from the existing JSON files in `backend
 ## Frontend Architecture
 
 ```arch
-jayaremala.com  (GitHub Pages — static export, no basePath)
+taruni-portfolio.vercel.app  (Vercel — static export, no basePath)
 │
 ├── /                    Pumpkin — full-screen, no nav/footer
 ├── /chat                Same chatbot, portfolio nav accessible
@@ -516,9 +516,9 @@ Chatbot lives outside — no nav, no footer, full screen.
   Recruiters who get interested mid-conversation shouldn't have to leave the chat to find a calendar
   link. The question was how far to take it. Option A: a full in-chat scheduler — collect name/email/slot
   and *create* the calendar event directly. Option B: a smart handoff — show real open slots and hand off
-  to Jaya's existing Google booking page for the actual booking.
+  to Taruni's existing Google booking page for the actual booking.
 
-  Option B won. The endpoint is public and unauthenticated, so writing events to Jaya's calendar would
+  Option B won. The endpoint is public and unauthenticated, so writing events to Taruni's calendar would
   mean a `calendar.events` OAuth scope, spam guards, rate limiting, and a confirmation-email path — a lot
   of surface for a portfolio. The handoff needs only **read-only Freebusy** plus a static booking link:
   `get_booking_card()` pulls real open 30-min slots (cached ~3 min) and bundles them with `booking_url`
@@ -530,7 +530,7 @@ Chatbot lives outside — no nav, no footer, full screen.
 </Decision>
 
 <Decision date="2026-06-14" title="Public MCP server — stateless HTTP, one registry, three surfaces">
-  A recruiter who lives in Claude Desktop or Cursor should be able to point *their own* model at Jaya's
+  A recruiter who lives in Claude Desktop or Cursor should be able to point *their own* model at Taruni's
   portfolio. That's exactly what the Model Context Protocol is for. The implementation reuses the same
   `TOOLS` registry that powers agent mode and the REST playground — no duplicate logic, and the handlers
   make no LLM calls, so a public endpoint costs nothing per request.
@@ -539,7 +539,7 @@ Chatbot lives outside — no nav, no footer, full screen.
   stateful mode issues an `Mcp-Session-Id` on `initialize` that every later POST must echo — which broke
   connect-from-anywhere clients with "Missing session ID". Stateless makes each request independent (also
   load-balancer friendly). It's mounted behind a CORS layer scoped to `/mcp` only, so browser clients work
-  while the main API stays locked to Jaya's domains. One gotcha worth recording: the endpoint is `/mcp/`
+  while the main API stays locked to Taruni's domain. One gotcha worth recording: the endpoint is `/mcp/`
   **with a trailing slash** — `/mcp` 307-redirects (and the proxy downgrades the redirect to `http://`),
   which surfaces in clients as a confusing "Method Not Allowed".
 </Decision>
@@ -579,9 +579,9 @@ Chatbot lives outside — no nav, no footer, full screen.
 </Decision>
 
 <Decision date="2026-05-28" title="HyDE (Hypothetical Document Embeddings) for retrieval precision">
-  Vague queries like "tell me about his AI experience" sit far from real knowledge-base chunks in embedding space. The raw question embedding retrieves semantically adjacent docs but often misses the most specific evidence a recruiter would want.
+  Vague queries like "tell me about her ML experience" sit far from real knowledge-base chunks in embedding space. The raw question embedding retrieves semantically adjacent docs but often misses the most specific evidence a recruiter would want.
 
-  HyDE (Gao et al. 2022) generates a short hypothetical answer to the question first, then embeds *that* for retrieval. A hypothetical answer ("Jaya built SnapLog at Qualcomm...") has much higher cosine similarity to the real project chunk than the question ("tell me about AI experience") does. The HyDE query runs in parallel with the original dense retrieval via `asyncio.gather()` — no added serial latency. A 4-second hard timeout and a character-length guard ensure greetings and simple follow-ups skip the Gemini call entirely. HyDE chunks are prepended to the dense pool before RRF so docs retrieved by both signals get a double rank bonus.
+  HyDE (Gao et al. 2022) generates a short hypothetical answer to the question first, then embeds *that* for retrieval. A hypothetical answer ("Taruni built the Intelligent Medical Text Analyser using SpaCy and BERT...") has much higher cosine similarity to the real project chunk than the question ("tell me about AI experience") does. The HyDE query runs in parallel with the original dense retrieval via `asyncio.gather()` — no added serial latency. A 4-second hard timeout and a character-length guard ensure greetings and simple follow-ups skip the Gemini call entirely. HyDE chunks are prepended to the dense pool before RRF so docs retrieved by both signals get a double rank bonus.
 </Decision>
 
 <Decision date="2026-05-28" title="Rate limiting via SlowAPI — protect Gemini quota from abuse">
@@ -598,12 +598,12 @@ Chatbot lives outside — no nav, no footer, full screen.
   Moving the ingest to a `daemon=True` background thread means the API starts serving `/health` immediately. The health endpoint returns `rag: "degraded"` while ingest is in progress, but `api: "ok"` — the health check loop can be shortened for cases where only the API availability matters. The warmup call (`query("warmup", n_results=1)`) pre-loads the ONNX model into memory so the first real user request doesn't pay the cold-load penalty.
 </Decision>
 
-<Decision date="2026-05-22" title="AWS Lightsail over Railway — $10/month VPS beats PaaS trial limits">
-  Railway's free trial ended and stopped all backend services. The migration decision came down to minimum cost with maximum control. App Runner and ECS Fargate cost $20–40/month and add EFS complexity for a single SQLite file. Lightsail 2GB ($10/month) gives 2 vCPUs, 60GB SSD, and a static IP — all the resources the backend needs and nothing it doesn't.
+<Decision date="2026-05-22" title="AWS Lightsail planned over Railway — $10/month VPS beats PaaS trial limits">
+  The backend runs locally for now, but the deploy scripts in `infra/` are written against AWS Lightsail rather than a PaaS like Railway, App Runner, or ECS Fargate — the latter cost $20–40/month and add EFS complexity for what's really a single SQLite file. Lightsail 2GB ($10/month) gives 2 vCPUs, 60GB SSD, and a static IP — all the resources the backend needs and nothing it doesn't, whenever hosting actually gets turned on.
 
-  The 2GB plan was chosen over 1GB (EC2 t2.micro free tier) because the fastembed ONNX model + ChromaDB + FastAPI peaks at 400–600MB under load. The 1GB option leaves no headroom for the 120-second ONNX warmup window at startup. A cold-start OOM kill during a recruiter demo would be worse than the $2/month difference.
+  The 2GB plan over 1GB (EC2 t2.micro free tier) is deliberate: the fastembed ONNX model + ChromaDB + FastAPI peaks at 400–600MB under load, and the 1GB option leaves no headroom for the 120-second ONNX warmup window at startup. A cold-start OOM kill during a recruiter demo would be worse than the $2/month difference.
 
-  What this means for the system: the backend is now a Docker container on a VPS with persistent SSD storage, Nginx reverse proxy, and Let's Encrypt HTTPS — a standard production setup that doesn't depend on any PaaS billing cycle.
+  What this means for the system: once deployed, the backend is a Docker container on a VPS with persistent SSD storage, Nginx reverse proxy, and Let's Encrypt HTTPS — a standard production setup that doesn't depend on any PaaS billing cycle.
 </Decision>
 
 <Decision date="2026-05-22" title="Zero-downtime blue-green deploy via staging port 8001">
@@ -622,12 +622,10 @@ Chatbot lives outside — no nav, no footer, full screen.
   The one scenario where Option A wins is if the instance is destroyed and rebuilt frequently. That doesn't apply here. The S3 backup cron runs at 02:00 UTC daily via `infra/scripts/backup.sh`. The deploy script auto-restores from S3 if `/data/analytics.db` is missing — so a fresh instance recovers all analytics data on the first deploy with no manual step.
 </Decision>
 
-<Decision date="2026-05-22" title="Custom domain jayaremala.com — necessary for HTTPS mixed content">
-  Moving the backend from Railway (which gave a free HTTPS URL) to a raw Lightsail IP created a mixed content problem. The frontend is served over HTTPS from GitHub Pages. Modern browsers block `http://IP:8000` calls from an HTTPS page — Pumpkin would silently fail on every message.
+<Decision date="2026-07-11" title="Vercel over a custom domain + Lightsail-fronted HTTPS">
+  Once the backend does move off localhost, an IP-only Lightsail box serving plain HTTP would create a mixed-content problem: browsers block `http://` calls from an HTTPS page, so the chatbot would silently fail on every message the moment the frontend went live over HTTPS.
 
-  The fix requires HTTPS on the backend, which requires a domain. DuckDNS was attempted but proved unreliable. The right call was purchasing `jayaremala.com` on Namecheap (~$10/year), pointing `api.jayaremala.com` to the Lightsail static IP, and running Certbot for a free Let's Encrypt certificate behind Nginx. Certbot auto-renews via a systemd timer — zero maintenance.
-
-  The domain also replaced the GitHub Pages subpath (`<username>.github.io/jayaremala`) with a clean root domain (`jayaremala.com`). The `basePath: "/jayaremala"` in `next.config.ts` was removed, and a `CNAME` file was added to `frontend/public/` so GitHub Pages serves from the apex domain.
+  Rather than pay for a domain purely to get Certbot working (the path the original template took), the frontend deploys to Vercel, which issues free HTTPS on its own subdomain (`taruni-portfolio.vercel.app`) with zero DNS setup or ongoing certificate maintenance. `infra/nginx/api.taruni-portfolio.conf` still documents the Nginx + Let's Encrypt setup for whenever the backend gets a real host — a custom domain is only worth buying once there's a reason beyond just "the backend needs HTTPS."
 </Decision>
 
 <Decision date="2026-04-22" title="Lab page — living system design docs over static write-ups">
@@ -645,7 +643,7 @@ Chatbot lives outside — no nav, no footer, full screen.
 </Decision>
 
 <Decision date="2026-05-22" title="BAAI/bge-base-en-v1.5 over all-MiniLM-L6-v2 — better retrieval, same ONNX runtime">
-  The original embedding model was `all-MiniLM-L6-v2` — a 6-layer distilled model producing 384-dim vectors. It was chosen for speed and the ~45MB ONNX binary size. The problem: distilled models sacrifice retrieval quality for size. On BEIR benchmarks, `BAAI/bge-base-en-v1.5` outperforms MiniLM by 8–12 recall points across task types. For a portfolio chatbot, missed recall means a recruiter asks "does he have Redis caching experience?" and the retrieval returns a profile doc instead of the exact 78% latency reduction bullet.
+  The original embedding model was `all-MiniLM-L6-v2` — a 6-layer distilled model producing 384-dim vectors. It was chosen for speed and the ~45MB ONNX binary size. The problem: distilled models sacrifice retrieval quality for size. On BEIR benchmarks, `BAAI/bge-base-en-v1.5` outperforms MiniLM by 8–12 recall points across task types. For a portfolio chatbot, missed recall means a recruiter asks "does she have anomaly detection experience?" and the retrieval returns a profile doc instead of the exact 95%-accuracy bullet.
 
   The switch stays fully ONNX via fastembed — no PyTorch dependency, no RAM regression beyond ~30–50MB for the larger 768-dim model. Critically, switching embedding models requires wiping ChromaDB and rebuilding from scratch because stored 384-dim vectors are incompatible with 768-dim queries. The auto-wipe mechanism handles this transparently on deploy.
 </Decision>
@@ -655,13 +653,13 @@ Chatbot lives outside — no nav, no footer, full screen.
 </Decision>
 
 <Decision date="2026-05-22" title="Static knowledge graph for context expansion — no graph library, no LLM extraction">
-  After retrieval, Pumpkin sometimes has all the pieces but not the connections. A user asks "what did he build at NYU IT?" — the experience doc is retrieved, but the Multi-Agent project doc sits at rank 12 in the RRF pool. Without graph expansion, Gemini gets the job description but not the specific system built there.
+  After retrieval, Pumpkin sometimes has all the pieces but not the connections. A user asks "what did she build at TCS?" — the experience doc is retrieved, but the anomaly-detection project doc sits at rank 12 in the RRF pool. Without graph expansion, Gemini gets the job description but not the specific system built there.
 
   Full GraphRAG was evaluated and rejected. It's designed for corpora with millions of nodes. For ~90 documents with completely known structure, the extraction step is pure overhead. The implementation is a static in-memory graph built at startup. Three relationship maps: `project → skill category docs`, `experience → project docs`, `project → experience doc`. After the RRF top-5 is selected, `expand_context()` follows 1-hop edges and pulls in at most 2 related docs from the RRF-20 pool — no extra ChromaDB call, zero added latency.
 </Decision>
 
 <Decision date="2026-04-10" title="BM25 hybrid retrieval alongside ChromaDB dense search">
-  Dense retrieval fails on specific identifiers. "Qualcomm" isn't weighted by the embedding model. "115 GB/day" and "3000 RPS" retrieve semantically similar documents, not the exact project. These failures matter for a portfolio because the most important recruiter queries are about specifics.
+  Dense retrieval fails on specific identifiers. "TCS" isn't weighted by the embedding model. "500GB+" and "92%" retrieve semantically similar documents, not the exact project. These failures matter for a portfolio because the most important recruiter queries are about specifics.
 
   BM25 handles exact term recall with no model overhead — pure in-memory frequency calculation rebuilt from the document list on every startup (~5ms). The hybrid catches both failure modes.
 </Decision>
@@ -681,7 +679,7 @@ Chatbot lives outside — no nav, no footer, full screen.
 </Decision>
 
 <Decision date="2026-02-15" title="Synthesised FAQ documents — highest-ROI knowledge addition (later made fully dynamic)">
-  The questions that matter most in the first 30 seconds — "What makes Jaya stand out?", "How do I hire him?" — are not well-served by retrieval from raw experience data alone. Pre-synthesised FAQ documents answer these at query time instead of requiring Gemini to infer them from scattered bullet points. When a FAQ doc is retrieved, Gemini gets the answer already formed.
+  The questions that matter most in the first 30 seconds — "What makes Taruni stand out?", "How do I hire her?" — are not well-served by retrieval from raw experience data alone. Pre-synthesised FAQ documents answer these at query time instead of requiring Gemini to infer them from scattered bullet points. When a FAQ doc is retrieved, Gemini gets the answer already formed.
 
   Initially these were 12 handwritten static strings in `ingest.py`. The failure mode: add a new job and `faq_nyu_work` silently becomes stale. Pumpkin continues citing the old role count, old company list, old achievements — not what's in the JSON files.
 
@@ -713,17 +711,6 @@ Chatbot lives outside — no nav, no footer, full screen.
   redesign.
 </Update>
 
-<Update date="2026-06-17">
-  **gradeVITian relaunched on the same infrastructure.** The 6-year, 17K-MAU VIT student-tools app was
-  rebuilt as a route segment (`app/gradevitian/**`) in this same Next.js app and FastAPI backend, and
-  served at **gradevitian.jayaremala.com** — the Lightsail Nginx points that host's document root at
-  the exported `out/gradevitian/` folder (a CI step rsyncs the static export to the box). It adds its
-  own SQLite store (`gradevitian.db`, S3-backed): accounts (stdlib scrypt + HMAC tokens, no new deps),
-  per-user autosave of calculator inputs + personal notes, a feedback wall with a two-pass moderation
-  pipeline (keyword filter → LLM toxicity check, escalate-only), referrals, notifications, and a
-  dedicated subdomain sitemap/robots/JSON-LD. Honest criticism stays published; abuse is held or blocked.
-</Update>
-
 <Update date="2026-06-14">
   **Structured `get_blog` / `get_lab` tools.** Blog and lab entries were previously reachable over MCP
   and agent mode only through `search_knowledge` (semantic) — there was no way to *enumerate* them.
@@ -741,7 +728,7 @@ Chatbot lives outside — no nav, no footer, full screen.
   Calendar Freebusy API (read-only OAuth, cached ~3 min) and bundle them with `booking_url` + `availability.open`
   from `profile.json`. Classic chat triggers it via keyword detection (`_is_calendar_query`); agent mode lets
   the model call the tool. Both emit a `booking_card` SSE event that renders `<BookingCard>` — clickable open
-  slots plus a "Book on Google Calendar" CTA to Jaya's existing Appointment Schedule page (Google handles the
+  slots plus a "Book on Google Calendar" CTA to Taruni's existing Appointment Schedule page (Google handles the
   invite, Meet link, reminders). Degrades gracefully to just the booking link if the calendar isn't connected,
   and the fetch is timeout-bounded so it never stalls the token stream. No calendar-write scope required.
 </Update>
@@ -751,7 +738,7 @@ Chatbot lives outside — no nav, no footer, full screen.
   `mcp.http_app(path="/", transport="http", stateless_http=True)` — dropping the per-session handshake that
   was failing connect-from-anywhere clients with "Missing session ID". The `/mcp` mount in `main.py` is
   wrapped in a permissive CORS layer scoped to that mount only, so browser-based MCP clients work while the
-  main API keeps its domain-locked policy. Endpoint is `https://api.jayaremala.com/mcp/` (trailing slash
+  main API keeps its domain-locked policy. Endpoint is `https://api.taruni-portfolio.vercel.app/mcp/` (trailing slash
   required — `/mcp` 307-redirects). Verified live: `initialize` and `tools/list` return 200 with no session
   ID needed.
 </Update>
@@ -858,19 +845,15 @@ Chatbot lives outside — no nav, no footer, full screen.
 </Update>
 
 <Update date="2026-05-21">
-  Migrated backend from Railway to AWS Lightsail 2GB ($10/month). Set up Nginx + Let's Encrypt for HTTPS on api.jayaremala.com. Purchased jayaremala.com domain — frontend now at root domain instead of GitHub Pages subpath. Removed basePath from next.config.ts, added CNAME file to public/.
-</Update>
-
-<Update date="2026-05-21">
   Implemented zero-downtime blue-green deployment. New container health-checked on port 8001 before old :8000 is stopped. deploy.sh, rollback.sh, and backup.sh moved into infra/scripts/ and version-controlled in the repo.
 </Update>
 
 <Update date="2026-05-21">
-  Set up daily S3 backup of analytics.db to itsjaya-backups-analytics bucket with 7-day retention. Deploy script auto-restores from S3 if /data/analytics.db is missing on a fresh instance. Docker log rotation configured: json-file driver, 10MB max, 3 files. CHROMA_DB_PATH made configurable via settings.py.
+  Set up daily S3 backup of analytics.db to taruni-portfolio-backups-analytics bucket with 7-day retention. Deploy script auto-restores from S3 if /data/analytics.db is missing on a fresh instance. Docker log rotation configured: json-file driver, 10MB max, 3 files. CHROMA_DB_PATH made configurable via settings.py.
 </Update>
 
 <Update date="2026-04-22">
-  Built /lab section. MDX-based living system design docs with custom components: Status, Arch, Decision, Update, Stack, Metric. Added Lab to nav. First entry: itsjaya itself.
+  Built /lab section. MDX-based living system design docs with custom components: Status, Arch, Decision, Update, Stack, Metric. Added Lab to nav. First entry: this portfolio itself.
 </Update>
 
 <Update date="2026-04-22">

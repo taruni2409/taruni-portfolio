@@ -9,7 +9,7 @@ import SparkleIcon from "@/components/SparkleIcon";
 
 // ─── constants ────────────────────────────────────────────────────────────────
 
-const STORAGE_KEY = "itsjaya_intro_seen";
+const STORAGE_KEY = "taruni_portfolio_intro_seen";
 
 const QUICK_LINKS = [
   { label: "Experience", href: "/experience" },

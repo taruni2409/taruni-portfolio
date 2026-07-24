@@ -12,6 +12,7 @@ interface Project {
   award?: string;
   note?: string;
   sourceLinks?: SourceLink[];
+  liveUrl?: string;
 }
 
 function onTiltMove(e: React.MouseEvent<HTMLDivElement>) {
@@ -139,9 +140,10 @@ export default function ProjectsGrid({ projects }: { projects: Project[] }) {
             return (
               <ScrollReveal key={i} delay={Math.min((i % 3) * 80, 160)} className="flex">
                 <div
-                  className="group relative flex flex-col flex-1 rounded-2xl border border-border bg-surface p-5 sm:p-6 hover:border-border-strong transition-all overflow-hidden card-lift"
+                  className={`group relative flex flex-col flex-1 rounded-2xl border border-border bg-surface p-5 sm:p-6 hover:border-border-strong transition-all overflow-hidden card-lift ${p.liveUrl ? "cursor-pointer" : ""}`}
                   onMouseMove={onTiltMove}
                   onMouseLeave={onTiltLeave}
+                  onClick={() => { if (p.liveUrl) window.open(p.liveUrl, "_blank", "noopener,noreferrer"); }}
                   style={{ transition: "transform 0.2s cubic-bezier(0.16,1,0.3,1), border-color 0.2s, box-shadow 0.2s", willChange: "transform" }}
                 >
                   {/* Hover sweep */}
@@ -180,7 +182,7 @@ export default function ProjectsGrid({ projects }: { projects: Project[] }) {
                     {p.tags.map((t) => (
                       <button
                         key={t}
-                        onClick={() => setActiveTag(activeTag === t ? null : t)}
+                        onClick={(e) => { e.stopPropagation(); setActiveTag(activeTag === t ? null : t); }}
                         className={`rounded-full border px-2.5 py-0.5 text-[10px] font-medium tracking-wide transition-colors ${
                           activeTag === t
                             ? "bg-accent border-accent text-white"
@@ -200,6 +202,20 @@ export default function ProjectsGrid({ projects }: { projects: Project[] }) {
 
                   {/* Source links */}
                   <div className="flex flex-wrap gap-2 pt-2 border-t border-border-subtle">
+                    {p.liveUrl && (
+                      <a
+                        href={p.liveUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 rounded-full bg-accent px-2.5 py-0.5 text-[10px] font-semibold text-white hover:bg-accent-hover transition-colors"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        Live
+                        <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                          <path d="M7 17L17 7M17 7H7M17 7v10"/>
+                        </svg>
+                      </a>
+                    )}
                     {p.sourceLinks && p.sourceLinks.length > 0 ? (
                       p.sourceLinks.map((link) => (
                         <a
@@ -216,9 +232,9 @@ export default function ProjectsGrid({ projects }: { projects: Project[] }) {
                           </svg>
                         </a>
                       ))
-                    ) : (
+                    ) : !p.liveUrl ? (
                       <span className="text-[11px] text-fg-faint">{p.note ? "" : "In progress"}</span>
-                    )}
+                    ) : null}
                   </div>
                 </div>
               </ScrollReveal>

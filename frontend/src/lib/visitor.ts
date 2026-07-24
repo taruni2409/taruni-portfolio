@@ -1,10 +1,10 @@
-/** Returns a stable per-device UUID stored in localStorage (key: "jaya_vid").
+/** Returns a stable per-device UUID stored in localStorage (key: "taruni_vid").
  *  Used by SiteTracker and ChatInterface so site-visit and chat stats both
  *  count devices individually, not shared-IP networks.
  */
 export function getOrCreateVisitorId(): string {
   try {
-    const key = "jaya_vid";
+    const key = "taruni_vid";
     let id = localStorage.getItem(key);
     if (!id) {
       id =

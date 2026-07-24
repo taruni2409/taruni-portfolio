@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-# Zero-downtime blue-green deploy for itsjaya-backend.
+# Zero-downtime blue-green deploy for taruni-portfolio-backend.
 # Called by GitHub Actions after git pull — do not run this before pulling.
 set -euo pipefail
 
-ENV_FILE="/home/ubuntu/itsjaya.env"
-IMAGE="itsjaya-backend"
-GHCR_IMAGE="ghcr.io/taruni2409/itsjaya-backend"
+ENV_FILE="/home/ubuntu/taruni-portfolio.env"
+IMAGE="taruni-portfolio-backend"
+GHCR_IMAGE="ghcr.io/taruni2409/taruni-portfolio-backend"
 DATA_DIR="/data"
-S3_BUCKET="${ITSJAYA_BACKUP_BUCKET:-itsjaya-backups-analytics}"
+S3_BUCKET="${TARUNI_BACKUP_BUCKET:-taruni-portfolio-backups-analytics}"
 
 # ── 0. Restore databases from S3 if missing ──────────────────────────────────
 mkdir -p "$DATA_DIR"
@@ -43,10 +43,10 @@ docker tag  "${GHCR_IMAGE}:latest" "${IMAGE}:latest"
 echo "[deploy] Pull complete."
 
 # ── 3. Start new container on staging port 8001 ───────────────────────────────
-docker rm -f itsjaya-backend-new 2>/dev/null || true
+docker rm -f taruni-portfolio-backend-new 2>/dev/null || true
 
 docker run -d \
-  --name itsjaya-backend-new \
+  --name taruni-portfolio-backend-new \
   --restart no \
   --env-file "$ENV_FILE" \
   -v "${DATA_DIR}:/data" \
@@ -71,17 +71,17 @@ done
 
 if [ "$HEALTHY" -eq 0 ]; then
   echo "[deploy] ERROR: New container failed health check. Old container still running."
-  docker rm -f itsjaya-backend-new || true
+  docker rm -f taruni-portfolio-backend-new || true
   exit 1
 fi
 
 # ── 5. Swap — stop old, start new on port 8000 ───────────────────────────────
-docker stop itsjaya-backend 2>/dev/null || true
-docker rm   itsjaya-backend 2>/dev/null || true
-docker rm -f itsjaya-backend-new
+docker stop taruni-portfolio-backend 2>/dev/null || true
+docker rm   taruni-portfolio-backend 2>/dev/null || true
+docker rm -f taruni-portfolio-backend-new
 
 docker run -d \
-  --name itsjaya-backend \
+  --name taruni-portfolio-backend \
   --restart unless-stopped \
   --env-file "$ENV_FILE" \
   -v "${DATA_DIR}:/data" \

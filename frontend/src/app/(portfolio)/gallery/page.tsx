@@ -5,10 +5,10 @@ import { profile } from "@/data/profile";
 export const metadata = {
   title: "Gallery",
   description: "Moments, milestones, and achievements — a visual log from Taruni Nallamothu.",
-  alternates: { canonical: "https://jayaremala.com/gallery" },
+  alternates: { canonical: "https://taruni-portfolio.vercel.app/gallery" },
   openGraph: {
     type: "website" as const,
-    url: "https://jayaremala.com/gallery",
+    url: "https://taruni-portfolio.vercel.app/gallery",
     title: "Gallery — Taruni Nallamothu",
     description: "Moments, milestones, and achievements in pictures.",
   },

@@ -47,7 +47,7 @@ const inter = Inter({
   weight: ["500", "600", "700", "800", "900"],
 });
 
-const SITE_URL = "https://jayaremala.com";
+const SITE_URL = "https://taruni-portfolio.vercel.app";
 const SITE_TITLE = "Taruni Nallamothu — Data Engineer & ML Engineer";
 const SITE_DESC =
   "Data Engineer & Machine Learning Engineer specializing in scalable ETL pipelines, predictive modelling, and cloud analytics on Azure and GCP. Google & Microsoft Certified.";
@@ -122,7 +122,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     >
       <head>
         {/* Anti-FOUC: apply data-theme + dark class before first paint so bg never flashes white */}
-        <script dangerouslySetInnerHTML={{ __html: `try{var t=localStorage.getItem('color-theme')||'midnight';document.documentElement.setAttribute('data-theme',t);var d=localStorage.getItem('theme');if(d==='dark'||((!d||d==='system')&&window.matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.classList.add('dark');}}catch(e){}` }} />
+        <script dangerouslySetInnerHTML={{ __html: `try{var t=localStorage.getItem('color-theme')||'midnight';document.documentElement.setAttribute('data-theme',t);var d=localStorage.getItem('theme');if(d==='dark'||(d==='system'&&window.matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.classList.add('dark');}}catch(e){}` }} />
       </head>
       <body className="min-h-full flex flex-col bg-bg text-fg">
         <ThemeProvider>

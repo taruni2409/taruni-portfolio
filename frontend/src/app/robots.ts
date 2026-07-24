@@ -11,6 +11,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/admin/", "/admin"],
       },
     ],
-    sitemap: ["https://jayaremala.com/sitemap.xml"],
+    sitemap: ["https://taruni-portfolio.vercel.app/sitemap.xml"],
   };
 }

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import SystemDashboard from "@/components/SystemDashboard";
 
-const SITE_URL = "https://jayaremala.com";
+const SITE_URL = "https://taruni-portfolio.vercel.app";
 
 export const metadata: Metadata = {
   title: "System — Live observability | Taruni Nallamothu",

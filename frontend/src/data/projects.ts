@@ -12,6 +12,7 @@ export interface Project {
   featured: boolean;
   award?: string;
   sourceLinks: SourceLink[];
+  liveUrl?: string;
   note?: string;
 }
 

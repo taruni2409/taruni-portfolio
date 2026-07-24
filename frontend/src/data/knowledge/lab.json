@@ -1,7 +1,7 @@
 [
   {
-    "slug": "itsjaya",
-    "title": "itsjaya — AI Portfolio",
+    "slug": "taruni-portfolio",
+    "title": "taruni-portfolio — AI Portfolio",
     "status": "active",
     "description": "AI-powered personal portfolio with a RAG chatbot (Pumpkin), an agentic tool-calling mode, a public MCP server, in-chat book-a-call, MDX blog, engagement analytics, and a fully automated deploy pipeline. Every layer is production-grade — not a toy.",
     "startedAt": "2025-11-01",

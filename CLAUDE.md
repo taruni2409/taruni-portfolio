@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this project is
 
-Personal AI-assisted portfolio for Taruni Nallamothu (`itsjaya.com`). The site has two entry points:
+Personal AI-assisted portfolio for Taruni Nallamothu (`taruni-portfolio.vercel.app`). The site has two entry points:
 
 - `/` — Full-screen RAG-powered recruiter chatbot ("Pumpkin") powered by Gemini via Google AI API + ChromaDB
 - `/portfolio` — Portfolio home with hero, featured projects, domain interests, skills, testimonials carousel, and contact

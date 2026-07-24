@@ -1,6 +1,6 @@
 # frontend
 
-Next.js 16 frontend for itsjaya. See the root [README.md](../README.md) for full system architecture, setup instructions, and deployment details.
+Next.js 16 frontend for taruni-portfolio. See the root [README.md](../README.md) for full system architecture, setup instructions, and deployment details.
 
 ```bash
 npm install

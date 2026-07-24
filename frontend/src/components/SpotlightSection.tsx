@@ -42,7 +42,7 @@ function SecondaryCta({ cta }: { cta: SpotlightCta }) {
 }
 
 /**
- * One product-spotlight card — an advertising break for a live product Jaya
+ * One product-spotlight card — an advertising break for a live product Taruni
  * builds and runs. Distinct from the numbered chapters: it reads as a "this
  * person ships and scales real products" proof point for recruiters.
  */

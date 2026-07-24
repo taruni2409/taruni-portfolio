@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # Backup analytics.db and content.db to S3. Keeps 7 days of history.
-# Usage: bash /home/ubuntu/itsjaya/infra/scripts/backup.sh
-# Cron:  0 2 * * * /bin/bash /home/ubuntu/itsjaya/infra/scripts/backup.sh >> /data/logs/backup.log 2>&1
+# Usage: bash /home/ubuntu/taruni-portfolio/infra/scripts/backup.sh
+# Cron:  0 2 * * * /bin/bash /home/ubuntu/taruni-portfolio/infra/scripts/backup.sh >> /data/logs/backup.log 2>&1
 set -euo pipefail
 
-S3_BUCKET="${ITSJAYA_BACKUP_BUCKET:-itsjaya-backups}"
+S3_BUCKET="${TARUNI_BACKUP_BUCKET:-taruni-portfolio-backups}"
 TIMESTAMP=$(date +"%Y-%m-%d_%H-%M-%S")
 CUTOFF=$(date -d '7 days ago' +%Y-%m-%d 2>/dev/null || date -v -7d +%Y-%m-%d)
 

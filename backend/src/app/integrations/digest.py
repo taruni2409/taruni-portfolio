@@ -101,7 +101,7 @@ def build_digest_html(stats: dict) -> str:
   </div>
 
   <div style="padding:16px 32px;border-top:1px solid #f0f0f0;text-align:center">
-    <p style="font-size:11px;color:#bbb;margin:0">Pumpkin · <a href="{admin_url}" style="color:#bbb">jayaremala.com/admin</a></p>
+    <p style="font-size:11px;color:#bbb;margin:0">Pumpkin · <a href="{admin_url}" style="color:#bbb">taruni-portfolio.vercel.app/admin</a></p>
   </div>
 </div>
 </body>

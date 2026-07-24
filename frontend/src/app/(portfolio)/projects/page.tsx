@@ -6,10 +6,10 @@ export const metadata = {
   title: "Projects",
   description:
     "Portfolio of AI systems, distributed infrastructure, and hackathon-winning projects — RAG pipelines, Edge AI inference on Snapdragon NPUs, and more.",
-  alternates: { canonical: "https://jayaremala.com/projects" },
+  alternates: { canonical: "https://taruni-portfolio.vercel.app/projects" },
   openGraph: {
     type: "website" as const,
-    url: "https://jayaremala.com/projects",
+    url: "https://taruni-portfolio.vercel.app/projects",
     title: "Projects — Taruni Nallamothu",
     description: "AI systems, distributed infrastructure, and hackathon-winning projects — RAG, Edge AI, LangGraph, FastAPI.",
   },
@@ -28,7 +28,6 @@ export default function ProjectsPage() {
 
         <div className="flex items-baseline gap-3 mb-2">
           <h1 className="text-3xl sm:text-4xl font-bold text-fg">Projects</h1>
-          <span className="text-xl sm:text-2xl font-mono select-none text-fg-faint" aria-hidden>{"{ }"}</span>
         </div>
 
         {profile.page_projects && (

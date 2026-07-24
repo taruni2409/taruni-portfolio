@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: Props) {
   return {
     title: `#${decoded} — Blog`,
     description: `All posts tagged with ${decoded} by Taruni Nallamothu.`,
-    alternates: { canonical: `https://jayaremala.com/blog/tag/${tag}` },
+    alternates: { canonical: `https://taruni-portfolio.vercel.app/blog/tag/${tag}` },
   };
 }
 
