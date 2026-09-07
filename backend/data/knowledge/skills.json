@@ -39,6 +39,23 @@
     ]
   },
   {
+    "category": "LLM & MLOps",
+    "items": [
+      "Prompt Engineering",
+      "Retrieval-Augmented Generation (RAG)",
+      "LLM Orchestration & Fallback Chains",
+      "Vector Databases (ChromaDB)",
+      "Embeddings (fastembed/ONNX)",
+      "Hybrid Search (BM25 + Vector, RRF)",
+      "Google Gemini API",
+      "Model Deployment",
+      "CI/CD (GitHub Actions)",
+      "Docker",
+      "FastAPI",
+      "Model Monitoring & Observability"
+    ]
+  },
+  {
     "category": "Cloud Platforms",
     "items": [
       "Microsoft Azure",
