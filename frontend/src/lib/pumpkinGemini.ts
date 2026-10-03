@@ -4,7 +4,11 @@ import { buildSystemPrompt } from "./pumpkinKnowledge";
 // current stable flash model, so the primary pick doesn't go stale on its own —
 // the fallback chain still matters for capacity errors and future deprecations.
 const GEMINI_MODEL = process.env.GEMINI_MODEL || "gemini-flash-latest";
-const GEMINI_FALLBACK_MODELS = (process.env.GEMINI_FALLBACK_MODELS || "gemini-2.5-flash,gemini-3.8-flash,gemini-2.5-flash-lite")
+// gemini-2.5-flash and gemini-2.5-flash-lite are no longer available to new API
+// keys (404) — replaced with current models. Each has its own daily free-tier
+// quota, so a longer chain means one exhausted model doesn't take the whole
+// widget down; verified each of these has independent quota.
+const GEMINI_FALLBACK_MODELS = (process.env.GEMINI_FALLBACK_MODELS || "gemini-3.8-flash,gemini-3.5-flash,gemini-3.5-flash-lite,gemini-flash-lite-latest")
   .split(",")
   .map((m) => m.trim())
   .filter(Boolean);
