@@ -11,6 +11,14 @@ const GEMINI_FALLBACK_MODELS = (process.env.GEMINI_FALLBACK_MODELS || "gemini-2.
 
 const MODEL_CHAIN = [GEMINI_MODEL, ...GEMINI_FALLBACK_MODELS];
 
+// Gemini occasionally returns 503 slowly instead of failing fast (seen directly
+// from the API: an 8s-plus wait before "currently experiencing high demand").
+// Without a bound, a slow-but-not-yet-erroring model stalls the whole chain for
+// 30s+ instead of failing over quickly. This caps time-to-first-token per model;
+// once tokens start flowing the timeout is cleared so a genuinely slow-but-working
+// stream isn't cut off mid-reply.
+const FIRST_TOKEN_TIMEOUT_MS = 12_000;
+
 export type PumpkinChatMessage = { role: "user" | "assistant"; content: string };
 
 function buildContents(messages: PumpkinChatMessage[], message: string) {
@@ -48,6 +56,9 @@ export async function* streamPumpkinReply(
 
   for (const model of MODEL_CHAIN) {
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:streamGenerateContent?alt=sse&key=${apiKey}`;
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), FIRST_TOKEN_TIMEOUT_MS);
+
     let res: Response;
     try {
       res = await fetch(url, {
@@ -57,13 +68,16 @@ export async function* streamPumpkinReply(
           contents,
           systemInstruction: { parts: [{ text: systemPrompt }] },
         }),
+        signal: controller.signal,
       });
     } catch {
+      clearTimeout(timer);
       lastErrorStatus = 503;
       continue;
     }
 
     if (!res.ok || !res.body) {
+      clearTimeout(timer);
       lastErrorStatus = res.status;
       if (isCapacityError(res.status)) continue;
       yield { error: "stream_error" };
@@ -74,38 +88,46 @@ export async function* streamPumpkinReply(
     const decoder = new TextDecoder();
     let buffer = "";
     let yieldedAny = false;
-    let streamFailed = false;
 
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      buffer += decoder.decode(value, { stream: true });
-      const lines = buffer.split("\n");
-      buffer = lines.pop() ?? "";
-      for (const line of lines) {
-        if (!line.startsWith("data: ")) continue;
-        const payload = line.slice(6).trim();
-        if (!payload) continue;
-        try {
-          const parsed = JSON.parse(payload);
-          const text = parsed?.candidates?.[0]?.content?.parts?.[0]?.text;
-          if (typeof text === "string" && text.length > 0) {
-            yieldedAny = true;
-            yield { token: text };
+    try {
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        if (!yieldedAny) clearTimeout(timer); // first chunk arrived — stop racing this model
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split("\n");
+        buffer = lines.pop() ?? "";
+        for (const line of lines) {
+          if (!line.startsWith("data: ")) continue;
+          const payload = line.slice(6).trim();
+          if (!payload) continue;
+          try {
+            const parsed = JSON.parse(payload);
+            const text = parsed?.candidates?.[0]?.content?.parts?.[0]?.text;
+            if (typeof text === "string" && text.length > 0) {
+              yieldedAny = true;
+              yield { token: text };
+            }
+          } catch {
+            // partial/malformed chunk — skip
           }
-        } catch {
-          // partial/malformed chunk — skip
         }
       }
+    } catch {
+      // Aborted (timeout) or connection dropped mid-stream.
+      if (yieldedAny) return; // already sent partial output — don't retry into a mixed reply
+      lastErrorStatus = 503;
+      continue;
+    } finally {
+      clearTimeout(timer);
     }
 
     if (yieldedAny) {
       yield { done: true, model: `gemini:${model}` };
       return;
     }
-    // Nothing streamed (e.g. safety block or empty candidate) — try next model.
-    streamFailed = true;
-    if (streamFailed) continue;
+    // Nothing streamed (e.g. safety block, empty candidate, or timed out with no bytes) — try next model.
+    lastErrorStatus = 503;
   }
 
   yield { error: lastErrorStatus && isCapacityError(lastErrorStatus) ? "quota_exhausted" : "stream_error" };
