@@ -1,0 +1,134 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1700 1150" width="1700" height="1150" font-family="Menlo, Monaco, monospace">
+  <rect width="1700" height="1150" fill="#0a0a0a"/>
+
+  <!-- Title -->
+  <rect x="520" y="30" width="660" height="110" rx="6" fill="none" stroke="#7b72f0" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <text x="850" y="65" fill="#e8e6f5" font-size="20" font-weight="bold" text-anchor="middle">Taruni Nallamothu — Portfolio System Design</text>
+  <text x="850" y="92" fill="#9590b5" font-size="13" text-anchor="middle">live at https://taruni-portfolio.vercel.app</text>
+  <text x="850" y="114" fill="#5e5a7e" font-size="11" text-anchor="middle">architecture overview</text>
+
+  <!-- Client Browser -->
+  <rect x="60" y="230" width="380" height="640" rx="6" fill="none" stroke="#5e5a7e" stroke-width="1.5"/>
+  <text x="250" y="258" fill="#e8e6f5" font-size="15" font-weight="bold" text-anchor="middle">Client Browser</text>
+
+  <rect x="90" y="280" width="320" height="150" rx="6" fill="none" stroke="#f5a623" stroke-width="1.5"/>
+  <text x="250" y="308" fill="#f5a623" font-size="13" font-weight="bold" text-anchor="middle">Pumpkin Chatbot</text>
+  <text x="250" y="326" fill="#c9c5db" font-size="11" text-anchor="middle">/ (full-screen) · /chat (nav)</text>
+  <text x="250" y="346" fill="#9590b5" font-size="10.5" text-anchor="middle">ChatInterface</text>
+  <text x="250" y="362" fill="#9590b5" font-size="10.5" text-anchor="middle">SSE token stream</text>
+  <text x="250" y="378" fill="#9590b5" font-size="10.5" text-anchor="middle">Model badge · Agent mode</text>
+  <text x="250" y="394" fill="#9590b5" font-size="10.5" text-anchor="middle">Book-a-call card</text>
+  <text x="250" y="410" fill="#9590b5" font-size="10.5" text-anchor="middle">Public MCP server (/mcp)</text>
+
+  <rect x="90" y="450" width="320" height="150" rx="6" fill="none" stroke="#10b981" stroke-width="1.5"/>
+  <text x="250" y="478" fill="#10b981" font-size="13" font-weight="bold" text-anchor="middle">Portfolio Site</text>
+  <text x="250" y="496" fill="#c9c5db" font-size="11" text-anchor="middle">/portfolio /experience /education</text>
+  <text x="250" y="512" fill="#c9c5db" font-size="11" text-anchor="middle">/projects /blog /lab /quotes</text>
+  <text x="250" y="532" fill="#9590b5" font-size="10.5" text-anchor="middle">Static Next.js export</text>
+  <text x="250" y="548" fill="#9590b5" font-size="10.5" text-anchor="middle">BlogEngagement · QuotesFeed</text>
+  <text x="250" y="564" fill="#9590b5" font-size="10.5" text-anchor="middle">ProjectsGrid · Search (⌘K)</text>
+  <text x="250" y="580" fill="#9590b5" font-size="10.5" text-anchor="middle">Google Forms contact</text>
+
+  <rect x="90" y="620" width="320" height="150" rx="6" fill="none" stroke="#4f9cf0" stroke-width="1.5"/>
+  <text x="250" y="648" fill="#4f9cf0" font-size="13" font-weight="bold" text-anchor="middle">Admin Panel</text>
+  <text x="250" y="666" fill="#c9c5db" font-size="11" text-anchor="middle">/admin (token-gated, no-index)</text>
+  <text x="250" y="686" fill="#9590b5" font-size="10.5" text-anchor="middle">Content editors (blog/lab/quotes)</text>
+  <text x="250" y="702" fill="#9590b5" font-size="10.5" text-anchor="middle">Stats dashboard</text>
+  <text x="250" y="718" fill="#9590b5" font-size="10.5" text-anchor="middle">Google Calendar / Gmail connect</text>
+  <text x="250" y="734" fill="#9590b5" font-size="10.5" text-anchor="middle">Batched GitHub publish (1 commit)</text>
+
+  <!-- Backend -->
+  <rect x="520" y="230" width="660" height="640" rx="6" fill="none" stroke="#5e5a7e" stroke-width="1.5"/>
+  <text x="850" y="258" fill="#e8e6f5" font-size="15" font-weight="bold" text-anchor="middle">Backend — FastAPI</text>
+  <text x="850" y="276" fill="#5e5a7e" font-size="10.5" text-anchor="middle">local dev today · Docker + Nginx on a VPS when deployed</text>
+
+  <rect x="550" y="292" width="600" height="130" rx="6" fill="none" stroke="#c084fc" stroke-width="1.3"/>
+  <text x="850" y="312" fill="#c084fc" font-size="12" font-weight="bold" text-anchor="middle">RAG Pipeline</text>
+  <text x="850" y="332" fill="#c9c5db" font-size="10.5" text-anchor="middle">Query expansion → HyDE + dense retrieval + BM25 (parallel) → RRF merge</text>
+  <text x="850" y="350" fill="#c9c5db" font-size="10.5" text-anchor="middle">→ knowledge-graph 1-hop expansion → top chunks → Gemini SSE</text>
+  <text x="850" y="370" fill="#9590b5" font-size="10" text-anchor="middle">POST /ai/chat/stream · /ai/chat · /ai/chat/agentic</text>
+  <text x="850" y="386" fill="#9590b5" font-size="10" text-anchor="middle">bge-base-en-v1.5 (768d ONNX) · rank_bm25 · SlowAPI 10 req/min</text>
+  <text x="850" y="402" fill="#9590b5" font-size="10" text-anchor="middle">GET /tools · POST /tools/{name} · public MCP at /mcp/</text>
+
+  <rect x="550" y="434" width="290" height="110" rx="6" fill="none" stroke="#f0819a" stroke-width="1.3"/>
+  <text x="695" y="454" fill="#f0819a" font-size="12" font-weight="bold" text-anchor="middle">Content API</text>
+  <text x="695" y="472" fill="#c9c5db" font-size="10" text-anchor="middle">/content/blog · /content/lab</text>
+  <text x="695" y="488" fill="#c9c5db" font-size="10" text-anchor="middle">/content/quotes</text>
+  <text x="695" y="504" fill="#9590b5" font-size="9.5" text-anchor="middle">CRUD → content.db → regenerate</text>
+  <text x="695" y="518" fill="#9590b5" font-size="9.5" text-anchor="middle">JSON → run_ingest() in background</text>
+
+  <rect x="860" y="434" width="290" height="110" rx="6" fill="none" stroke="#f5a623" stroke-width="1.3"/>
+  <text x="1005" y="454" fill="#f5a623" font-size="12" font-weight="bold" text-anchor="middle">Analytics API</text>
+  <text x="1005" y="472" fill="#c9c5db" font-size="10" text-anchor="middle">/stats · /stats/overview</text>
+  <text x="1005" y="488" fill="#c9c5db" font-size="10" text-anchor="middle">/blog/{slug}/view · /clap</text>
+  <text x="1005" y="504" fill="#9590b5" font-size="9.5" text-anchor="middle">IPs SHA-256 hashed before</text>
+  <text x="1005" y="518" fill="#9590b5" font-size="9.5" text-anchor="middle">storage · geo lookup async</text>
+
+  <rect x="550" y="562" width="290" height="100" rx="6" fill="none" stroke="#7b72f0" stroke-width="1.3"/>
+  <text x="695" y="582" fill="#7b72f0" font-size="12" font-weight="bold" text-anchor="middle">RAG Store</text>
+  <text x="695" y="600" fill="#c9c5db" font-size="10" text-anchor="middle">ChromaDB (persistent)</text>
+  <text x="695" y="616" fill="#9590b5" font-size="9.5" text-anchor="middle">HNSW cosine · incremental</text>
+  <text x="695" y="632" fill="#9590b5" font-size="9.5" text-anchor="middle">per-doc SHA-256 upsert</text>
+  <text x="695" y="648" fill="#9590b5" font-size="9.5" text-anchor="middle">static knowledge graph</text>
+
+  <rect x="860" y="562" width="290" height="100" rx="6" fill="none" stroke="#10b981" stroke-width="1.3"/>
+  <text x="1005" y="582" fill="#10b981" font-size="12" font-weight="bold" text-anchor="middle">SQLite</text>
+  <text x="1005" y="600" fill="#c9c5db" font-size="10" text-anchor="middle">analytics.db · content.db</text>
+  <text x="1005" y="616" fill="#9590b5" font-size="9.5" text-anchor="middle">interactions · site_visits</text>
+  <text x="1005" y="632" fill="#9590b5" font-size="9.5" text-anchor="middle">blog_views · blog_claps</text>
+  <text x="1005" y="648" fill="#9590b5" font-size="9.5" text-anchor="middle">blog_posts · lab_entries · quotes</text>
+
+  <rect x="550" y="684" width="600" height="150" rx="6" fill="none" stroke="#4f9cf0" stroke-width="1.3"/>
+  <text x="850" y="704" fill="#4f9cf0" font-size="12" font-weight="bold" text-anchor="middle">Knowledge Base — backend/data/knowledge/*.json</text>
+  <text x="850" y="724" fill="#c9c5db" font-size="10" text-anchor="middle">profile · experience · education · projects · skills · testimonials</text>
+  <text x="850" y="740" fill="#c9c5db" font-size="10" text-anchor="middle">gallery · quotes · blog · lab</text>
+  <text x="850" y="760" fill="#9590b5" font-size="9.5" text-anchor="middle">Single source of truth — TypeScript files are thin typed wrappers</text>
+  <text x="850" y="776" fill="#9590b5" font-size="9.5" text-anchor="middle">over synced copies. sync-knowledge.mjs runs before every build.</text>
+  <text x="850" y="796" fill="#9590b5" font-size="9.5" text-anchor="middle">blog.json / lab.json auto-generated from MDX frontmatter</text>
+  <text x="850" y="812" fill="#9590b5" font-size="9.5" text-anchor="middle">quotes.json synced from content.db</text>
+
+  <!-- Model providers -->
+  <rect x="1240" y="240" width="400" height="150" rx="6" fill="none" stroke="#c084fc" stroke-width="1.5"/>
+  <text x="1440" y="266" fill="#c084fc" font-size="13" font-weight="bold" text-anchor="middle">Model Fallback Chain</text>
+  <text x="1440" y="288" fill="#c9c5db" font-size="10.5" text-anchor="middle">Gemini 2.5 Flash (primary)</text>
+  <text x="1440" y="304" fill="#9590b5" font-size="10" text-anchor="middle">→ Gemini 2.0 Flash / Flash-Lite</text>
+  <text x="1440" y="320" fill="#9590b5" font-size="10" text-anchor="middle">→ Groq (llama-3.x, if key set)</text>
+  <text x="1440" y="336" fill="#9590b5" font-size="10" text-anchor="middle">→ OpenRouter (if key set)</text>
+  <text x="1440" y="356" fill="#5e5a7e" font-size="9.5" text-anchor="middle">auto-retry on 503 / 429 / deprecated model</text>
+  <text x="1440" y="372" fill="#5e5a7e" font-size="9.5" text-anchor="middle">mid-stream reset on failover</text>
+
+  <!-- Deploy -->
+  <rect x="1240" y="420" width="400" height="200" rx="6" fill="none" stroke="#f5a623" stroke-width="1.5"/>
+  <text x="1440" y="446" fill="#f5a623" font-size="13" font-weight="bold" text-anchor="middle">GitHub Actions</text>
+  <text x="1440" y="468" fill="#c9c5db" font-size="10.5" text-anchor="middle">push to main →</text>
+  <text x="1440" y="486" fill="#9590b5" font-size="10" text-anchor="middle">sync-knowledge.mjs → build</text>
+  <text x="1440" y="502" fill="#9590b5" font-size="10" text-anchor="middle">→ Vercel (frontend, live)</text>
+  <text x="1440" y="522" fill="#9590b5" font-size="10" text-anchor="middle">→ Docker build → GHCR</text>
+  <text x="1440" y="538" fill="#5e5a7e" font-size="9.5" text-anchor="middle">→ backend host (blue/green deploy,</text>
+  <text x="1440" y="554" fill="#5e5a7e" font-size="9.5" text-anchor="middle">skipped until hosting is configured)</text>
+  <text x="1440" y="576" fill="#9590b5" font-size="10" text-anchor="middle">→ commit synced knowledge JSON</text>
+  <text x="1440" y="596" fill="#9590b5" font-size="10" text-anchor="middle">[skip ci] back to main</text>
+
+  <!-- arrows -->
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#7b72f0"/>
+    </marker>
+  </defs>
+
+  <line x1="440" y1="355" x2="518" y2="355" stroke="#7b72f0" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="479" y="345" fill="#7b72f0" font-size="9.5" text-anchor="middle">HTTPS+SSE</text>
+
+  <line x1="440" y1="700" x2="518" y2="450" stroke="#7b72f0" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="500" y="590" fill="#7b72f0" font-size="9.5" text-anchor="middle" transform="rotate(-58 500 590)">HTTPS REST</text>
+
+  <line x1="1150" y1="330" x2="1238" y2="310" stroke="#c084fc" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="1195" y="310" fill="#c084fc" font-size="9.5" text-anchor="middle">API call</text>
+
+  <line x1="1150" y1="500" x2="1238" y2="500" stroke="#f5a623" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#arrow)"/>
+  <text x="1195" y="490" fill="#f5a623" font-size="9.5" text-anchor="middle">deploy</text>
+
+  <!-- footer -->
+  <text x="850" y="1000" fill="#3a3750" font-size="10.5" text-anchor="middle">Next.js 16 · React 19 · Tailwind v4 · FastAPI · ChromaDB · fastembed ONNX · rank-bm25 · FastMCP · SQLite</text>
+  <text x="850" y="1020" fill="#3a3750" font-size="10.5" text-anchor="middle">generated architecture reference · not to scale</text>
+</svg>
