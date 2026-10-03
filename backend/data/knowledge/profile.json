@@ -39,9 +39,9 @@
     ]
   },
   "now": {
-    "building": "Generative AI and agentic workflows at Hansvonlehwalt — RAG pipelines, multi-agent systems, and enterprise LLM integration on Azure OpenAI.",
-    "learning": "Agentic multi-agent systems and production-grade LLM observability.",
-    "reading": "",
+    "building": "Generative AI and agentic workflows at Hansvonlehwalt — RAG pipelines, multi-agent systems, and enterprise LLM integration on Azure OpenAI. Genuinely having fun watching this stack evolve week to week.",
+    "learning": "Deep in agentic multi-agent systems and production-grade LLM observability right now — plus making time to properly understand RAG evaluation frameworks, vector-DB internals, and prompt-optimization techniques I've been using more by instinct than by theory. I love picking up a new concept on a Tuesday and finding a reason to build with it by Friday.",
+    "reading": "Atomic Habits by James Clear — trying to turn \"learn one new AI concept a week\" from a vague intention into an actual system, one small habit at a time.",
     "location": "London, UK",
     "updated": "2026-10-03"
   },
