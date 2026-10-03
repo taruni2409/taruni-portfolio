@@ -1,0 +1,58 @@
+---
+title: "Does Social Media Sentiment Actually Predict Crypto Volatility?"
+date: "2026-10-03"
+publishedAt: "2026-10-03"
+description: My MSc final project at the University of Hertfordshire — comparing GARCH, Random Forest, XGBoost, and LSTM on ten major cryptocurrencies to see whether sentiment data adds real predictive signal beyond price history alone.
+tags: [machine-learning, finance, time-series, deep-learning]
+---
+
+Crypto markets are loud in a way few other asset classes are — every price move comes with a wave of social-media chatter, news coverage, and sentiment swings attached to it. The obvious question, and the one my MSc final project set out to actually test rather than assume: does any of that noise carry real predictive signal about where volatility is headed next, or is price history alone already telling you everything price history can tell you?
+
+<Callout type="info" title="Scope">
+  Ten major cryptocurrencies, daily data combining price-based indicators with sentiment scores from news and social media. Four forecasting approaches compared head-to-head under the same evaluation protocol: an econometric baseline, two tree-based ensembles, and a sequence model.
+</Callout>
+
+## Building features that respect how markets actually work
+
+The target was next-period realised volatility — a 12-period rolling standard deviation of log returns, shifted forward so the model is always predicting something it hasn't seen yet. Getting the input features right mattered more than any single model choice:
+
+```python
+def make_features(g):
+    g = g.sort_values("timestamp").copy()
+    g["log_return"] = np.log(g["current_price_usd"]).diff()
+    g["rv_24h"] = g["log_return"].rolling(12, min_periods=12).std()
+    g["target_vol_next"] = g["rv_24h"].shift(-1)
+
+    for k in [1, 2, 3, 6, 12]:
+        g[f"ret_lag_{k}"] = g["log_return"].shift(k)
+
+    g["sentiment_combo"] = (
+        g["social_sentiment_score"] + g["news_sentiment_score"]
+    ) / 2.0
+    g["sentiment_x_mentions"] = (
+        g["sentiment_combo"] * np.log1p(g["social_mentions_count"])
+    )
+    return g
+```
+
+Beyond lagged returns and rolling volatility, the sentiment features weren't just "sentiment score" on its own — `sentiment_x_mentions` combines sentiment *polarity* with mention *volume*, on the theory that a mildly negative sentiment score attached to a huge spike in social chatter means something different than the same score on a quiet day. Price-based features (momentum, rolling EMA, volume and market-cap on a log scale) sat alongside the sentiment ones so every model saw both signal types and could weight them however the data actually supported.
+
+<Callout type="tip" title="The split that matters most in time-series work">
+  Train/test splitting was done per-cryptocurrency, in chronological order — never a random shuffle. A random split on time-series volatility data leaks future information into training in a way that makes every result look better than it would in live deployment. Getting this wrong is the single most common way time-series forecasting projects quietly cheat without realizing it.
+</Callout>
+
+## Four models, one evaluation protocol
+
+<Divider />
+
+**GARCH(1,1)** — the econometric standard for volatility clustering, and the baseline every other approach has to justify beating. It only sees the return series itself, no sentiment or cross-sectional features at all.
+
+**Random Forest** and **XGBoost** — both get the full feature set (price-based, sentiment-based, and their interactions), letting tree-based models find nonlinear relationships and feature interactions that GARCH structurally can't represent.
+
+**LSTM** — a sequence model trained directly on the time-ordered feature windows, to see whether there's temporal structure in the sentiment/price relationship that a tree-based model, which treats each row independently, would miss entirely.
+
+All four were scored on the same held-out, chronologically-separated test windows using MAE, RMSE, and R² — identical splits, identical metrics, so the comparison is actually fair rather than each model getting evaluated on its own favorable slice of data.
+
+## What I'd tell someone starting this today
+
+The honest version of this research question isn't "yes" or "no" — it's "under what conditions, and how much." Sentiment data is noisy and asynchronous in a way clean price history isn't, and the real test of whether it's worth the added complexity is always the out-of-sample, time-respecting comparison against a model that doesn't get to see it. Building the sentiment interaction features (not just raw scores) and enforcing a genuinely chronological split were the two decisions that determined whether this project's results would mean anything at all once it left the notebook.

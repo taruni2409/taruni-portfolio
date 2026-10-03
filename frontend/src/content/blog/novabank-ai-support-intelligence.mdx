@@ -1,0 +1,62 @@
+---
+title: "Can AI Handle Bank Support Tickets Without Making Things Up?"
+date: "2026-10-01"
+publishedAt: "2026-10-01"
+description: Building NovaBank — an AI system that classifies support tickets across 77 banking intents, flags SLA risk before it happens, and answers policy questions without ever inventing a policy that doesn't exist.
+tags: [generative-ai, rag, machine-learning, nlp]
+---
+
+Customer support at a bank has three different problems hiding inside one ticket queue: *what is this person actually asking?*, *is this one about to breach its SLA?*, and *what does policy actually say here?* Most support-automation demos solve one of these and wave at the other two. I wanted to see what it took to solve all three honestly, without quietly taking shortcuts that only work on a clean demo dataset.
+
+<Callout type="info" title="A note on the data">
+  NovaBank is a synthetic bank — not a real client. Its support tickets, SLA data, and policy documents were built specifically for this project. The modelling decisions below are real; the bank isn't.
+</Callout>
+
+## The first dataset lied to me, so I didn't use it
+
+I started with a public customer-support dataset — 8,469 tickets labelled by type. A quick baseline classifier got 19.54% accuracy. With five roughly balanced classes, random guessing gets you about 20%. The model had learned nothing.
+
+Digging into *why* turned up the actual problem: 205 rows had conflicting labels, 85 ticket texts appeared under multiple different target classes, and tickets literally titled "Refund request" were scattered across all five categories almost evenly. The labels weren't predicting the text because the labels didn't reliably describe the text.
+
+<Callout type="tip" title="The decision that mattered more than any model">
+  I didn't try to clean this dataset into submission. I kept it for dashboard analytics, where label noise doesn't matter as much, and went looking for a dataset actually built for intent classification: BANKING77 — 77 fine-grained banking support intents, purpose-built for this exact task.
+</Callout>
+
+## Classical baseline, then the transformer
+
+With BANKING77 (10,003 training examples, 3,080 test examples, 77 classes), I built a TF-IDF + Logistic Regression baseline first, tuned it properly with stratified 3-fold cross-validation and a GridSearch over n-grams and regularization — not as a strawman, but as a genuine bar to clear.
+
+| Model | Accuracy | Macro F1 |
+|---|---|---|
+| TF-IDF + Logistic Regression | 85.88% | 85.81% |
+| DistilBERT (3 epochs) | 81.59% | 79.75% |
+| DistilBERT (5 epochs) | **90.62%** | **90.59%** |
+
+The 3-epoch DistilBERT run actually *lost* to the classical baseline — the learning curve was still climbing, a clear sign of undertraining rather than a transformer ceiling. Two more epochs closed that gap and then some: a 4.78-point Macro F1 improvement over the tuned classical model. I also ran the same evaluation on a strict zero-overlap test split to rule out leakage between train and test; the numbers barely moved, which is the result you want to see.
+
+## Predicting SLA breaches before they happen
+
+The same raw support dataset I'd rejected for intent classification turned out to be unusable for SLA modelling too — 49.3% of "resolved" tickets had negative resolution times, a timestamp logging bug, not a modelling problem I could fix with a better algorithm. So I built a controlled synthetic NovaBank operational dataset instead, with explicit SLA rules (4h for Critical, 8h for High, 24h Medium, 48h Low) and documented risk-generation assumptions, rather than train on data I already knew was broken.
+
+```python
+# XGBoost selected at threshold 0.25 — prioritizing breach recall
+# over raw accuracy, because a missed breach costs more than a
+# false alarm that gets reviewed and dismissed.
+xgb.predict_proba(X)[:, 1] > 0.25
+```
+
+Final test performance: **77.98% recall** at **40.23% precision** (F1 53.07%, ROC-AUC 66.54%). That precision number looks low until you consider the operational requirement it was built around — at least 70% recall on breaches, because a support lead reviewing some extra false alarms is a far cheaper mistake than silently missing a ticket that's about to blow its SLA. SHAP explainability on top of this surfaced the real risk drivers: queue load, agent utilization, ticket priority, customer sentiment, and submissions outside business hours — all things an operations team can actually act on.
+
+<Divider />
+
+## Making the RAG layer say "I don't know" on purpose
+
+The last piece answers policy questions — "can a customer dispute this card transaction?" — grounded in eight synthetic NovaBank policy documents (card payments, refunds, transfers, account security, and so on), retrieved via Sentence Transformers embeddings and ChromaDB, then answered by Gemini.
+
+The part I actually spent the most time on wasn't retrieval accuracy — on the controlled evaluation set, Hit@1 and Hit@3 both landed at 100%. It was making sure the system *refuses* to answer when it shouldn't: a retrieval-confidence threshold blocks clearly unrelated questions before they ever reach Gemini, and the generation prompt is instructed to return an explicit "insufficient context" response rather than improvise when the retrieved policies don't actually support an answer. Out-of-domain rejection rate and citation compliance both came back at 100% on the evaluation set too.
+
+A support bot that's 90% accurate but confidently wrong the other 10% of the time is worse than one that says "I'm not sure" — especially when the wrong answer is about a bank's refund policy.
+
+## What I'd tell someone starting this today
+
+The dataset decisions mattered more than any single model choice. Twice in this project, the "obvious" dataset turned out to be unusable for its intended purpose — and the fix both times wasn't a cleverer model, it was recognizing the data couldn't support the claim I wanted to make, and finding or building a dataset that could. The classifier that looked best on paper (a well-tuned classical baseline) still lost to a properly-trained transformer, but only once I'd actually trained it properly. And the RAG system is only trustworthy because it's allowed to say no.

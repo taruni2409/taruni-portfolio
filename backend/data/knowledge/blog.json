@@ -1,5 +1,18 @@
 [
   {
+    "slug": "crypto-volatility-sentiment-forecasting",
+    "title": "Does Social Media Sentiment Actually Predict Crypto Volatility?",
+    "date": "2026-10-03",
+    "description": "My MSc final project at the University of Hertfordshire — comparing GARCH, Random Forest, XGBoost, and LSTM on ten major cryptocurrencies to see whether sentiment data adds real predictive signal beyond price history alone.",
+    "tags": [
+      "machine-learning",
+      "finance",
+      "time-series",
+      "deep-learning"
+    ],
+    "content": "Crypto markets are loud in a way few other asset classes are — every price move comes with a wave of social-media chatter, news coverage, and sentiment swings attached to it. The obvious question, and the one my MSc final project set out to actually test rather than assume: does any of that noise carry real predictive signal about where volatility is headed next, or is price history alone already telling you everything price history can tell you?\n\nBuilding features that respect how markets actually work\n\nThe target was next-period realised volatility — a 12-period rolling standard deviation of log returns, shifted forward so the model is always predicting something it hasn't seen yet. Getting the input features right mattered more than any single model choice:\n\nBeyond lagged returns and rolling volatility, the sentiment features weren't just \"sentiment score\" on its own —  combines sentiment polarity with mention volume, on the theory that a mildly negative sentiment score attached to a huge spike in social chatter means something different than the same score on a quiet day. Price-based features (momentum, rolling EMA, volume and market-cap on a log scale) sat alongside the sentiment ones so every model saw both signal types and could weight them however the data actually supported.\n\nFour models, one evaluation protocol\n\nGARCH(1,1) — the econometric standard for volatility clustering, and the baseline every other approach has to justify beating. It only sees the return series itself, no sentiment or cross-sectional features at all.\n\nRandom Forest and XGBoost — both get the full feature set (price-based, sentiment-based, and their interactions), letting tree-based models find nonlinear relationships and feature interactions that GARCH structurally can't represent.\n\nLSTM — a sequence model trained directly on the time-ordered feature windows, to see whether there's temporal structure in the sentiment/price relationship that a tree-based model, which treats each row i"
+  },
+  {
     "slug": "enterprise-feature-engineering-pipelines",
     "title": "Turning Raw Transactional Data Into 100+ Model-Ready Features",
     "date": "2026-07-02",
@@ -24,5 +37,31 @@
       "python"
     ],
     "content": "Clinical narratives are some of the messiest unstructured text you can work with — inconsistent abbreviations, dense domain vocabulary, and a writing style optimised for the clinician who wrote it, not for a downstream model. The Intelligent Medical Text Analyser started as a personal project to see how far a layered NLP pipeline could get toward making that text actually searchable.\n\nWhy one model wasn't enough\n\nThe obvious approach is \"throw a transformer at it.\" That works for some of the pipeline, but not all of it. Classification benefits from a fine-tuned BERT model that's actually seen clinical phrasing. Summarisation over long narratives needs a different strategy than a single-pass classifier. And a lot of the entity extraction — medication names, dosages, symptom mentions — is well served by classic rule-based NLP that's faster and more auditable than a black-box model, which matters a lot in a clinical context.\n\nSo the pipeline ended up layered:\n\nSummarisation had a different failure mode\n\nClinical notes tend to bury the actually-important line — a change in medication, a new symptom — somewhere in the middle of routine documentation. Naive extractive summarisation (just pulling the \"most central\" sentences by TF-IDF similarity) reliably missed these, because routine documentation is, definitionally, similar to itself across many notes. What worked better was weighting sentences that introduced entities not present in the patient's prior notes — novelty, not centrality, was the signal that mattered.\n\nWhere Scikit-learn still earned its place\n\nNot every stage needed deep learning. Triage-style classification — is this note urgent, routine, or follow-up — was well served by a Scikit-learn model over TF-IDF features, and it was fast enough to run on every note rather than sampling.\n\nThe Streamlit layer mattered more than expected\n\nI wrapped the whole thing in a Streamlit interface, mostly so I could actually look at the outputs rather than trusting metrics i"
+  },
+  {
+    "slug": "novabank-ai-support-intelligence",
+    "title": "Can AI Handle Bank Support Tickets Without Making Things Up?",
+    "date": "2026-10-01",
+    "description": "Building NovaBank — an AI system that classifies support tickets across 77 banking intents, flags SLA risk before it happens, and answers policy questions without ever inventing a policy that doesn't exist.",
+    "tags": [
+      "generative-ai",
+      "rag",
+      "machine-learning",
+      "nlp"
+    ],
+    "content": "Customer support at a bank has three different problems hiding inside one ticket queue: what is this person actually asking?, is this one about to breach its SLA?, and what does policy actually say here? Most support-automation demos solve one of these and wave at the other two. I wanted to see what it took to solve all three honestly, without quietly taking shortcuts that only work on a clean demo dataset.\n\nThe first dataset lied to me, so I didn't use it\n\nI started with a public customer-support dataset — 8,469 tickets labelled by type. A quick baseline classifier got 19.54% accuracy. With five roughly balanced classes, random guessing gets you about 20%. The model had learned nothing.\n\nDigging into why turned up the actual problem: 205 rows had conflicting labels, 85 ticket texts appeared under multiple different target classes, and tickets literally titled \"Refund request\" were scattered across all five categories almost evenly. The labels weren't predicting the text because the labels didn't reliably describe the text.\n\nClassical baseline, then the transformer\n\nWith BANKING77 (10,003 training examples, 3,080 test examples, 77 classes), I built a TF-IDF + Logistic Regression baseline first, tuned it properly with stratified 3-fold cross-validation and a GridSearch over n-grams and regularization — not as a strawman, but as a genuine bar to clear.\n\nThe 3-epoch DistilBERT run actually lost to the classical baseline — the learning curve was still climbing, a clear sign of undertraining rather than a transformer ceiling. Two more epochs closed that gap and then some: a 4.78-point Macro F1 improvement over the tuned classical model. I also ran the same evaluation on a strict zero-overlap test split to rule out leakage between train and test; the numbers barely moved, which is the result you want to see.\n\nPredicting SLA breaches before they happen\n\nThe same raw support dataset I'd rejected for intent classification turned out to be unusable for SLA modelling too — 49."
+  },
+  {
+    "slug": "threatlens-security-classification",
+    "title": "Can AI Tell a Phishing Email From a Leaked Password?",
+    "date": "2026-10-02",
+    "description": "Fine-tuning RoBERTa to sort sensitive documents into seven security categories — credentials, PII, financial, medical, confidential, malicious, and safe — and beating a strong classical baseline to do it.",
+    "tags": [
+      "nlp",
+      "machine-learning",
+      "security",
+      "transformers"
+    ],
+    "content": "Security and compliance teams deal with a constant stream of documents that need the same first question answered: what kind of sensitive thing is this, and how urgently does it need attention? A leaked API key, a phishing attempt, a customer's medical record pasted somewhere it shouldn't be — these all look like \"a block of text\" to a naive system, but they need completely different handling. ThreatLens is a classifier built to make that first call automatically.\n\nStarting with class imbalance, not a model\n\nThe raw labelled data wasn't close to balanced — the malicious category had substantially more examples than medical, which would have quietly taught any model to favor the bigger classes. I sampled 1,300 documents per category for a balanced set of 9,100 documents before training anything, specifically so the eventual accuracy numbers would mean what they claim to mean, rather than reflecting which class happened to be biggest in the raw data.\n\nSplit 7,280 / 910 / 910 for train, validation, and test — stratified so all seven categories stayed represented in equal proportion across every split.\n\nBaseline first, transformer second\n\nThe same pattern as everywhere else I've done this: build the honest classical baseline before reaching for a transformer, so the eventual improvement number is measuring something real.\n\nRoBERTa's gains were concentrated in exactly the categories you'd expect to be hardest: confidential (precision rose from 95.38% to 93.33% but recall climbed from 95.38% to 96.92%) and safe — the one category defined mostly by the absence of a signal rather than the presence of one, which is the category classical bag-of-words features tend to find the hardest to pin down.\n\nReading the mistakes, not just the score\n\n98.35% accuracy on a 910-document test set means roughly 15 documents got misclassified. I pulled every one of them and read the actual text rather than treating \"15 errors\" as a number to report and move past.\n\nThe confusion pairs clustere"
   }
 ]
