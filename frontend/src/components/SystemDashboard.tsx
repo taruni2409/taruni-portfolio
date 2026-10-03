@@ -40,8 +40,12 @@ export default function SystemDashboard() {
   if (error && !data) {
     return (
       <p className="text-sm text-fg-faint">
-        The live system is warming up or unreachable. This dashboard reads real-time metrics from the
-        Railway backend — refresh in a moment.
+        This dashboard reads live metrics from the full RAG backend, which isn&apos;t deployed for this
+        site right now (kept out of production to avoid hosting costs). The backend — and this
+        dashboard — run fully when you clone the repo from{" "}
+        <a href="https://github.com/taruni2409/taruni-portfolio" target="_blank" rel="noopener noreferrer" className="underline hover:text-fg">
+          GitHub
+        </a>.
       </p>
     );
   }

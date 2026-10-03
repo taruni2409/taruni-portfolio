@@ -91,7 +91,7 @@ export default function McpExplorer() {
       const data = await res.json();
       setResult(JSON.stringify(res.ok ? data.result : data, null, 2));
     } catch {
-      setResult("Request failed — the backend may be warming up. Try again in a moment.");
+      setResult("The MCP server lives on the full RAG backend, which isn't deployed for this site right now — clone the repo on GitHub to run it yourself.");
     } finally {
       setRunning(false);
     }
@@ -104,12 +104,20 @@ export default function McpExplorer() {
         <h2 className="text-[11px] font-bold uppercase tracking-[0.16em] text-fg-faint mb-1">
           Connect your AI client
         </h2>
-        <p className="text-sm text-fg-muted mb-4">
+        <p className="text-sm text-fg-muted mb-2">
           Point Claude Desktop or Cursor at the server below, then ask your model about Taruni — it will
           call these tools directly. Endpoint:{" "}
           <code className="rounded bg-surface-raised px-1.5 py-0.5 text-[12px] font-mono text-accent break-all">
             {mcpUrl}
           </code>
+        </p>
+        <p className="text-xs text-fg-faint mb-4">
+          Note: the live backend serving this endpoint isn&apos;t deployed right now (kept out of
+          production to avoid hosting costs) — these configs show what connecting looks like once you
+          run the backend from the{" "}
+          <a href="https://github.com/taruni2409/taruni-portfolio" target="_blank" rel="noopener noreferrer" className="underline hover:text-fg-muted">
+            GitHub repo
+          </a>.
         </p>
         <div className="grid sm:grid-cols-2 gap-3">
           <CopyBlock label="Claude Desktop — claude_desktop_config.json" code={claudeConfig} />
@@ -128,7 +136,14 @@ export default function McpExplorer() {
         </p>
 
         {error && (
-          <p className="text-sm text-fg-faint">The tools API is warming up — refresh in a moment.</p>
+          <p className="text-sm text-fg-faint">
+            These tools run on the full RAG backend, which isn&apos;t deployed for this site right now
+            (kept out of production to avoid hosting costs). Clone the repo on{" "}
+            <a href="https://github.com/taruni2409/taruni-portfolio" target="_blank" rel="noopener noreferrer" className="underline hover:text-fg">
+              GitHub
+            </a>{" "}
+            to run the full backend, MCP server, and this playground yourself.
+          </p>
         )}
 
         {!error && tools.length === 0 && (

@@ -31,6 +31,11 @@ const SITE_URL = "https://taruni-portfolio.vercel.app";
 
 type Props = { params: Promise<{ slug: string }> };
 
+// Same reasoning as the lab [slug] route: without this, a slug that drops out of
+// generateStaticParams (e.g. a deleted/renamed content.db post) can keep serving
+// from Vercel's ISR cache indefinitely instead of 404ing.
+export const dynamicParams = false;
+
 function extractHeadings(markdown: string): Heading[] {
   return [...markdown.matchAll(/^(#{2,3})\s+(.+)$/gm)].map(([, hashes, text]) => ({
     level: hashes.length as 2 | 3,

@@ -16,6 +16,12 @@ import type { ApiLabEntry } from "@/lib/api/content";
 
 type Props = { params: Promise<{ slug: string }> };
 
+// Without this, a slug that was once returned by generateStaticParams (e.g. from
+// the backend's content.db when it was briefly reachable) but no longer is can
+// still be served from Vercel's ISR cache indefinitely — a stale/deleted entry
+// stays live forever instead of 404ing once it drops out of the build's slug list.
+export const dynamicParams = false;
+
 const STATUS_STYLES: Record<LabStatus, { dot: string; text: string; bg: string; label: string }> = {
   active:  { dot: "bg-emerald-400 animate-pulse", text: "text-emerald-700 dark:text-emerald-400", bg: "bg-emerald-50 dark:bg-emerald-950/50 border-emerald-200 dark:border-emerald-800", label: "Active" },
   shipped: { dot: "bg-indigo-400",                text: "text-indigo-700 dark:text-indigo-400",   bg: "bg-indigo-50 dark:bg-indigo-950/50 border-indigo-200 dark:border-indigo-800",   label: "Shipped" },

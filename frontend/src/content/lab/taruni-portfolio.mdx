@@ -3,8 +3,8 @@ title: "taruni-portfolio — AI Portfolio"
 status: "active"
 description: "AI-powered personal portfolio with a RAG chatbot (Pumpkin), an agentic tool-calling mode, a public MCP server, in-chat book-a-call, MDX blog, engagement analytics, and a fully automated deploy pipeline. Every layer is production-grade — not a toy."
 startedAt: "2025-11-01"
-updatedAt: "2026-06-17"
-tech: [Next.js 16, React 19, Tailwind CSS v4, TypeScript, FastAPI, ChromaDB, Gemini 2.5 Flash, Groq, OpenRouter, Model Context Protocol, FastMCP, Function Calling, Google Calendar API, BAAI/bge-base-en-v1.5, HyDE, BM25, RRF, Knowledge Graph, FNV-1a Hash, SQLite, SlowAPI, GitHub Git Data API, Scroll Parallax, AWS Lightsail, Nginx, S3, GitHub Pages, GitHub Actions]
+updatedAt: "2026-10-03"
+tech: [Next.js 16, React 19, Tailwind CSS v4, TypeScript, FastAPI, ChromaDB, Gemini, Groq, OpenRouter, Model Context Protocol, FastMCP, Function Calling, Google Calendar API, BAAI/bge-base-en-v1.5, HyDE, BM25, RRF, Knowledge Graph, FNV-1a Hash, SQLite, SlowAPI, GitHub Git Data API, Scroll Parallax, AWS Lightsail, Nginx, S3, Vercel, GitHub Actions]
 links:
   - label: GitHub
     url: https://github.com/taruni2409/taruni-portfolio
@@ -17,6 +17,8 @@ links:
 Most portfolios are static pages someone scrolls past in 30 seconds. This one starts a conversation.
 
 **Pumpkin** is an AI assistant backed by a hybrid RAG pipeline. It answers questions about experience, projects, skills, and blog posts in real time — with tokens streaming directly to the browser. Ask it *"what's your strongest AI project?"* and it retrieves the most relevant knowledge chunks, reranks them, and streams a grounded answer through Gemini.
+
+**A note on what's actually live right now:** everything below — the hybrid RAG pipeline, agent mode, the public MCP server, live observability, the FastAPI backend on AWS Lightsail — is this project's full designed architecture, and it's what runs if you clone the repo and self-host it. The live site at `taruni-portfolio.vercel.app` currently runs a deliberately lighter version instead: Pumpkin answers straight from Gemini with the full knowledge base stuffed into its system prompt (no vector DB, no backend server at all), to avoid paying for always-on hosting. The `/mcp` and `/system` pages reflect this honestly — they explain that those specific features need the full backend running. Everything else on this page describes the real, complete system.
 
 The portfolio half is a full static Next.js site — experience, education, projects, and a blog with per-post views and claps tracked in SQLite. The whole system auto-deploys on every `git push` with zero manual steps. Content (blog posts, lab entries, quotes) can also be managed via a token-gated admin panel without any git commits.
 
@@ -689,6 +691,21 @@ Chatbot lives outside — no nav, no footer, full screen.
 ---
 
 ## Progress Log
+
+<Update date="2026-10-03">
+  **Lightweight Gemini-direct chat widget for the live site; GitHub Pages deploy removed.** The full
+  backend in this doc was never actually deployed to Lightsail or anywhere else — running it would mean
+  paying for always-on hosting while job-hunting, so the live site needed a different answer for Pumpkin.
+  Built Next.js Route Handlers (`/ai/chat/stream`, `/ai/chat/agentic`) that call Gemini directly with the
+  full knowledge base stuffed into the system prompt — no vector DB, no server process, just a serverless
+  function on Vercel with the API key kept out of the client bundle. Required dropping `output: "export"`
+  from `next.config.ts` so Route Handlers can actually run. Added honest in-UI messaging on `/mcp` and
+  `/system` explaining those specific features need the full backend (they don't pretend to be "warming
+  up"). Also discovered and removed `.github/workflows/deploy.yml`'s GitHub Pages build/deploy jobs — dead
+  weight, since Vercel's own GitHub integration has been the real deploy path the whole time — and fixed a
+  real pre-existing bug in that same file (job-level `if:` can't reference the `secrets` context; GitHub
+  Actions was silently failing the entire workflow on every push).
+</Update>
 
 <Update date="2026-06-17">
   **Admin → one batched GitHub commit.** Each file-based section editor (Profile, Experience,

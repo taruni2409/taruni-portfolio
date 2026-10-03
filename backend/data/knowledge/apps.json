@@ -1,1 +1,14 @@
-[]
+[
+  {
+    "slug": "novabank-support-intelligence",
+    "name": "NovaBank – AI Customer Support Intelligence",
+    "url": "https://supportops-ai-hazel.vercel.app/",
+    "tagline": "AI-powered customer support intelligence for a retail-banking case study",
+    "description": "A DistilBERT intent classifier fine-tuned to 90.59% F1, an XGBoost SLA-breach predictor achieving 77.98% recall with SHAP explainability, and a Gemini-powered RAG pipeline over ChromaDB for grounded resolution recommendations.",
+    "status": "live",
+    "category": "Web App",
+    "tech": ["Python", "PyTorch", "DistilBERT", "XGBoost", "ChromaDB", "Gemini", "FastAPI", "Next.js"],
+    "featured": true,
+    "launchedAt": "2026-10"
+  }
+]
