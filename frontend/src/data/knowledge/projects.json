@@ -56,5 +56,27 @@
     "sourceLinks": [],
     "liveUrl": "",
     "note": ""
+  },
+  {
+    "title": "SupportOps AI – Customer Support Intelligence Platform",
+    "description": "End-to-end customer support intelligence platform combining a DistilBERT intent classifier fine-tuned to 90.59% F1, an XGBoost SLA-breach predictor achieving 77.98% recall with SHAP explainability, and a Gemini-powered RAG pipeline over ChromaDB for grounded resolution recommendations.",
+    "tags": [
+      "Python",
+      "PyTorch",
+      "DistilBERT",
+      "XGBoost",
+      "ChromaDB",
+      "Gemini",
+      "FastAPI"
+    ],
+    "featured": true,
+    "sourceLinks": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/taruni2409/supportops-ai"
+      }
+    ],
+    "liveUrl": "",
+    "note": ""
   }
 ]

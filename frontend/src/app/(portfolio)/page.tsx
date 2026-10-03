@@ -23,16 +23,16 @@ import SparkleIcon from "@/components/SparkleIcon";
 import { experience } from "@/data/experience";
 
 export const metadata = {
-  title: "Taruni Nallamothu — Data Engineer & ML Engineer",
+  title: "Taruni Nallamothu — AI/ML Engineer & Data Engineer",
   description:
-    "Data Engineer & Machine Learning Engineer specializing in scalable ETL pipelines, predictive modelling, and cloud analytics on Azure and GCP. Google & Microsoft Certified. Previously at Tata Consultancy Services (Shell PLC).",
+    "AI/ML Engineer & Data Engineer specializing in Generative AI, RAG, agentic AI systems, and scalable data pipelines on Azure. Google & Microsoft Certified. Previously at Tata Consultancy Services.",
   alternates: { canonical: "https://taruni-portfolio.vercel.app/" },
   openGraph: {
     type: "website",
     url: "https://taruni-portfolio.vercel.app/",
-    title: "Taruni Nallamothu — Data Engineer & ML Engineer",
+    title: "Taruni Nallamothu — AI/ML Engineer & Data Engineer",
     description:
-      "Data Engineer & Machine Learning Engineer specializing in scalable ETL pipelines, predictive modelling, and cloud analytics on Azure and GCP. Google & Microsoft Certified.",
+      "AI/ML Engineer & Data Engineer specializing in Generative AI, RAG, agentic AI systems, and scalable data pipelines on Azure. Google & Microsoft Certified.",
   },
 };
 
@@ -41,9 +41,9 @@ const jsonLd = {
   "@type": "Person",
   name: "Taruni Nallamothu",
   url: "https://taruni-portfolio.vercel.app",
-  jobTitle: "Data Engineer & Machine Learning Engineer",
+  jobTitle: "AI/ML Engineer & Data Engineer",
   description:
-    "Data Engineer & Machine Learning Engineer specializing in scalable ETL pipelines, predictive modelling, and cloud analytics on Azure and GCP. Google & Microsoft Certified.",
+    "AI/ML Engineer & Data Engineer specializing in Generative AI, RAG, agentic AI systems, and scalable data pipelines on Azure. Google & Microsoft Certified.",
   email: "taruninallamothu24@gmail.com",
   sameAs: [
     "https://www.linkedin.com/in/taruninallamothu24/",
@@ -55,9 +55,9 @@ const jsonLd = {
     name: "University of Hertfordshire",
   },
   knowsAbout: [
-    "Data Engineering", "Machine Learning", "ETL Pipelines", "Python",
-    "SQL", "Microsoft Azure", "Google Cloud Platform", "Power BI",
-    "Predictive Modelling", "Anomaly Detection",
+    "Generative AI", "Large Language Models", "Retrieval-Augmented Generation",
+    "Agentic AI", "Machine Learning", "Data Engineering", "Python",
+    "SQL", "Microsoft Azure", "Azure OpenAI", "Azure Databricks",
   ],
   address: { "@type": "PostalAddress", addressLocality: "London", addressCountry: "GB" },
 };

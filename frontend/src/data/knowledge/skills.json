@@ -1,106 +1,98 @@
 [
   {
-    "category": "Languages, Libraries & Databases",
+    "category": "Programming & Backend",
     "items": [
       "Python",
-      "Pandas",
-      "NumPy",
-      "Scikit-learn",
+      "FastAPI",
+      "Flask",
+      "REST APIs",
+      "Microservices Architecture",
+      "SQL / T-SQL",
+      "PySpark"
+    ]
+  },
+  {
+    "category": "AI/ML & Generative AI",
+    "items": [
+      "Generative AI",
+      "Large Language Models (LLMs)",
+      "Retrieval-Augmented Generation (RAG)",
+      "Agentic AI",
+      "Multi-Agent AI Systems",
+      "Conversational AI",
+      "Natural Language Processing (NLP)",
+      "Prompt Engineering",
+      "Semantic Search",
+      "Embeddings",
+      "Transformer Fine-Tuning",
+      "BERT",
+      "DistilBERT",
+      "RoBERTa",
+      "Hugging Face Transformers",
+      "PyTorch",
       "TensorFlow",
-      "Hugging Face",
-      "PySpark",
-      "JavaScript",
-      "jQuery",
-      "ASP.NET",
-      "SQL",
+      "Scikit-learn",
+      "XGBoost",
+      "SHAP"
+    ]
+  },
+  {
+    "category": "Cloud & AI Platforms",
+    "items": [
+      "Azure OpenAI",
+      "Azure AI Foundry",
+      "Azure Machine Learning",
+      "Azure AI / Cognitive Search",
+      "Azure Databricks",
+      "MLflow",
+      "Azure Data Factory",
+      "Synapse Analytics",
+      "Azure SQL"
+    ]
+  },
+  {
+    "category": "MLOps & Infrastructure",
+    "items": [
+      "Docker",
+      "Docker Compose",
+      "Kubernetes",
+      "Azure DevOps",
+      "GitHub Actions",
+      "CI/CD",
+      "Model Serving",
+      "Inference Pipelines",
+      "Model Versioning",
+      "Redis",
+      "Kafka"
+    ]
+  },
+  {
+    "category": "Monitoring & Security",
+    "items": [
+      "Azure Monitor",
+      "Application Insights",
+      "Observability",
+      "Distributed Tracing",
+      "RBAC",
+      "Azure Active Directory"
+    ]
+  },
+  {
+    "category": "Data Engineering & Storage",
+    "items": [
+      "Apache Spark",
+      "Delta Lake",
+      "ETL/ELT",
+      "Medallion Architecture",
+      "Airflow",
+      "Data Warehousing",
+      "Dimensional Modelling",
       "SQL Server",
       "MongoDB",
-      "Oracle",
-      "MySQL"
-    ]
-  },
-  {
-    "category": "Machine Learning",
-    "items": [
-      "Predictive Modelling",
-      "Supervised Learning",
-      "Unsupervised Learning",
-      "Feature Engineering",
-      "Anomaly Detection",
-      "Natural Language Processing (NLP)",
-      "Large Language Models (LLMs)",
-      "K-Nearest Neighbours (KNN)",
-      "Linear Regression",
-      "Logistic Regression",
-      "Random Forest",
-      "Support Vector Machines (SVM)",
-      "K-Means",
-      "Naive Bayes"
-    ]
-  },
-  {
-    "category": "LLM & MLOps",
-    "items": [
-      "Prompt Engineering",
-      "Retrieval-Augmented Generation (RAG)",
-      "LLM Orchestration & Fallback Chains",
-      "Vector Databases (ChromaDB)",
-      "Embeddings (fastembed/ONNX)",
-      "Hybrid Search (BM25 + Vector, RRF)",
-      "Google Gemini API",
-      "Model Deployment",
-      "CI/CD (GitHub Actions)",
-      "Docker",
-      "FastAPI",
-      "Model Monitoring & Observability"
-    ]
-  },
-  {
-    "category": "Cloud Platforms",
-    "items": [
-      "Microsoft Azure",
-      "Azure Data Factory",
-      "Azure Blob Storage",
-      "Azure Synapse",
-      "Azure Kubernetes Service (AKS)",
-      "Azure Functions",
-      "Azure Monitor",
-      "Azure DevOps",
-      "Google Cloud Platform",
-      "BigQuery",
-      "Vertex AI",
-      "Cloud Functions",
-      "Pub/Sub",
-      "IAM"
-    ]
-  },
-  {
-    "category": "Big Data & ETL",
-    "items": [
-      "Apache Airflow",
-      "Apache Spark",
-      "Hadoop",
-      "Kafka",
-      "ETL/ELT Pipelines",
-      "Data Validation",
-      "Dimensional Modelling",
-      "Data Warehousing"
-    ]
-  },
-  {
-    "category": "Visualisation & Delivery",
-    "items": [
-      "Tableau",
-      "Looker Studio",
-      "Power BI",
-      "Agile",
-      "SDLC",
-      "Jira",
-      "Slack",
-      "Git",
-      "GitHub",
-      "GitLab",
-      "Bitbucket"
+      "MySQL",
+      "Delta Tables",
+      "ChromaDB",
+      "Vector Search"
     ]
   },
   {

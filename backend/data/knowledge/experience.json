@@ -1,17 +1,21 @@
 [
   {
     "company": "Hansvonlehwalt",
-    "role": "Freelance Data Engineer, Machine Learning Engineer",
-    "start": "Sep 2024",
+    "role": "Machine Learning Engineer (Intern, Remote)",
+    "start": "Jan 2026",
     "end": "Present",
     "location": "Remote",
-    "description": "Freelance data engineering and ML work across retail and SaaS clients — ETL pipelines, forecasting dashboards, and NLP-based support analytics.",
-    "tech": "Python, SQL, Power BI, ETL, NLP",
+    "description": "Building Generative AI and conversational AI solutions — RAG pipelines, agentic multi-agent workflows, and enterprise LLM integration on Azure OpenAI and Azure AI Foundry.",
+    "tech": "Python, FastAPI, LLMs, RAG, Azure OpenAI, Azure AI Foundry, Redis, MLflow, Docker, Kubernetes, Azure DevOps",
     "bullets": [
-      "Sales Reporting Automation (Retail Chain, Hyderabad) — developed Python-based ETL pipelines extracting POS datasets into centralized SQL data warehouses, with automated pipelines processing daily transactions across multiple stores for centralised analytics reporting.",
-      "Built Power BI dashboards visualising revenue, product performance, and inventory movement, reducing manual reporting workload by 60% while improving sales data accuracy and accessibility.",
-      "Inventory Monitoring System (Supermarket, Vijayawada) — optimised SQL queries, improving inventory analytics performance by 35% across operational dashboards, and built dashboards tracking turnover, stock availability, and demand trends.",
-      "Customer Support Ticket Analytics (SaaS Startup, Hyderabad) — implemented NLP-based text analysis to identify customer complaints and improve issue categorisation, with analytics dashboards tracking resolution time, issue categories, and satisfaction metrics."
+      "Designed and developed Generative AI and conversational AI solutions using Python, FastAPI, LLMs and RAG for enterprise knowledge retrieval, support-ticket intelligence and workflow automation.",
+      "Built RAG pipelines using embeddings, semantic search and vector stores to ground LLM responses in enterprise knowledge sources and improve contextual relevance.",
+      "Developed agentic and multi-agent AI workflows for multi-step tasks, coordinating retrieval, reasoning and API/tool execution across specialized AI components.",
+      "Built REST APIs and microservices with Python and FastAPI to expose ML and LLM capabilities to downstream applications and frontend systems.",
+      "Implemented conversational memory and session-context management using Redis to support multi-turn AI interactions and context-aware responses.",
+      "Applied Azure OpenAI and Azure AI Foundry capabilities for LLM applications, prompt engineering, embeddings and enterprise AI integration.",
+      "Used MLflow for experiment tracking, model versioning and lifecycle management; containerized AI services with Docker and Kubernetes and supported CI/CD through Azure DevOps and GitHub Actions.",
+      "Implemented monitoring and observability with Azure Monitor, Application Insights and structured logging, and applied Azure AD/RBAC controls to secure APIs and AI services."
     ]
   },
   {
@@ -20,19 +24,19 @@
     "start": "Dec 2021",
     "end": "Aug 2024",
     "location": "India",
-    "description": "Engineered scalable ETL pipelines and machine learning systems processing 500GB+ of enterprise data daily for large-scale operational and financial analytics.",
-    "tech": "Python, SQL, Azure Data Factory, Azure Functions, Power BI, Scikit-learn, Azure DevOps",
+    "description": "Engineered scalable data and ML pipelines on Azure Databricks processing 500GB+ of enterprise data daily, with semantic search, NLP, and REST API work supporting enterprise analytics and model-serving workloads.",
+    "tech": "Python, PySpark, SQL, Azure Databricks, Azure Data Factory, Azure Machine Learning, MLflow, Scikit-learn, Docker, Kubernetes, Azure DevOps",
     "bullets": [
-      "Engineered scalable ETL pipelines using Python, SQL and Azure Data Factory, processing 500GB+ enterprise datasets daily and improving data processing efficiency by 35%.",
-      "Optimised SQL queries and indexing strategies, reducing analytical workload execution time by 40%.",
-      "Automated data cleansing and transformation pipelines using Python Azure Functions, reducing manual effort by 50%.",
-      "Built real-time Power BI dashboards tracking 20+ operational and financial KPIs across multiple business units.",
-      "Developed predictive machine learning models using Python Scikit-learn, improving forecasting accuracy from 78% to 92%.",
-      "Implemented anomaly detection models to identify abnormal events and data inconsistencies, achieving 95% accuracy.",
-      "Implemented feature engineering pipelines generating 100+ features, improving model AUC score from 0.71 to 0.86.",
-      "Designed data validation frameworks, ensuring 99.9% data accuracy across datasets exceeding 1M+ records.",
-      "Used Azure DevOps CI/CD pipelines to automate data pipeline deployment, reducing operational errors.",
-      "Led root cause analysis for pipeline failures, improving system reliability and platform uptime by 20%."
+      "Engineered scalable data and ML pipelines using Azure Databricks, PySpark, Python and SQL and Azure Data Factory, processing 500GB+ of enterprise data daily from multiple source systems into curated analytics layers.",
+      "Built reusable cleansing and validation frameworks across 1M+ records, enforcing schema, completeness, duplicate and business-rule checks before downstream warehouse and analytics consumption.",
+      "Created PySpark/Python feature-engineering pipelines generating 100+ model-ready variables for classification, forecasting, anomaly-detection and predictive analytics workloads.",
+      "Built and evaluated machine learning and NLP solutions using Python, Scikit-learn and transformer-based approaches for classification, predictive analytics and enterprise text-processing use cases.",
+      "Developed semantic-search and knowledge-retrieval workflows using embeddings, transformer-based NLP and vector-search techniques for large enterprise document collections.",
+      "Developed Python REST APIs and microservices to expose data and ML functionality to downstream enterprise applications and supported model-serving and inference workflows.",
+      "Used Azure Machine Learning and MLflow for experiment tracking, model versioning, evaluation and management of ML workloads across development environments.",
+      "Containerized application and ML components using Docker and Kubernetes and automated testing, deployment and version management using Azure DevOps and GitHub-based CI/CD workflows.",
+      "Implemented monitoring and troubleshooting using Azure Monitor, Application Insights and centralized logging, identifying data-quality, API, infrastructure and application failures.",
+      "Developed dimensional datasets and reporting-ready data marts supporting 20+ operational and financial KPIs; optimized T-SQL stored procedures, views and reusable transformations for reliable downstream reporting."
     ]
   },
   {

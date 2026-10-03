@@ -74,8 +74,8 @@ function getTimeGreeting() {
 const PROMPTS = [
   { category: "Availability",   label: "Open to new roles?",    full: "Is Taruni currently open to new job opportunities? Where is she based and what kind of roles interest her?" },
   { category: "Projects",       label: "Most impressive work",   full: "What is Taruni's most impressive project and what makes it technically stand out?" },
-  { category: "ML Expertise",   label: "ML & data skills",       full: "Tell me about Taruni's machine learning and data engineering expertise — ETL pipelines, forecasting models, and anomaly detection." },
-  { category: "Experience",     label: "TCS, Shell & freelance", full: "What did Taruni build at Tata Consultancy Services (embedded with Shell PLC) and in her freelance data engineering work? Walk me through her career timeline." },
+  { category: "ML Expertise",   label: "AI & ML skills",         full: "Tell me about Taruni's AI/ML expertise — Generative AI, RAG pipelines, agentic AI systems, and data engineering." },
+  { category: "Experience",     label: "Hansvonlehwalt & TCS",   full: "What did Taruni build at Hansvonlehwalt and Tata Consultancy Services? Walk me through her career timeline." },
   { category: "Certifications", label: "Google & Microsoft certified", full: "Tell me about Taruni's Google and Microsoft cloud certifications and other notable achievements." },
   { category: "About Pumpkin",  label: "How this AI works",      full: "How does this AI portfolio chatbot work? What powers Pumpkin behind the scenes?" },
 ];

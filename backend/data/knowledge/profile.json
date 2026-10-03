@@ -1,19 +1,19 @@
 {
   "name": "Taruni Nallamothu",
-  "tagline": "Data Engineer & Machine Learning Engineer · Google & Microsoft Certified · Scalable Data Platforms at Enterprise Scale",
-  "bio": "I build data platforms and machine learning systems that turn raw, messy data into decisions people can act on. At Tata Consultancy Services, I engineered ETL pipelines processing 500GB+ of enterprise data daily and pushed forecasting model accuracy from 78% to 92%. Now freelancing across retail and SaaS, I design pipelines and dashboards that cut manual reporting workload by 60%.",
-  "summary": "Data engineering & machine learning professional with experience designing scalable data pipelines, predictive models, and analytics systems. Skilled in Python, SQL, Azure cloud services, ETL orchestration, and machine learning development, supporting large enterprise datasets. Experienced in transforming raw data into production-ready data platforms enabling real-time analytics, automation, and data-driven decision-making across business functions.",
-  "obsession": "Currently, I'm obsessed with turning noisy, high-volume data into pipelines and models that are boring in the best way — reliable, observable, and trusted enough to run a business on.",
-  "currently": "scalable ETL pipelines, anomaly detection, and forecasting models that hold up under real production load.",
+  "tagline": "AI/ML Engineer & Data Engineer · Google & Microsoft Certified · Generative AI, RAG & Scalable Data Platforms",
+  "bio": "I build Generative AI, RAG, and data engineering systems that turn raw, messy data into decisions people can act on. At Hansvonlehwalt, I build agentic AI and RAG pipelines on Azure OpenAI for enterprise knowledge retrieval. At Tata Consultancy Services, I engineered data and ML pipelines on Azure Databricks processing 500GB+ of enterprise data daily across 1M+ validated records.",
+  "summary": "AI/ML Engineer and Data Engineer with close to three years of industry experience building machine learning, Generative AI, NLP and data solutions using Python, LLMs, RAG, Azure, Databricks and cloud-native engineering. Hands-on experience with agentic and multi-agent AI workflows, semantic search, conversational AI, transformer models, REST APIs, microservices, model serving, MLOps and scalable ETL/ELT pipelines. Experienced with Azure OpenAI, Azure AI Foundry, Azure Machine Learning, MLflow, Docker, Kubernetes, CI/CD, Redis, monitoring and secure enterprise AI patterns, alongside a strong foundation in PySpark, SQL, statistics and predictive modelling.",
+  "obsession": "Currently, I'm obsessed with making LLM systems boring in the best way — grounded, observable, and reliable enough to trust in production, not just a demo.",
+  "currently": "Generative AI, RAG pipelines, and agentic multi-agent systems that hold up under real-world load.",
   "previous": "Hansvonlehwalt, Tata Consultancy Services, Civil Engineering Projects",
-  "prev_domain": "Retail, Enterprise IT, SaaS, Civil Engineering",
-  "interested_domain": "Retail, SaaS & Enterprise Data Platforms",
+  "prev_domain": "Enterprise AI, Enterprise IT, Civil Engineering",
+  "interested_domain": "Generative AI, Agentic Systems & Enterprise AI Platforms",
   "location": "London, UK",
   "email": "taruninallamothu24@gmail.com",
   "phone": "+44 7741031780",
   "github": "https://github.com/taruni2409",
   "linkedin": "https://www.linkedin.com/in/taruninallamothu24/",
-  "resume": "https://drive.google.com/file/d/1FPwj9a1alvjalTKpnjJgHyWXvhknZ4eY/view?usp=sharing",
+  "resume": "https://drive.google.com/file/d/1QkIIvjNkH_Sj4TkS8EwOekzvTN2iTajv/view?usp=drive_link",
   "booking_url": "https://calendar.app.google/iTFghdy61LhnVYTH8",
   "page_experience": "Experience designing data pipelines, ML models, and analytics platforms across retail, SaaS, and enterprise IT.",
   "page_education": "Academic foundations in data science and engineering that underpin the systems I build.",
@@ -37,11 +37,11 @@
     ]
   },
   "now": {
-    "building": "Freelance data engineering & ML projects across retail and SaaS — ETL pipelines, forecasting, and analytics dashboards.",
-    "learning": "Large Language Models (LLMs) and how they integrate into production data platforms.",
+    "building": "Generative AI and agentic workflows at Hansvonlehwalt — RAG pipelines, multi-agent systems, and enterprise LLM integration on Azure OpenAI.",
+    "learning": "Agentic multi-agent systems and production-grade LLM observability.",
     "reading": "",
     "location": "London, UK",
-    "updated": "2026-07-10"
+    "updated": "2026-10-03"
   },
   "heroStats": [
     {
@@ -51,22 +51,22 @@
       "sub": "Enterprise ETL pipelines"
     },
     {
-      "value": 92,
+      "value": 90.59,
       "suffix": "%",
-      "label": "Forecast Accuracy",
-      "sub": "Up from 78% baseline"
+      "label": "Intent Classification F1",
+      "sub": "Fine-tuned DistilBERT, SupportOps AI"
     },
     {
-      "value": 95,
-      "suffix": "%",
-      "label": "Anomaly Detection Accuracy",
-      "sub": "Production ML models"
+      "value": 1,
+      "suffix": "M+",
+      "label": "Records Validated",
+      "sub": "Schema & quality frameworks"
     },
     {
-      "value": 60,
-      "suffix": "%",
-      "label": "Reporting Workload Cut",
-      "sub": "Retail analytics automation"
+      "value": 100,
+      "suffix": "+",
+      "label": "ML-Ready Features Engineered",
+      "sub": "PySpark feature pipelines"
     }
   ]
 }

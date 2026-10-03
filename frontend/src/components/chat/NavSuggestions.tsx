@@ -26,9 +26,9 @@ const SECTIONS: { href: string; label: string; icon: string; keywords: string[] 
     label: "Experience",
     icon: "◎",
     keywords: [
-      "experience", "work", "job", "role", "shell", "wipro", "nyu", "engineer",
+      "experience", "work", "job", "role", "hansvonlehwalt", "tcs", "tata consultancy", "engineer",
       "intern", "company", "position", "career", "employed", "team", "led", "built at",
-      "latency", "pipeline", "kafka", "langraph", "production",
+      "azure", "pipeline", "rag", "agentic", "production",
     ],
   },
   {
@@ -36,7 +36,7 @@ const SECTIONS: { href: string; label: string; icon: string; keywords: string[] 
     label: "Education",
     icon: "◉",
     keywords: [
-      "education", "degree", "university", "nyu", "vit", "gpa", "tandon",
+      "education", "degree", "university", "hertfordshire", "siddhartha", "jntuk", "gpa",
       "master", "bachelor", "school", "college", "coursework", "study", "studied", "graduate",
     ],
   },

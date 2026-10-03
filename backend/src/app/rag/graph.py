@@ -1,15 +1,16 @@
 """Lightweight static knowledge graph for the Pumpkin knowledge base.
 
-Builds 3 relationship maps at startup from knowledge JSON files (no LLM, no graph library):
+Builds relationship maps at startup from knowledge JSON files (no LLM, no graph library):
   project → skill category docs  (from projects.json tags[])
-  experience → project docs       (temporal co-occurrence, hard-coded for the 5-6 known links)
+  experience → project docs       (hard-coded — only set this if a project is explicitly
+                                    built as part of a specific role; leave empty otherwise)
   project → experience doc        (reverse of the above)
 
 After retrieval, expand_context() follows 1-hop relationships to pull in related docs
 that weren't in the strict top-5 but are contextually relevant.
 
-Example: user asks "what did he build at NYU IT?" → multi-agent engine is retrieved
-→ graph expansion also surfaces the Redis/Kubernetes skills docs from the merged pool.
+Example: user asks "what skills does the EcoCast project use?" → the project doc is
+retrieved → graph expansion also surfaces the relevant skill-category docs from the pool.
 """
 from __future__ import annotations
 
@@ -35,15 +36,11 @@ _project_experience: dict[str, str] = {}
 # lowercase skill string → list of skill_category doc_ids that contain it
 _skill_to_docs: dict[str, list[str]] = {}
 
-# Hard-coded experience→project links based on role descriptions and project notes.
-# exp_0 = NYU CAS (Jun 2025 - Present)              → GeneCart (proj_2)
-# exp_1 = NYU IT Web Apps Lead (Sep 2024-May 2025)  → Multi-Agent (proj_3), portfolio (proj_0)
-# exp_2 = NYU IT Intern (May 2024-Aug 2024)         → same research infra as exp_1 (proj_3)
-_HARD_EXP_PROJ: dict[str, list[str]] = {
-    "exp_0_overview": ["proj_2_overview"],
-    "exp_1_overview": ["proj_3_overview", "proj_0_overview"],
-    "exp_2_overview": ["proj_3_overview"],
-}
+# Hard-coded experience→project links — only populate this when a project in
+# projects.json was explicitly built as part of a specific experience.json role.
+# None of Taruni's current projects are tied to a specific employer, so this is
+# empty; the skill-tag-based graph edges (computed dynamically below) still work.
+_HARD_EXP_PROJ: dict[str, list[str]] = {}
 
 
 def build_graph() -> None:

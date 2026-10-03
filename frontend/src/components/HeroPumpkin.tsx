@@ -7,8 +7,8 @@ import { API_BASE_URL } from "@/lib/api/client";
 import { saveMessages, loadMessages } from "@/lib/session";
 
 const ROTATE_PLACEHOLDERS = [
-  "How did she improve forecasting accuracy from 78% to 92%?",
-  "What did she build at Shell PLC?",
+  "How did she fine-tune DistilBERT to 90.59% F1?",
+  "What does she build at Hansvonlehwalt?",
   "What Google & Microsoft certifications does she hold?",
   "What is she excited about right now?",
   "What data stack does she work with?",

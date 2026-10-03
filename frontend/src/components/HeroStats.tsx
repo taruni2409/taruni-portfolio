@@ -4,10 +4,10 @@ import { useEffect, useState } from "react";
 import type { HeroStat } from "@/data/profile";
 
 const FALLBACK_STATS: HeroStat[] = [
-  { value: 78,  suffix: "%",  label: "Latency Cut",      sub: "P99 RAG on 3K+ RPS" },
-  { value: 3,   suffix: "K+", label: "Peak RPS",         sub: "99.9% uptime" },
-  { value: 15,  suffix: "ms", label: "Edge Inference",   sub: "Snapdragon NPU" },
-  { value: 115, suffix: "GB", label: "Daily Throughput", sub: "Zero data loss" },
+  { value: 500,   suffix: "GB+", label: "Daily Data Processed",        sub: "Enterprise ETL pipelines" },
+  { value: 90.59, suffix: "%",   label: "Intent Classification F1",    sub: "Fine-tuned DistilBERT" },
+  { value: 1,     suffix: "M+",  label: "Records Validated",           sub: "Schema & quality frameworks" },
+  { value: 100,   suffix: "+",   label: "ML-Ready Features Engineered", sub: "PySpark feature pipelines" },
 ];
 
 export default function HeroStats({ stats, cols = 4 }: { stats?: HeroStat[]; cols?: 2 | 4 }) {
@@ -21,10 +21,12 @@ export default function HeroStats({ stats, cols = 4 }: { stats?: HeroStat[]; col
       const duration = 1100;
       const start = performance.now();
 
+      const round = (v: number) => (Number.isInteger(v) ? Math.round(v) : Math.round(v * 100) / 100);
+
       function tick(now: number) {
         const t = Math.min((now - start) / duration, 1);
         const eased = 1 - (1 - t) ** 3; // ease-out cubic
-        setCounts(STATS.map((s) => Math.round(s.value * eased)));
+        setCounts(STATS.map((s) => round(s.value * eased)));
         if (t < 1) requestAnimationFrame(tick);
         else setCounts(STATS.map((s) => s.value));
       }
