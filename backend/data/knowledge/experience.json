@@ -40,15 +40,15 @@
     ]
   },
   {
-    "company": "Civil Engineering Projects",
+    "company": "Andhra Pradesh Capital Region Development Authority (APCRDA)",
     "role": "IT Consultant",
     "start": "Oct 2019",
     "end": "Nov 2021",
     "location": "India",
-    "description": "Supported civil engineering infrastructure projects with geospatial data collection and technical documentation.",
-    "tech": "Geospatial Survey Data, Technical Reporting",
+    "description": "Supported civil engineering and public infrastructure projects for the Andhra Pradesh State Government, collecting, organising and validating field survey, project and geospatial data used for planning.",
+    "tech": "AutoCAD, Microsoft SQL Server, Geospatial Survey Data, Technical Reporting",
     "bullets": [
-      "Collected and processed geospatial survey data supporting civil engineering infrastructure projects.",
+      "Collected, organised and validated field survey, project and geospatial data used for civil engineering and public infrastructure planning across Andhra Pradesh State Government projects.",
       "Assisted in the preparation of technical reports and documentation for project stakeholders."
     ]
   }
