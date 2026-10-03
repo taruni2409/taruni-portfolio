@@ -46,10 +46,13 @@
     "end": "Nov 2021",
     "location": "India",
     "description": "Supported civil engineering and public infrastructure projects for the Andhra Pradesh State Government, collecting, organising and validating field survey, project and geospatial data used for planning.",
-    "tech": "AutoCAD, Microsoft SQL Server, Geospatial Survey Data, Technical Reporting",
+    "tech": "AutoCAD, Microsoft SQL Server, Excel, Geospatial Survey Data, Technical Reporting",
     "bullets": [
-      "Collected, organised and validated field survey, project and geospatial data used for civil engineering and public infrastructure planning across Andhra Pradesh State Government projects.",
-      "Assisted in the preparation of technical reports and documentation for project stakeholders."
+      "Supported civil engineering and public infrastructure projects by collecting, organising and validating field survey, geospatial and project data used for planning, progress tracking and technical reporting.",
+      "Managed engineering datasets covering survey measurements, project locations, quantities, infrastructure assets and construction progress, ensuring accuracy and consistency across project records.",
+      "Used Excel, basic SQL and data-management techniques to structure, validate and analyse engineering data, identifying missing, duplicate and inconsistent records.",
+      "Prepared project progress reports, engineering summaries and data-driven documentation by consolidating information from field engineers, survey teams and project stakeholders.",
+      "Developed foundational experience in databases, structured data, data validation and digital information management, which supported the subsequent transition into IT and data engineering."
     ]
   }
 ]
