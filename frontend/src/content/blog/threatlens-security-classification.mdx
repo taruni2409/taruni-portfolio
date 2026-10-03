@@ -18,6 +18,12 @@ The raw labelled data wasn't close to balanced — the malicious category had su
 
 Split 7,280 / 910 / 910 for train, validation, and test — stratified so all seven categories stayed represented in equal proportion across every split.
 
+<BlogImage
+  src="/blog/threatlens-class-distribution.png"
+  alt="Bar chart showing exactly 1,300 documents per security category after balancing"
+  caption="The balanced dataset — 1,300 documents in each of the seven categories, by construction."
+/>
+
 ## Baseline first, transformer second
 
 The same pattern as everywhere else I've done this: build the honest classical baseline before reaching for a transformer, so the eventual improvement number is measuring something real.
@@ -53,6 +59,12 @@ error_analysis["confidence"] = (
 ```
 
 The confusion pairs clustered exactly where a human would expect difficulty: **confidential** and **safe** sitting closest together in the model's decision space, since the line between "internal but harmless" and "internal and sensitive" genuinely depends on context a single paragraph doesn't always carry. That's not a modelling failure — it's the actual ambiguity in the task showing up honestly in the error analysis, which is more useful than a clean number with no visibility into where it breaks.
+
+<BlogImage
+  src="/blog/threatlens-confusion-matrix.png"
+  alt="Confusion matrix for the fine-tuned RoBERTa model, showing near-perfect diagonal with errors concentrated between confidential and safe"
+  caption="9 of the model's 15 test errors were safe documents mistaken for confidential, and vice versa — exactly the ambiguous boundary you'd expect."
+/>
 
 A quick inference check makes the practical behavior concrete:
 

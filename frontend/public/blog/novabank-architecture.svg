@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" width="900" height="520" font-family="'Helvetica Neue', Arial, sans-serif">
+  <rect width="900" height="520" fill="#ffffff"/>
+
+  <!-- Input -->
+  <rect x="330" y="20" width="240" height="56" rx="8" fill="#f4f4f8" stroke="#6b64d6" stroke-width="1.5"/>
+  <text x="450" y="46" fill="#1f2937" font-size="14" font-weight="600" text-anchor="middle">Incoming Support Ticket</text>
+  <text x="450" y="64" fill="#6b7280" font-size="11" text-anchor="middle">free text + priority, channel, tier</text>
+
+  <!-- arrow down -->
+  <line x1="450" y1="76" x2="450" y2="110" stroke="#9ca3af" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Three parallel branches -->
+  <rect x="40" y="118" width="250" height="140" rx="8" fill="#ffffff" stroke="#2563eb" stroke-width="1.5"/>
+  <text x="165" y="144" fill="#2563eb" font-size="13" font-weight="700" text-anchor="middle">Intent Classification</text>
+  <text x="165" y="164" fill="#374151" font-size="11.5" text-anchor="middle">DistilBERT, fine-tuned</text>
+  <text x="165" y="182" fill="#374151" font-size="11.5" text-anchor="middle">77 BANKING77 intents</text>
+  <text x="165" y="200" fill="#6b7280" font-size="10.5" text-anchor="middle">90.59% Macro F1</text>
+  <text x="165" y="218" fill="#6b7280" font-size="10.5" text-anchor="middle">(+4.78pt over TF-IDF baseline)</text>
+  <text x="165" y="240" fill="#9ca3af" font-size="10" text-anchor="middle">→ maps to operational category</text>
+
+  <rect x="325" y="118" width="250" height="140" rx="8" fill="#ffffff" stroke="#d97706" stroke-width="1.5"/>
+  <text x="450" y="144" fill="#d97706" font-size="13" font-weight="700" text-anchor="middle">SLA Risk Prediction</text>
+  <text x="450" y="164" fill="#374151" font-size="11.5" text-anchor="middle">XGBoost, threshold 0.25</text>
+  <text x="450" y="182" fill="#374151" font-size="11.5" text-anchor="middle">queue load, agent load,</text>
+  <text x="450" y="198" fill="#374151" font-size="11.5" text-anchor="middle">priority, sentiment, timing</text>
+  <text x="450" y="220" fill="#6b7280" font-size="10.5" text-anchor="middle">77.98% recall on breaches</text>
+  <text x="450" y="240" fill="#9ca3af" font-size="10" text-anchor="middle">→ SHAP-explained risk drivers</text>
+
+  <rect x="610" y="118" width="250" height="140" rx="8" fill="#ffffff" stroke="#059669" stroke-width="1.5"/>
+  <text x="735" y="144" fill="#059669" font-size="13" font-weight="700" text-anchor="middle">Grounded Knowledge</text>
+  <text x="735" y="164" fill="#374151" font-size="11.5" text-anchor="middle">Sentence Transformers</text>
+  <text x="735" y="182" fill="#374151" font-size="11.5" text-anchor="middle">ChromaDB retrieval</text>
+  <text x="735" y="198" fill="#374151" font-size="11.5" text-anchor="middle">Gemini generation</text>
+  <text x="735" y="220" fill="#6b7280" font-size="10.5" text-anchor="middle">100% Hit@3, 100% citation</text>
+  <text x="735" y="240" fill="#9ca3af" font-size="10" text-anchor="middle">→ refuses when evidence is thin</text>
+
+  <!-- arrows converging -->
+  <line x1="165" y1="258" x2="430" y2="320" stroke="#9ca3af" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="450" y1="258" x2="450" y2="320" stroke="#9ca3af" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="735" y1="258" x2="470" y2="320" stroke="#9ca3af" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Output -->
+  <rect x="280" y="330" width="340" height="92" rx="8" fill="#f4f4f8" stroke="#6b64d6" stroke-width="1.5"/>
+  <text x="450" y="358" fill="#1f2937" font-size="14" font-weight="700" text-anchor="middle">Unified Ticket Analysis</text>
+  <text x="450" y="378" fill="#374151" font-size="11.5" text-anchor="middle">intent + SLA risk + cited policy recommendation</text>
+  <text x="450" y="398" fill="#6b7280" font-size="10.5" text-anchor="middle">one API response, /analyze-ticket</text>
+
+  <text x="450" y="460" fill="#9ca3af" font-size="11" text-anchor="middle">NovaBank is a synthetic bank built for this project — not a real client.</text>
+  <text x="450" y="480" fill="#9ca3af" font-size="11" text-anchor="middle">All three models are trained and evaluated independently, then combined at inference time.</text>
+
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#9ca3af"/>
+    </marker>
+  </defs>
+</svg>

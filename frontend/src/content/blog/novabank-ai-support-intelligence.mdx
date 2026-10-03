@@ -12,6 +12,12 @@ Customer support at a bank has three different problems hiding inside one ticket
   NovaBank is a synthetic bank — not a real client. Its support tickets, SLA data, and policy documents were built specifically for this project. The modelling decisions below are real; the bank isn't.
 </Callout>
 
+<BlogImage
+  src="/blog/novabank-architecture.svg"
+  alt="Architecture diagram: a support ticket flows into three parallel models — DistilBERT intent classification, XGBoost SLA risk prediction, and a ChromaDB/Gemini RAG pipeline — which combine into one unified ticket analysis"
+  caption="All three models run independently and combine at inference time into one response."
+/>
+
 ## The first dataset lied to me, so I didn't use it
 
 I started with a public customer-support dataset — 8,469 tickets labelled by type. A quick baseline classifier got 19.54% accuracy. With five roughly balanced classes, random guessing gets you about 20%. The model had learned nothing.

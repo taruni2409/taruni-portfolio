@@ -45,6 +45,12 @@ Beyond lagged returns and rolling volatility, the sentiment features weren't jus
 
 <Divider />
 
+<BlogImage
+  src="/blog/volatilityiq-model-comparison.svg"
+  alt="Diagram showing price and sentiment features feeding into four models — GARCH(1,1), Random Forest, XGBoost, and LSTM — all evaluated on the same chronological held-out split"
+  caption="Same features, same split, same metrics — so the comparison across all four models is actually fair."
+/>
+
 **GARCH(1,1)** — the econometric standard for volatility clustering, and the baseline every other approach has to justify beating. It only sees the return series itself, no sentiment or cross-sectional features at all.
 
 **Random Forest** and **XGBoost** — both get the full feature set (price-based, sentiment-based, and their interactions), letting tree-based models find nonlinear relationships and feature interactions that GARCH structurally can't represent.
