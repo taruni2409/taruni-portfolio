@@ -1,6 +1,6 @@
 [
   {
-    "category": "Programming & Backend",
+    "category": "Programming & Full-Stack Development",
     "items": [
       "Python",
       "FastAPI",
@@ -8,14 +8,19 @@
       "REST APIs",
       "Microservices Architecture",
       "SQL / T-SQL",
-      "PySpark"
+      "PySpark",
+      "Next.js",
+      "React",
+      "TypeScript",
+      "Tailwind CSS"
     ]
   },
   {
-    "category": "AI/ML & Generative AI",
+    "category": "Generative AI & NLP",
     "items": [
       "Generative AI",
       "Large Language Models (LLMs)",
+      "Google Gemini",
       "Retrieval-Augmented Generation (RAG)",
       "Agentic AI",
       "Multi-Agent AI Systems",
@@ -24,16 +29,38 @@
       "Prompt Engineering",
       "Semantic Search",
       "Embeddings",
+      "Sentence Transformers",
       "Transformer Fine-Tuning",
       "BERT",
       "DistilBERT",
       "RoBERTa",
       "Hugging Face Transformers",
+      "SpaCy",
+      "NLTK",
+      "Text Classification"
+    ]
+  },
+  {
+    "category": "Machine Learning & Forecasting",
+    "items": [
       "PyTorch",
       "TensorFlow",
+      "Keras",
       "Scikit-learn",
       "XGBoost",
-      "SHAP"
+      "Random Forest",
+      "Logistic Regression",
+      "TF-IDF",
+      "SHAP",
+      "GARCH",
+      "ARIMA",
+      "Statsmodels",
+      "LSTM",
+      "Convolutional Neural Networks (CNN)",
+      "Time-Series Forecasting",
+      "Sentiment Analysis",
+      "Pandas",
+      "NumPy"
     ]
   },
   {
@@ -63,7 +90,8 @@
       "Inference Pipelines",
       "Model Versioning",
       "Redis",
-      "Kafka"
+      "Kafka",
+      "Streamlit"
     ]
   },
   {
@@ -92,7 +120,8 @@
       "MySQL",
       "Delta Tables",
       "ChromaDB",
-      "Vector Search"
+      "Vector Search",
+      "Excel"
     ]
   },
   {
