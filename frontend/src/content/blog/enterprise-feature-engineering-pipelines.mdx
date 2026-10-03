@@ -1,0 +1,52 @@
+---
+title: Turning Raw Transactional Data Into 100+ Model-Ready Features
+date: "2026-07-02"
+publishedAt: "2026-07-02"
+description: Notes from building reusable cleansing, validation, and feature-engineering pipelines on 500GB+ of daily enterprise data at Tata Consultancy Services.
+tags: [machine-learning, feature-engineering, data-engineering, pyspark]
+---
+
+At Tata Consultancy Services, a lot of the ML and analytics work downstream of our pipelines kept running into the same wall: the data reaching modelers was close to raw. A handful of source-system fields, maybe a join or two, nothing a classification or forecasting model could really sink its teeth into. Every team building something on top of it ended up re-deriving the same rolling averages and lag features from scratch.
+
+<Callout type="info" title="Context">
+  The pipelines behind this processed 500GB+ of enterprise data daily from multiple source systems, built on Azure Databricks, PySpark, and Azure Data Factory, feeding curated analytics layers used across classification, forecasting, anomaly-detection, and predictive-analytics workloads.
+</Callout>
+
+## Garbage in, garbage out starts with validation
+
+Before any feature engineering is worth doing, the input has to be trustworthy. I built reusable cleansing and validation frameworks that ran schema checks, completeness checks, duplicate detection, and business-rule validation across 1M+ records before anything reached the warehouse or an analytics consumer. Catching a malformed batch here is cheap; catching it after a model has already trained on it is not.
+
+## From a dozen raw fields to 100+ engineered ones
+
+With validated data as the foundation, the actual feature-engineering pipelines expanded a handful of raw transactional fields into over 100 model-ready variables — rolling statistics at multiple time windows, categorical interaction terms, and decay-weighted historical aggregates.
+
+```python
+import pandas as pd
+
+def engineer_rolling_features(df: pd.DataFrame, windows=(7, 14, 30)) -> pd.DataFrame:
+    df = df.sort_values("date")
+    for w in windows:
+        df[f"rolling_mean_{w}d"] = (
+            df.groupby("category")["value"]
+              .transform(lambda s: s.rolling(w, min_periods=1).mean())
+        )
+        df[f"rolling_std_{w}d"] = (
+            df.groupby("category")["value"]
+              .transform(lambda s: s.rolling(w, min_periods=1).std())
+        )
+    return df
+```
+
+<Callout type="tip" title="Build it once, reuse it everywhere">
+  The real payoff wasn't any single feature — it was that classification, forecasting, and anomaly-detection workloads could all draw from the same PySpark feature pipeline instead of each team deriving its own version of "rolling 7-day average" slightly differently.
+</Callout>
+
+## Why PySpark, not pandas, at this scale
+
+Pandas is fine until the dataset stops fitting comfortably in memory on one machine. At 500GB+ processed daily, the rolling-window and groupby operations needed to distribute across a cluster — PySpark on Azure Databricks handled that, with the pandas version above standing in as the readable reference implementation of the same logic.
+
+<Divider />
+
+## What I'd tell someone starting this today
+
+A feature pipeline is infrastructure, not a one-off script for a single model. The moment a second team needs "rolling volatility by category," you're better off with one validated, reusable pipeline than three slightly different copies scattered across notebooks. The validation layer in front of it matters just as much as the features themselves — a feature computed on bad data is worse than no feature at all, because it looks trustworthy.
