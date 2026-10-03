@@ -1,4 +1,12 @@
-name: Deploy to GitHub Pages
+name: Sync knowledge base & backend deploy
+
+# The frontend no longer deploys here — Vercel's own GitHub integration builds
+# and deploys it on every push to main (taruni-portfolio.vercel.app). This
+# workflow now only handles two things that are independent of that:
+#  1. Regenerating backend/data/knowledge/{blog,lab}.json from MDX/source and
+#     committing them back, so the knowledge base stays in sync.
+#  2. The backend Docker build/deploy, which stays skipped until a real host
+#     is configured (LIGHTSAIL_HOST secret).
 
 on:
   push:
@@ -7,12 +15,10 @@ on:
 
 permissions:
   contents: write
-  pages: write
-  id-token: write
   packages: write
 
 concurrency:
-  group: pages
+  group: knowledge-sync
   cancel-in-progress: false
 
 jobs:
@@ -45,54 +51,9 @@ jobs:
               - 'infra/**'
               - 'backend/data/knowledge/*.json'
 
-  build:
+  sync-knowledge:
     needs: detect-changes
     if: needs.detect-changes.outputs.frontend == 'true' || github.event_name == 'workflow_dispatch'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-
-      - name: Install dependencies
-        working-directory: frontend
-        run: npm install
-
-      - name: Build
-        working-directory: frontend
-        run: npm run build
-        env:
-          NEXT_PUBLIC_API_BASE_URL: ${{ secrets.NEXT_PUBLIC_API_BASE_URL }}
-          NEXT_PUBLIC_EMAILJS_SERVICE_ID: ${{ secrets.NEXT_PUBLIC_EMAILJS_SERVICE_ID }}
-          NEXT_PUBLIC_EMAILJS_TEMPLATE_ID: ${{ secrets.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID }}
-          NEXT_PUBLIC_EMAILJS_PUBLIC_KEY: ${{ secrets.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY }}
-          NODE_ENV: production
-
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: frontend/out
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
-
-  # Persist the generated knowledge JSON back to the repo. Runs AFTER deploy so
-  # the [skip ci] sync commit never moves main's HEAD while the Pages deployment
-  # for the run's commit is still pending — which was getting it cancelled.
-  sync-knowledge:
-    needs: deploy
     runs-on: ubuntu-latest
     permissions:
       contents: write
