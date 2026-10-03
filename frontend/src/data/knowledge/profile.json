@@ -27,8 +27,10 @@
     "open": true,
     "label": "Open to work",
     "types": [
-      "Full-time",
-      "Freelance"
+      "Machine Learning",
+      "MLOps",
+      "Generative AI",
+      "Agentic AI"
     ],
     "locations": [
       "Remote",
