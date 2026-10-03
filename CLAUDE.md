@@ -6,10 +6,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Personal AI-assisted portfolio for Taruni Nallamothu (`taruni-portfolio.vercel.app`). The site has two entry points:
 
-- `/` — Full-screen RAG-powered recruiter chatbot ("Pumpkin") powered by Gemini via Google AI API + ChromaDB
-- `/portfolio` — Portfolio home with hero, featured projects, domain interests, skills, testimonials carousel, and contact
+- `/` — Portfolio home with hero, featured projects, domain interests, skills, testimonials carousel, and contact
+- `/chat` — Full-screen RAG-powered recruiter chatbot ("Pumpkin") powered by Gemini via Google AI API + ChromaDB
 
 From the portfolio visitors navigate to Experience, Education, Projects, and Blog.
+
+Note: there is no standalone `/portfolio` route — `(portfolio)/page.tsx` serves the portfolio home directly at `/` (the route group adds no URL segment). An earlier draft of this doc described `/` as a separate chatbot-only landing with a distinct `/portfolio` home; that was never actually built this way, and nothing in the app (nav, footer, sitemap) has pointed at `/portfolio` for a while — don't reintroduce it without a reason.
 
 ---
 
@@ -17,16 +19,15 @@ From the portfolio visitors navigate to Experience, Education, Projects, and Blo
 
 | Route | Purpose |
 |---|---|
-| `/` | Pumpkin — AI chatbot landing (full-screen, no nav) |
-| `/chat` | Same chatbot, accessible from portfolio nav |
-| `/portfolio` | Portfolio home — hero, featured projects, skills, testimonials, contact |
+| `/` | Portfolio home — hero, featured projects, skills, testimonials, contact |
+| `/chat` | Pumpkin — full-screen AI chatbot, linked from portfolio nav + mobile FAB |
 | `/experience` | Work history timeline |
 | `/education` | Education cards |
 | `/projects` | Projects grid with source link tag buttons |
 | `/blog` | Blog index sorted by `publishedAt` |
 | `/blog/[slug]` | Blog post rendered in Source Serif 4 font |
 
-All portfolio routes live inside `frontend/src/app/(portfolio)/` route group sharing a `Nav` + `Footer` layout. The chatbot (`/`) is outside this group — no nav or footer.
+All portfolio routes — including `/` itself — live inside `frontend/src/app/(portfolio)/` route group sharing a `Nav` + `Footer` layout. `/chat` lives outside this group — no nav or footer.
 
 A mobile FAB (fixed bottom-right) appears on all portfolio pages linking to `/chat`.
 

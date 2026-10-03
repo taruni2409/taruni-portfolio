@@ -53,7 +53,7 @@ export default function Breadcrumbs() {
   // Every crumb that maps to a real route is a clickable link — including the
   // current page. The category (Work/Writing/…) has no page, so it stays a label.
   const crumbs: Crumb[] = [
-    { label: "Home", href: "/portfolio" },
+    { label: "Home", href: "/" },
     { label: section.group },
     { label: section.label, href: sectionPath },
   ];

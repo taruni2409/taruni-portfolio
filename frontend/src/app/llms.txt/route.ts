@@ -108,7 +108,7 @@ export async function GET() {
     "/system":     "live observability — latency percentiles, RAG pipeline timing, model fallback",
   };
   const keyPages = [
-    `- [Portfolio](${BASE}/portfolio): hero, featured projects, skills, contact`,
+    `- [Portfolio](${BASE}/): hero, featured projects, skills, contact`,
     ...siteGroups.flatMap((g) => g.items).map((i) =>
       `- [${i.label}](${BASE}${i.href}): ${LLMS_DESC[i.href] ?? i.desc}`),
     `- [Chat with Pumpkin](${BASE}/chat): RAG chatbot that answers recruiter questions about my work`,

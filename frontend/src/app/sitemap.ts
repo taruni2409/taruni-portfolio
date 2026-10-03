@@ -15,7 +15,6 @@ type ChangeFreq = MetadataRoute.Sitemap[number]["changeFrequency"];
 // so a newly added page still lands in the sitemap with sensible values.
 const ROUTE_META: Record<string, { priority: number; changeFrequency: ChangeFreq }> = {
   "/":           { priority: 1.0,  changeFrequency: "weekly"  },
-  "/portfolio":  { priority: 0.95, changeFrequency: "weekly"  },
   "/blog":       { priority: 0.9,  changeFrequency: "weekly"  },
   "/experience": { priority: 0.8,  changeFrequency: "monthly" },
   "/projects":   { priority: 0.8,  changeFrequency: "monthly" },
@@ -83,9 +82,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   /* ── Static routes — derived from the shared nav config (lib/site-nav) ──
      so any page added to the nav/footer automatically appears here too.
-     Plus a few routes that aren't in the nav (home, portfolio, chat). ── */
+     Plus a couple of routes that aren't in the nav (home, chat). ── */
   const pageHrefs = [...new Set([
-    "/", "/portfolio", "/chat",
+    "/", "/chat",
     ...siteGroups.flatMap((g) => g.items.map((i) => i.href)),
   ])];
 
