@@ -63,7 +63,20 @@ export default function RichCards({ content }: { content: string }) {
             </div>
 
             {/* Link / action */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
+              {p.liveUrl && (
+                <a
+                  href={p.liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 rounded-full bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 px-2.5 py-0.5 text-[10px] font-semibold text-emerald-700 dark:text-emerald-400 hover:opacity-80 transition-opacity"
+                >
+                  Live
+                  <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                    <path d="M7 17L17 7M17 7H7M17 7v10" />
+                  </svg>
+                </a>
+              )}
               {link ? (
                 <a
                   href={link.url}
@@ -76,7 +89,7 @@ export default function RichCards({ content }: { content: string }) {
                     <path d="M7 17L17 7M17 7H7M17 7v10" />
                   </svg>
                 </a>
-              ) : (
+              ) : !p.liveUrl ? (
                 <Link
                   href="/projects"
                   className="inline-flex items-center gap-1 text-[10px] font-medium text-fg-faint hover:text-accent transition-colors"
@@ -86,7 +99,7 @@ export default function RichCards({ content }: { content: string }) {
                     <path d="M5 12h14M12 5l7 7-7 7" />
                   </svg>
                 </Link>
-              )}
+              ) : null}
             </div>
           </div>
         );
