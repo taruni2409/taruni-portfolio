@@ -51,6 +51,12 @@ Not every stage needed deep learning. Triage-style classification — is this no
 | Note triage | Scikit-learn (TF-IDF) | Fast enough to run on every note, good enough accuracy |
 | Summarisation | Novelty-weighted extraction | Centrality-based methods missed the important line |
 
+<BlogImage
+  src="/blog/medical-model-comparison.png"
+  alt="Bar chart comparing Logistic Regression and SVM on weighted-average precision, recall, and F1-score, both performing nearly identically around 0.94-0.97"
+  caption="Logistic Regression vs SVM over TF-IDF features — close enough that the simpler, faster model was the practical choice."
+/>
+
 <Divider />
 
 ## The Streamlit layer mattered more than expected

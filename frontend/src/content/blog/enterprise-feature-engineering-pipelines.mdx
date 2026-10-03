@@ -12,6 +12,12 @@ At Tata Consultancy Services, a lot of the ML and analytics work downstream of o
   The pipelines behind this processed 500GB+ of enterprise data daily from multiple source systems, built on Azure Databricks, PySpark, and Azure Data Factory, feeding curated analytics layers used across classification, forecasting, anomaly-detection, and predictive-analytics workloads.
 </Callout>
 
+<BlogImage
+  src="/blog/tcs-feature-pipeline.svg"
+  alt="Pipeline diagram: raw source data flows through cleansing and validation, then PySpark feature engineering, into downstream ML workloads like classification, forecasting, and anomaly detection"
+  caption="One validated, reusable pipeline feeding every downstream workload."
+/>
+
 ## Garbage in, garbage out starts with validation
 
 Before any feature engineering is worth doing, the input has to be trustworthy. I built reusable cleansing and validation frameworks that ran schema checks, completeness checks, duplicate detection, and business-rule validation across 1M+ records before anything reached the warehouse or an analytics consumer. Catching a malformed batch here is cheap; catching it after a model has already trained on it is not.
