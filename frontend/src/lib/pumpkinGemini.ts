@@ -1,4 +1,31 @@
 import { buildSystemPrompt } from "./pumpkinKnowledge";
+import profile from "@/data/knowledge/profile.json";
+
+// Long opaque URLs (Google Calendar appointment links, Drive share links) are
+// unreliable for an LLM to transcribe verbatim in free-text generation — one
+// mis-copied character silently breaks the link with no visible error. Rather
+// than trust Gemini to reproduce them correctly, we detect intent ourselves
+// and append the exact URL as a deterministic extra token after the model's
+// reply (the system prompt tells Gemini not to write these out itself).
+const CALENDAR_KEYWORDS = [
+  "book", "schedule", "call", "meeting", "available", "availability",
+  "slot", "free", "interview", "chat", "connect", "this week", "next week",
+  "30 min", "30-min", "30 minute", "hop on", "catch up",
+];
+const RESUME_KEYWORDS = ["resume", "cv", "curriculum vitae"];
+
+function detectIntentSuffix(message: string): string | null {
+  const lower = message.toLowerCase();
+  const wantsCalendar = CALENDAR_KEYWORDS.some((kw) => lower.includes(kw));
+  const wantsResume = RESUME_KEYWORDS.some((kw) => lower.includes(kw));
+  if (wantsCalendar && profile.booking_url) {
+    return `\n\n👉 [Book a 30-minute call](${profile.booking_url})`;
+  }
+  if (wantsResume && profile.resume) {
+    return `\n\n📄 [View résumé](${profile.resume})`;
+  }
+  return null;
+}
 
 // "gemini-flash-latest" is a Google-maintained alias that always points at the
 // current stable flash model, so the primary pick doesn't go stale on its own —
@@ -127,6 +154,8 @@ export async function* streamPumpkinReply(
     }
 
     if (yieldedAny) {
+      const suffix = detectIntentSuffix(message);
+      if (suffix) yield { token: suffix };
       yield { done: true, model: `gemini:${model}` };
       return;
     }
