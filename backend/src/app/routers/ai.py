@@ -37,7 +37,7 @@ Key highlights:
 - Google Certified: Associate Cloud Engineer | Microsoft Certified: Azure Data Scientist Associate
 - At Hansvonlehwalt: builds RAG pipelines, agentic multi-agent AI workflows, and conversational AI using Azure OpenAI and Azure AI Foundry
 - At Tata Consultancy Services: engineered data and ML pipelines on Azure Databricks processing 500GB+ of enterprise data daily across 1M+ validated records
-- Built SupportOps AI: fine-tuned a DistilBERT intent classifier to 90.59% F1 and an XGBoost SLA-breach predictor to 77.98% recall, with a Gemini-powered RAG pipeline over ChromaDB
+- Built NovaBank, an AI customer support intelligence platform (retail-banking case study): fine-tuned a DistilBERT intent classifier to 90.59% F1 and an XGBoost SLA-breach predictor to 77.98% recall, with a Gemini-powered RAG pipeline over ChromaDB
 - M.Sc. Data Science, University of Hertfordshire (GPA 3.91/4.0)
 - Contact: taruninallamothu24@gmail.com | +44 7741031780 | linkedin.com/in/taruninallamothu24 | github.com/taruni2409
 - Pumpkin uses BAAI/bge-base-en-v1.5 (768-dim ONNX) for dense retrieval + BM25 + RRF + knowledge graph expansion
@@ -448,7 +448,7 @@ _PERSONA_GUIDANCE = {
     "recruiter": (
         "The visitor is a RECRUITER or hiring manager. Lead with impact, outcomes, and fit: "
         "availability, target roles, standout achievements (Google/Microsoft cloud certifications, "
-        "90.59% F1 intent classifier and 77.98% recall SLA-breach predictor on SupportOps AI, "
+        "90.59% F1 intent classifier and 77.98% recall SLA-breach predictor on NovaBank, "
         "500GB+ daily ETL at TCS), and how Taruni works with teams. Keep it crisp and "
         "results-focused, quantify wherever possible, and proactively surface availability and how to reach her."
     ),

@@ -11,7 +11,56 @@
       "Streamlit"
     ],
     "featured": true,
-    "sourceLinks": [],
+    "sourceLinks": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/taruni2409/Medical_Text_Analyzer"
+      }
+    ],
+    "liveUrl": "",
+    "note": ""
+  },
+  {
+    "title": "NovaBank – AI Customer Support Intelligence",
+    "description": "End-to-end customer support intelligence platform built for NovaBank, a retail-banking case study, combining a DistilBERT intent classifier fine-tuned to 90.59% F1, an XGBoost SLA-breach predictor achieving 77.98% recall with SHAP explainability, and a Gemini-powered RAG pipeline over ChromaDB for grounded resolution recommendations.",
+    "tags": [
+      "Python",
+      "PyTorch",
+      "DistilBERT",
+      "XGBoost",
+      "ChromaDB",
+      "Gemini",
+      "FastAPI"
+    ],
+    "featured": true,
+    "sourceLinks": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/taruni2409/supportops-ai"
+      }
+    ],
+    "liveUrl": "",
+    "note": ""
+  },
+  {
+    "title": "VolatilityIQ – Cryptocurrency Volatility Forecasting",
+    "description": "Investigated whether cryptocurrency market volatility can be predicted by combining historical price-based indicators with sentiment signals from news and social media across ten major cryptocurrencies, comparing an econometric baseline against machine learning and deep learning approaches (GARCH(1,1), Random Forest, XGBoost, and LSTM) under a time-aware train/test split to avoid look-ahead bias. Completed as the MSc Data Science final project at the University of Hertfordshire.",
+    "tags": [
+      "Python",
+      "GARCH",
+      "Random Forest",
+      "XGBoost",
+      "LSTM",
+      "Sentiment Analysis",
+      "Time-Series Forecasting"
+    ],
+    "featured": true,
+    "sourceLinks": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/taruni2409/crypto-volatility-prediction"
+      }
+    ],
     "liveUrl": "",
     "note": ""
   },
@@ -26,7 +75,7 @@
       "ARIMA",
       "Statsmodels"
     ],
-    "featured": true,
+    "featured": false,
     "sourceLinks": [],
     "liveUrl": "",
     "note": ""
@@ -58,22 +107,21 @@
     "note": ""
   },
   {
-    "title": "SupportOps AI – Customer Support Intelligence Platform",
-    "description": "End-to-end customer support intelligence platform combining a DistilBERT intent classifier fine-tuned to 90.59% F1, an XGBoost SLA-breach predictor achieving 77.98% recall with SHAP explainability, and a Gemini-powered RAG pipeline over ChromaDB for grounded resolution recommendations.",
+    "title": "ThreatLens – Multi-Class Cybersecurity Document Classification",
+    "description": "Fine-tuned a RoBERTa transformer to classify sensitive documents into seven security categories (credentials, PII, financial, medical, confidential, malicious, safe), reaching 98.35% accuracy and 98.37% macro F1 on a balanced 9,100-document held-out evaluation — outperforming a TF-IDF + Logistic Regression baseline (98.02% accuracy).",
     "tags": [
       "Python",
-      "PyTorch",
-      "DistilBERT",
-      "XGBoost",
-      "ChromaDB",
-      "Gemini",
-      "FastAPI"
+      "RoBERTa",
+      "Hugging Face Transformers",
+      "NLP",
+      "Text Classification",
+      "Scikit-learn"
     ],
-    "featured": true,
+    "featured": false,
     "sourceLinks": [
       {
         "label": "GitHub",
-        "url": "https://github.com/taruni2409/supportops-ai"
+        "url": "https://github.com/taruni2409/ThreatLens-NLP-Classification"
       }
     ],
     "liveUrl": "",

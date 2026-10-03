@@ -54,7 +54,7 @@
       "value": 90.59,
       "suffix": "%",
       "label": "Intent Classification F1",
-      "sub": "Fine-tuned DistilBERT, SupportOps AI"
+      "sub": "Fine-tuned DistilBERT, NovaBank"
     },
     {
       "value": 1,
