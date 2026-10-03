@@ -1,0 +1,112 @@
+import { buildSystemPrompt } from "./pumpkinKnowledge";
+
+// "gemini-flash-latest" is a Google-maintained alias that always points at the
+// current stable flash model, so the primary pick doesn't go stale on its own —
+// the fallback chain still matters for capacity errors and future deprecations.
+const GEMINI_MODEL = process.env.GEMINI_MODEL || "gemini-flash-latest";
+const GEMINI_FALLBACK_MODELS = (process.env.GEMINI_FALLBACK_MODELS || "gemini-2.5-flash,gemini-3.8-flash,gemini-2.5-flash-lite")
+  .split(",")
+  .map((m) => m.trim())
+  .filter(Boolean);
+
+const MODEL_CHAIN = [GEMINI_MODEL, ...GEMINI_FALLBACK_MODELS];
+
+export type PumpkinChatMessage = { role: "user" | "assistant"; content: string };
+
+function buildContents(messages: PumpkinChatMessage[], message: string) {
+  const history = messages.slice(-8).map((m) => ({
+    role: m.role === "user" ? "user" : "model",
+    parts: [{ text: m.content }],
+  }));
+  return [...history, { role: "user", parts: [{ text: message }] }];
+}
+
+function isCapacityError(status: number): boolean {
+  // 404 included deliberately: Google periodically retires model ids (e.g.
+  // gemini-2.0-flash), and that should fall through to the next model in the
+  // chain rather than fail the whole request — same handling as the backend.
+  return status === 429 || status === 503 || status === 500 || status === 502 || status === 404;
+}
+
+/** Streams tokens from Gemini's REST API, falling back through MODEL_CHAIN on
+ * capacity errors (429/503/etc.) — same resilience pattern as the backend's
+ * multi-model fallback, without the extra Groq/OpenRouter providers. */
+export async function* streamPumpkinReply(
+  messages: PumpkinChatMessage[],
+  message: string,
+): AsyncGenerator<{ token: string } | { done: true; model: string } | { error: string }> {
+  const apiKey = process.env.GOOGLE_API_KEY;
+  if (!apiKey) {
+    yield { error: "not_configured" };
+    return;
+  }
+
+  const systemPrompt = buildSystemPrompt();
+  const contents = buildContents(messages, message);
+
+  let lastErrorStatus: number | null = null;
+
+  for (const model of MODEL_CHAIN) {
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:streamGenerateContent?alt=sse&key=${apiKey}`;
+    let res: Response;
+    try {
+      res = await fetch(url, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          contents,
+          systemInstruction: { parts: [{ text: systemPrompt }] },
+        }),
+      });
+    } catch {
+      lastErrorStatus = 503;
+      continue;
+    }
+
+    if (!res.ok || !res.body) {
+      lastErrorStatus = res.status;
+      if (isCapacityError(res.status)) continue;
+      yield { error: "stream_error" };
+      return;
+    }
+
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = "";
+    let yieldedAny = false;
+    let streamFailed = false;
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split("\n");
+      buffer = lines.pop() ?? "";
+      for (const line of lines) {
+        if (!line.startsWith("data: ")) continue;
+        const payload = line.slice(6).trim();
+        if (!payload) continue;
+        try {
+          const parsed = JSON.parse(payload);
+          const text = parsed?.candidates?.[0]?.content?.parts?.[0]?.text;
+          if (typeof text === "string" && text.length > 0) {
+            yieldedAny = true;
+            yield { token: text };
+          }
+        } catch {
+          // partial/malformed chunk — skip
+        }
+      }
+    }
+
+    if (yieldedAny) {
+      yield { done: true, model: `gemini:${model}` };
+      return;
+    }
+    // Nothing streamed (e.g. safety block or empty candidate) — try next model.
+    streamFailed = true;
+    if (streamFailed) continue;
+  }
+
+  yield { error: lastErrorStatus && isCapacityError(lastErrorStatus) ? "quota_exhausted" : "stream_error" };
+}

@@ -1,5 +1,10 @@
+// With NEXT_PUBLIC_API_BASE_URL unset, dev targets the local FastAPI backend
+// (full RAG experience); production falls back to "" (same-origin), which hits
+// this app's own lightweight /ai/* Route Handlers backing the live chat widget
+// instead of a dead external host.
 export const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/+$/, "") ?? "http://localhost:8000";
+  process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/+$/, "") ??
+  (process.env.NODE_ENV === "production" ? "" : "http://localhost:8000");
 
 export async function apiPost<TResponse>(
   path: string,
