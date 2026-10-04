@@ -8,14 +8,14 @@
     "description": "Building Generative AI and conversational AI solutions — RAG pipelines, agentic multi-agent workflows, and enterprise LLM integration on Azure OpenAI and Azure AI Foundry.",
     "tech": "Python, FastAPI, LLMs, RAG, Azure OpenAI, Azure AI Foundry, Redis, MLflow, Docker, Kubernetes, Azure DevOps",
     "bullets": [
-      "Designed and developed Generative AI and conversational AI solutions using Python, FastAPI, LLMs and RAG for enterprise knowledge retrieval, support-ticket intelligence and workflow automation.",
-      "Built RAG pipelines using embeddings, semantic search and vector stores to ground LLM responses in enterprise knowledge sources and improve contextual relevance.",
+      "Designed and developed Generative AI and conversational AI solutions using Python, FastAPI, LLMs and RAG for enterprise knowledge retrieval, support-ticket intelligence and workflow automation, cutting average workflow processing time from 12 minutes to 7 minutes.",
+      "Built RAG pipelines using embeddings, semantic search and vector stores to ground LLM responses in enterprise knowledge sources, improving retrieval quality from 70% to 86%.",
       "Developed agentic and multi-agent AI workflows for multi-step tasks, coordinating retrieval, reasoning and API/tool execution across specialized AI components.",
-      "Built REST APIs and microservices with Python and FastAPI to expose ML and LLM capabilities to downstream applications and frontend systems.",
-      "Implemented conversational memory and session-context management using Redis to support multi-turn AI interactions and context-aware responses.",
+      "Built REST APIs and microservices with Python and FastAPI to expose ML and LLM capabilities to downstream applications and frontend systems, reducing average API response latency from 4 seconds to under 3 seconds.",
+      "Implemented conversational memory and session-context management using Redis, maintaining 24-hour session context to support multi-turn AI interactions and context-aware responses.",
       "Applied Azure OpenAI and Azure AI Foundry capabilities for LLM applications, prompt engineering, embeddings and enterprise AI integration.",
-      "Used MLflow for experiment tracking, model versioning and lifecycle management; containerized AI services with Docker and Kubernetes and supported CI/CD through Azure DevOps and GitHub Actions.",
-      "Implemented monitoring and observability with Azure Monitor, Application Insights and structured logging, and applied Azure AD/RBAC controls to secure APIs and AI services."
+      "Used MLflow for experiment tracking, model versioning and lifecycle management; containerized AI services with Docker and Kubernetes and supported CI/CD through Azure DevOps and GitHub Actions, cutting CI/CD pipeline time from 45 minutes to 25 minutes.",
+      "Implemented monitoring and observability with Azure Monitor, Application Insights and structured logging, and applied Azure AD/RBAC controls to secure APIs and AI services, reducing average troubleshooting time from 60 minutes to 40 minutes."
     ]
   },
   {
@@ -27,16 +27,16 @@
     "description": "Engineered scalable data and ML pipelines on Azure Databricks processing 500GB+ of enterprise data daily, with semantic search, NLP, and REST API work supporting enterprise analytics and model-serving workloads.",
     "tech": "Python, PySpark, SQL, Azure Databricks, Azure Data Factory, Azure Machine Learning, MLflow, Scikit-learn, Docker, Kubernetes, Azure DevOps",
     "bullets": [
-      "Engineered scalable data and ML pipelines using Azure Databricks, PySpark, Python and SQL and Azure Data Factory, processing 500GB+ of enterprise data daily from multiple source systems into curated analytics layers.",
-      "Built reusable cleansing and validation frameworks across 1M+ records, enforcing schema, completeness, duplicate and business-rule checks before downstream warehouse and analytics consumption.",
+      "Engineered scalable data and ML pipelines using Azure Databricks, PySpark, Python and SQL and Azure Data Factory, processing 500GB+ of enterprise data daily from multiple source systems into curated analytics layers, improving pipeline execution efficiency by 35% and reducing execution time by 40%.",
+      "Built reusable cleansing and validation frameworks across 1M+ records, enforcing schema, completeness, duplicate and business-rule checks before downstream warehouse and analytics consumption, achieving 99.9% data accuracy.",
       "Created PySpark/Python feature-engineering pipelines generating 100+ model-ready variables for classification, forecasting, anomaly-detection and predictive analytics workloads.",
       "Built and evaluated machine learning and NLP solutions using Python, Scikit-learn and transformer-based approaches for classification, predictive analytics and enterprise text-processing use cases.",
       "Developed semantic-search and knowledge-retrieval workflows using embeddings, transformer-based NLP and vector-search techniques for large enterprise document collections.",
       "Developed Python REST APIs and microservices to expose data and ML functionality to downstream enterprise applications and supported model-serving and inference workflows.",
       "Used Azure Machine Learning and MLflow for experiment tracking, model versioning, evaluation and management of ML workloads across development environments.",
       "Containerized application and ML components using Docker and Kubernetes and automated testing, deployment and version management using Azure DevOps and GitHub-based CI/CD workflows.",
-      "Implemented monitoring and troubleshooting using Azure Monitor, Application Insights and centralized logging, identifying data-quality, API, infrastructure and application failures.",
-      "Developed dimensional datasets and reporting-ready data marts supporting 20+ operational and financial KPIs; optimized T-SQL stored procedures, views and reusable transformations for reliable downstream reporting."
+      "Implemented monitoring and troubleshooting using Azure Monitor, Application Insights and centralized logging, identifying data-quality, API, infrastructure and application failures and improving system uptime by 20% through proactive root-cause analysis.",
+      "Developed dimensional datasets and reporting-ready data marts supporting 20+ operational and financial KPIs; optimized T-SQL stored procedures, views and reusable transformations for reliable downstream reporting, cutting manual reporting effort by 50%."
     ]
   },
   {
