@@ -122,7 +122,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     >
       <head>
         {/* Anti-FOUC: apply data-theme + dark class before first paint so bg never flashes white */}
-        <script dangerouslySetInnerHTML={{ __html: `try{var t=localStorage.getItem('color-theme')||'midnight';document.documentElement.setAttribute('data-theme',t);var d=localStorage.getItem('theme');if(d==='dark'||(d==='system'&&window.matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.classList.add('dark');}}catch(e){}` }} />
+        <script dangerouslySetInnerHTML={{ __html: `try{var t=localStorage.getItem('color-theme')||'midnight';document.documentElement.setAttribute('data-theme',t);var d=localStorage.getItem('theme');if(!d||d==='dark'||(d==='system'&&window.matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.classList.add('dark');}}catch(e){}` }} />
       </head>
       <body className="min-h-full flex flex-col bg-bg text-fg">
         <ThemeProvider>

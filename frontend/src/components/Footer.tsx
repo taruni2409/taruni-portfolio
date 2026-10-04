@@ -116,6 +116,7 @@ export default function Footer() {
             <a href="/feed.xml" target="_blank" rel="noopener noreferrer" className="font-mono text-[11px] tracking-[0.06em] text-fg-muted transition-colors hover:text-fg">RSS</a>
             <a href="/sitemap.xml" target="_blank" rel="noopener noreferrer" className="font-mono text-[11px] tracking-[0.06em] text-fg-muted transition-colors hover:text-fg">Sitemap</a>
             <a href={profile.resume} target="_blank" rel="noopener noreferrer" className="font-mono text-[11px] tracking-[0.06em] text-fg-muted transition-colors hover:text-fg">Résumé</a>
+            <a href="/llms.txt" target="_blank" rel="noopener noreferrer" className="font-mono text-[11px] tracking-[0.06em] text-fg-muted transition-colors hover:text-fg">llms.txt</a>
           </div>
         </div>
       </div>

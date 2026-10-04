@@ -1,7 +1,7 @@
 {
   "name": "Taruni Nallamothu",
   "tagline": "AI/ML Engineer & Data Engineer · Google & Microsoft Certified · Generative AI, RAG & Scalable Data Platforms",
-  "bio": "I build Generative AI, RAG, and data engineering systems that turn raw, messy data into decisions people can act on. At Hansvonlehwalt, I build agentic AI and RAG pipelines on Azure OpenAI for enterprise knowledge retrieval. At Tata Consultancy Services, I engineered data and ML pipelines on Azure Databricks processing 500GB+ of enterprise data daily across 1M+ validated records.",
+  "bio": "I build Generative AI, RAG, and data engineering systems that turn enterprise data into decisions people can trust. At Hansvonlehwalt, I build agentic AI and RAG pipelines on Azure OpenAI for enterprise knowledge retrieval. At Tata Consultancy Services, I engineered data and ML pipelines on Azure Databricks processing 500GB+ of enterprise data daily across 1M+ validated records.",
   "summary": "AI/ML Engineer and Data Engineer with close to three years of industry experience building machine learning, Generative AI, NLP and data solutions using Python, LLMs, RAG, Azure, Databricks and cloud-native engineering. Hands-on experience with agentic and multi-agent AI workflows, semantic search, conversational AI, transformer models, REST APIs, microservices, model serving, MLOps and scalable ETL/ELT pipelines. Experienced with Azure OpenAI, Azure AI Foundry, Azure Machine Learning, MLflow, Docker, Kubernetes, CI/CD, Redis, monitoring and secure enterprise AI patterns, alongside a strong foundation in PySpark, SQL, statistics and predictive modelling.",
   "obsession": "Currently, I'm obsessed with making LLM systems boring in the best way — grounded, observable, and reliable enough to trust in production, not just a demo.",
   "currently": "Generative AI, RAG pipelines, and agentic multi-agent systems that hold up under real-world load.",
@@ -55,8 +55,8 @@
     {
       "value": 90.59,
       "suffix": "%",
-      "label": "Intent Classification F1",
-      "sub": "Fine-tuned DistilBERT, NovaBank"
+      "label": "AI Classification Accuracy",
+      "sub": "Fine-tuned DistilBERT · NovaBank support tickets"
     },
     {
       "value": 1,

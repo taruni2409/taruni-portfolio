@@ -230,7 +230,7 @@ export default function PortfolioHome() {
                 return (
                   <div className="animate-fade-up flex items-center gap-2" style={{ animationDelay: "0ms" }}>
                     <span className={`inline-block w-1.5 h-1.5 rounded-full shrink-0 ${isOpen ? "bg-green-500 animate-pulse" : "bg-zinc-400 dark:bg-zinc-500"}`} />
-                    <span className="text-[11px] font-medium tracking-wide text-fg-faint/80">{chipText}</span>
+                    <span className="text-[11px] font-semibold tracking-wide text-fg-muted">{chipText}</span>
                   </div>
                 );
               })()}
@@ -301,7 +301,7 @@ export default function PortfolioHome() {
                 )}
               </div>
 
-              {/* Utility chips — latest post + install + LLM hint */}
+              {/* Utility chips — latest post + install */}
               <div className="animate-fade-up flex flex-wrap items-center gap-2" style={{ animationDelay: "360ms" }}>
                 {latestPost && (
                   <Link href={`/blog/${latestPost.slug}`} className="group inline-flex items-center gap-2 rounded-sm border border-border/60 dark:border-border-strong bg-surface dark:bg-surface-raised px-3.5 py-1.5 hover:border-border-strong transition-all">
@@ -316,12 +316,6 @@ export default function PortfolioHome() {
                   </Link>
                 )}
                 <span className="inline-flex"><InstallPWA variant="chip" /></span>
-                <a href="/llms.txt" target="_blank" rel="noopener noreferrer" className="group inline-flex items-center gap-1.5 text-fg-faint hover:text-accent transition-colors px-1">
-                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="shrink-0 animate-pulse group-hover:animate-none text-accent">
-                    <path d="M4 17l6-6-6-6"/><path d="M12 19h8"/>
-                  </svg>
-                  <span className="text-[10px] font-semibold uppercase tracking-[0.14em]">Want your LLM to read my work?</span>
-                </a>
               </div>
             </div>
 
