@@ -218,7 +218,7 @@ export default function IntroScreen() {
         <div className="mb-6 flex items-center gap-2.5 opacity-0 animate-[fadeUp_0.6s_ease_0.15s_forwards]">
           <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" aria-hidden />
           <span className="text-[11px] font-bold uppercase tracking-[0.24em] text-fg-faint">
-            {getGreeting()} — Portfolio
+            {getGreeting()} — Welcome
           </span>
         </div>
 
