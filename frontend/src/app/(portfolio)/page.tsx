@@ -4,7 +4,6 @@ import { profile } from "@/data/profile";
 import { projects } from "@/data/projects";
 import { skills } from "@/data/skills";
 import { quotes } from "@/data/quotes";
-import { getAllPosts } from "@/lib/blog";
 import ContactForm from "@/components/ContactForm";
 import ScrollReveal from "@/components/ScrollReveal";
 import HeroName from "@/components/HeroName";
@@ -189,7 +188,6 @@ function findExp(chipName: string) {
 
 export default function PortfolioHome() {
   const featured = projects.filter((p) => p.featured);
-  const latestPost = getAllPosts()[0] ?? null;
   const latestQuote = quotes.find((q) => q.featured) ?? [...quotes].sort((a, b) => b.addedAt.localeCompare(a.addedAt))[0] ?? null;
 
   return (
@@ -301,20 +299,8 @@ export default function PortfolioHome() {
                 )}
               </div>
 
-              {/* Utility chips — latest post + install */}
+              {/* Utility chips — install */}
               <div className="animate-fade-up flex flex-wrap items-center gap-2" style={{ animationDelay: "360ms" }}>
-                {latestPost && (
-                  <Link href={`/blog/${latestPost.slug}`} className="group inline-flex items-center gap-2 rounded-sm border border-border/60 dark:border-border-strong bg-surface dark:bg-surface-raised px-3.5 py-1.5 hover:border-border-strong transition-all">
-                    <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-fg-faint shrink-0">Latest</span>
-                    <span className="w-px h-3 bg-border shrink-0" />
-                    <span className="text-[11px] text-fg-subtle group-hover:text-accent transition-colors line-clamp-1 max-w-[55vw] sm:max-w-xs">
-                      {latestPost.title}
-                    </span>
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-fg-faint group-hover:text-accent shrink-0 transition-colors">
-                      <path d="M5 12h14M12 5l7 7-7 7"/>
-                    </svg>
-                  </Link>
-                )}
                 <span className="inline-flex"><InstallPWA variant="chip" /></span>
               </div>
             </div>

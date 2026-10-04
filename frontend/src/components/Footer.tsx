@@ -6,6 +6,12 @@ import { profile } from "@/data/profile";
 import LiquidWave from "@/components/LiquidWave";
 import InstallPWA from "@/components/InstallPWA";
 import { footerColumns as COLUMNS } from "@/lib/site-nav";
+import blogPosts from "@/data/knowledge/blog.json";
+
+type BlogPostMeta = { slug: string; title: string; date?: string };
+const latestPost = [...(blogPosts as BlogPostMeta[])].sort((a, b) =>
+  (b.date ?? "").localeCompare(a.date ?? "")
+)[0] ?? null;
 
 function IconLink({ href, label, children }: { href: string; label: string; children: React.ReactNode }) {
   return (
@@ -113,6 +119,11 @@ export default function Footer() {
             </span>
           </div>
           <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+            {latestPost && (
+              <Link href={`/blog/${latestPost.slug}`} className="font-mono text-[11px] tracking-[0.06em] text-fg-muted transition-colors hover:text-fg line-clamp-1 max-w-[70vw] sm:max-w-[220px]">
+                Latest: {latestPost.title}
+              </Link>
+            )}
             <a href="/feed.xml" target="_blank" rel="noopener noreferrer" className="font-mono text-[11px] tracking-[0.06em] text-fg-muted transition-colors hover:text-fg">RSS</a>
             <a href="/sitemap.xml" target="_blank" rel="noopener noreferrer" className="font-mono text-[11px] tracking-[0.06em] text-fg-muted transition-colors hover:text-fg">Sitemap</a>
             <a href={profile.resume} target="_blank" rel="noopener noreferrer" className="font-mono text-[11px] tracking-[0.06em] text-fg-muted transition-colors hover:text-fg">Résumé</a>
