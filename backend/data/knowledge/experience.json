@@ -29,8 +29,8 @@
     "bullets": [
       "Engineered scalable data and ML pipelines using Azure Databricks, PySpark, Python and SQL and Azure Data Factory, processing 500GB+ of enterprise data daily from multiple source systems into curated analytics layers, improving pipeline execution efficiency by 35% and reducing execution time by 40%.",
       "Built reusable cleansing and validation frameworks across 1M+ records, enforcing schema, completeness, duplicate and business-rule checks before downstream warehouse and analytics consumption, achieving 99.9% data accuracy.",
-      "Created PySpark/Python feature-engineering pipelines generating 100+ model-ready variables for classification, forecasting, anomaly-detection and predictive analytics workloads.",
-      "Built and evaluated machine learning and NLP solutions using Python, Scikit-learn and transformer-based approaches for classification, predictive analytics and enterprise text-processing use cases.",
+      "Created PySpark/Python feature-engineering pipelines generating 100+ model-ready variables for classification, forecasting, anomaly-detection and predictive analytics workloads, raising anomaly-detection accuracy to 95% and improving a classification model's AUC from 0.71 to 0.86.",
+      "Built and evaluated machine learning and NLP solutions using Python, Scikit-learn and transformer-based approaches for classification, predictive analytics and enterprise text-processing use cases, improving forecasting accuracy from 78% to 92% through refined feature engineering and model tuning.",
       "Developed semantic-search and knowledge-retrieval workflows using embeddings, transformer-based NLP and vector-search techniques for large enterprise document collections.",
       "Developed Python REST APIs and microservices to expose data and ML functionality to downstream enterprise applications and supported model-serving and inference workflows.",
       "Used Azure Machine Learning and MLflow for experiment tracking, model versioning, evaluation and management of ML workloads across development environments.",
