@@ -7,6 +7,7 @@ interface SourceLink { label: string; url: string }
 interface Project {
   title: string;
   description: string;
+  details?: string[];
   tags: string[];
   featured?: boolean;
   award?: string;
@@ -30,6 +31,15 @@ function onTiltLeave(e: React.MouseEvent<HTMLDivElement>) {
 export default function ProjectsGrid({ projects }: { projects: Project[] }) {
   const [query, setQuery] = useState("");
   const [activeTag, setActiveTag] = useState<string | null>(null);
+  const [expanded, setExpanded] = useState<Set<number>>(new Set());
+
+  function toggleExpanded(i: number) {
+    setExpanded((prev) => {
+      const next = new Set(prev);
+      if (next.has(i)) next.delete(i); else next.add(i);
+      return next;
+    });
+  }
 
   const q = query.toLowerCase().trim();
   const allTags = Array.from(new Set(projects.flatMap((p) => p.tags))).sort();
@@ -136,14 +146,18 @@ export default function ProjectsGrid({ projects }: { projects: Project[] }) {
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {filtered.map((p, i) => {
             const isAward = Boolean(p.award);
+            const hasDetails = Boolean(p.details && p.details.length > 0);
+            const isExpanded = expanded.has(i);
 
             return (
               <ScrollReveal key={i} delay={Math.min((i % 3) * 80, 160)} className="flex">
                 <div
-                  className={`group relative flex flex-col flex-1 rounded-2xl border border-border bg-surface p-5 sm:p-6 hover:border-border-strong transition-all overflow-hidden card-lift ${p.liveUrl ? "cursor-pointer" : ""}`}
+                  className={`group relative flex flex-col flex-1 rounded-2xl border border-border bg-surface p-5 sm:p-6 hover:border-border-strong transition-all overflow-hidden card-lift ${hasDetails ? "cursor-pointer" : ""}`}
                   onMouseMove={onTiltMove}
                   onMouseLeave={onTiltLeave}
-                  onClick={() => { if (p.liveUrl) window.open(p.liveUrl, "_blank", "noopener,noreferrer"); }}
+                  onClick={() => { if (hasDetails) toggleExpanded(i); }}
+                  role={hasDetails ? "button" : undefined}
+                  aria-expanded={hasDetails ? isExpanded : undefined}
                   style={{ transition: "transform 0.2s cubic-bezier(0.16,1,0.3,1), border-color 0.2s, box-shadow 0.2s", willChange: "transform" }}
                 >
                   {/* Hover sweep */}
@@ -156,8 +170,24 @@ export default function ProjectsGrid({ projects }: { projects: Project[] }) {
                     <path d="M1 9 L9 9 L9 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
 
+                  {/* Tap-to-expand affordance — right edge, vertically centred */}
+                  {hasDetails && (
+                    <div
+                      className={`absolute right-2.5 top-1/2 -translate-y-1/2 flex items-center justify-center w-6 h-6 rounded-full border transition-all duration-200 pointer-events-none ${
+                        isExpanded
+                          ? "border-accent/50 bg-accent/10 text-accent rotate-180"
+                          : "border-border text-fg-faint group-hover:border-accent/40 group-hover:text-accent group-hover:scale-110"
+                      }`}
+                      aria-hidden
+                    >
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M6 9l6 6 6-6" />
+                      </svg>
+                    </div>
+                  )}
+
                   {/* Title + badges */}
-                  <div className="flex items-start justify-between gap-2 mb-3">
+                  <div className="flex items-start justify-between gap-2 mb-3 pr-6">
                     <h2 className="font-bold text-fg text-sm leading-snug group-hover:text-accent transition-colors">
                       {p.title}
                     </h2>
@@ -176,6 +206,22 @@ export default function ProjectsGrid({ projects }: { projects: Project[] }) {
                   </div>
 
                   <p className="text-xs leading-5 text-fg-subtle flex-1 mb-4">{p.description}</p>
+
+                  {/* Expanded details — smooth grid-rows reveal, no layout jump */}
+                  {hasDetails && (
+                    <div
+                      className="grid transition-[grid-template-rows] duration-300 ease-out mb-4"
+                      style={{ gridTemplateRows: isExpanded ? "1fr" : "0fr" }}
+                    >
+                      <div className="overflow-hidden">
+                        <ul className="space-y-1.5 border-l-2 border-accent/30 pl-3 mb-1">
+                          {p.details!.map((d, di) => (
+                            <li key={di} className="text-[11px] leading-5 text-fg-subtle">{d}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  )}
 
                   {/* Tag chips */}
                   <div className="flex flex-wrap gap-1.5 mb-4">

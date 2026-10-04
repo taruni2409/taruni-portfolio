@@ -2,6 +2,11 @@
   {
     "title": "Intelligent Medical Text Analyser",
     "description": "NLP pipeline extracting clinical insights from medical text datasets, with models for automated text classification, summarisation, and knowledge extraction to improve information retrieval efficiency from clinical narratives.",
+    "details": [
+      "Built an NLTK preprocessing pipeline (tokenization, stop-word handling, lemmatization) that preserves medically meaningful terms while turning clinical text into model-ready features.",
+      "Engineered TF-IDF features and trained SVM and Random Forest classifiers for medical-text classification — both landed within a point of each other on weighted precision/recall/F1 (roughly 0.94–0.97), so the simpler, faster model was the practical choice.",
+      "Implemented TextRank-based extractive summarisation with configurable compression and model-confidence visualisations, wrapped in a Streamlit interface for predicting patient length-of-stay categories."
+    ],
     "tags": [
       "Python",
       "NLTK",
@@ -23,6 +28,12 @@
   {
     "title": "NovaBank – AI Customer Support Intelligence",
     "description": "End-to-end customer support intelligence platform built for NovaBank, a retail-banking case study, combining a DistilBERT intent classifier fine-tuned to 90.59% F1, an XGBoost SLA-breach predictor achieving 77.98% recall with SHAP explainability, and a Gemini-powered RAG pipeline over ChromaDB for grounded resolution recommendations.",
+    "details": [
+      "Selected BANKING77 (10,003 train / 3,080 test examples, 77 intents) over a noisier initial support-ticket dataset after a baseline classifier scored barely above random chance on it — a labelling-quality problem, not a modelling one.",
+      "DistilBERT (5 epochs) beat a tuned TF-IDF + Logistic Regression baseline 90.59% vs 85.88% Macro F1; the 3-epoch run actually lost to the classical baseline, a clear undertraining signal before the extra epochs closed the gap.",
+      "XGBoost SLA-breach predictor tuned to a 0.25 decision threshold, trading precision for the 70%+ recall the business actually needed — a missed breach costs more than an extra review alert.",
+      "RAG layer hit 100% Hit@3 retrieval and 100% out-of-domain rejection on the evaluation set, with a confidence threshold that makes it explicitly say \"insufficient context\" rather than improvise."
+    ],
     "tags": [
       "Python",
       "PyTorch",
@@ -45,6 +56,11 @@
   {
     "title": "VolatilityIQ – Cryptocurrency Volatility Forecasting",
     "description": "Investigated whether cryptocurrency market volatility can be predicted by combining historical price-based indicators with sentiment signals from news and social media across ten major cryptocurrencies, comparing an econometric baseline against machine learning and deep learning approaches (GARCH(1,1), Random Forest, XGBoost, and LSTM) under a time-aware train/test split to avoid look-ahead bias. Completed as the MSc Data Science final project at the University of Hertfordshire.",
+    "details": [
+      "Engineered sentiment-interaction features — combining sentiment polarity with social-mention volume — rather than using raw sentiment scores alone, on the theory that a mildly negative score during a chatter spike means something different than the same score on a quiet day.",
+      "Compared all four models under one identical protocol: same features, same per-cryptocurrency chronological split, same MAE/RMSE/R² metrics — so the comparison is genuinely fair rather than each model scored on its own favourable slice.",
+      "GARCH acted as the econometric baseline (returns only, no sentiment); Random Forest and XGBoost got the full feature set; LSTM tested whether a sequence model finds temporal structure the tree models, which treat each row independently, would miss."
+    ],
     "tags": [
       "Python",
       "GARCH",
@@ -67,6 +83,11 @@
   {
     "title": "EcoCast – Hybrid GDP Forecasting System",
     "description": "Hybrid forecasting system combining ARIMA models with machine learning algorithms to predict GDP trends, processing macroeconomic datasets with feature engineering to improve forecasting accuracy.",
+    "details": [
+      "Merged seven World Bank indicators (GDP, CPI, energy use, exports, government spending, oil rents, unemployment) across the top 20 global economies into one clean country-year panel.",
+      "Random Forest handled the multi-variate prediction (GDP, CPI, unemployment, exports) and consistently won on stable economies like France, Japan, and the Netherlands, but struggled with scale on highly volatile economies like China and the US.",
+      "ARIMA was reserved for single-variable, trend-dominated series (energy use, oil rents) where it outperformed — the two models were deliberately matched to the structure of what they were forecasting rather than forced to compete head-to-head on everything."
+    ],
     "tags": [
       "Python",
       "Pandas",
@@ -76,39 +97,74 @@
       "Statsmodels"
     ],
     "featured": false,
-    "sourceLinks": [],
+    "sourceLinks": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/taruni2409/EcoCast-ML-ARIMA-Based-GDP-Forecasting"
+      }
+    ],
     "liveUrl": "",
     "note": ""
   },
   {
-    "title": "Traffic Flow Prediction System Using LSTM",
-    "description": "LSTM deep learning model forecasting hourly traffic volume from historical transportation datasets, with engineered weather features to improve predictive performance.",
+    "title": "Traffic Flow Prediction Using Attention-Based BiLSTM",
+    "description": "Forecasted hourly traffic volume from the Metro Interstate Traffic Volume dataset, engineering weather and holiday features and benchmarking six architectures — Dense, CNN, LSTM, and three attention-based variants — to find the best predictor of traffic eight hours ahead from a six-hour input window.",
+    "details": [
+      "Cleaned and feature-engineered weather (temperature, rain, snow, cloud cover), holiday, and time-of-day signals from raw hourly traffic + weather data, handling missing values and clear outliers (e.g. a single extreme rain reading) before modelling.",
+      "Benchmarked six architectures on identical windowed input/output splits: Dense, Conv (CNN), plain LSTM, AttentionLSTM, Improved Attention BiLSTM, and Enhanced Attention BiLSTM.",
+      "The attention-based BiLSTM variants won clearly — Enhanced Attention BiLSTM had the lowest validation MAE of the six, while plain LSTM was actually among the weaker performers and showed the widest train/validation gap."
+    ],
     "tags": [
       "Python",
       "TensorFlow",
-      "Keras"
+      "Keras",
+      "LSTM",
+      "Attention",
+      "Time-Series Forecasting"
     ],
     "featured": false,
-    "sourceLinks": [],
+    "sourceLinks": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/taruni2409/Traffic-Flow-Prediction"
+      }
+    ],
     "liveUrl": "",
     "note": ""
   },
   {
     "title": "LeafCare – Plant Disease Detection Using CNN",
     "description": "Convolutional neural network detecting plant diseases from leaf images, trained on labelled plant pathology datasets to enable automated agricultural diagnostics.",
+    "details": [
+      "Trained on ~4,500 labelled leaf images (2,278 healthy / 2,225 diseased) spanning mango, guava, lemon, basil, pomegranate, poplar, and other plant types, sourced from Kaggle and Mendeley datasets.",
+      "Three-layer CNN (32/64/128 filters, ReLU + MaxPooling) with a dropout-regularised dense head and sigmoid output for binary healthy-vs-diseased classification, trained with rotation/zoom/shear/flip augmentation over 50 epochs.",
+      "Validated generalisation on random leaf images pulled from outside the training dataset, not just the held-out test split."
+    ],
     "tags": [
       "Python",
       "TensorFlow",
-      "Azure Machine Learning"
+      "OpenCV",
+      "Scikit-learn",
+      "Computer Vision"
     ],
     "featured": false,
-    "sourceLinks": [],
+    "sourceLinks": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/taruni2409/LeafCare-Plant-Leaf-Health-Classification-Using-CNN"
+      }
+    ],
     "liveUrl": "",
     "note": ""
   },
   {
     "title": "ThreatLens – Multi-Class Cybersecurity Document Classification",
     "description": "Fine-tuned a RoBERTa transformer to classify sensitive documents into seven security categories (credentials, PII, financial, medical, confidential, malicious, safe), reaching 98.35% accuracy and 98.37% macro F1 on a balanced 9,100-document held-out evaluation — outperforming a TF-IDF + Logistic Regression baseline (98.02% accuracy).",
+    "details": [
+      "Balanced the dataset to exactly 1,300 documents per category before training anything, since the raw data skewed heavily toward the \"malicious\" class.",
+      "RoBERTa's edge over the classical baseline was real but modest (98.37% vs 98.02% Macro F1) — a strong baseline here is a sign the categories are genuinely well-separated, not a weak strawman to beat.",
+      "Read every one of the model's ~15 test errors individually rather than just reporting the headline number — confusion clustered almost entirely between \"confidential\" and \"safe\", exactly the ambiguous boundary a human would expect to be hardest."
+    ],
     "tags": [
       "Python",
       "RoBERTa",
@@ -122,6 +178,57 @@
       {
         "label": "GitHub",
         "url": "https://github.com/taruni2409/ThreatLens-NLP-Classification"
+      }
+    ],
+    "liveUrl": "",
+    "note": ""
+  },
+  {
+    "title": "Oil Price Time Series Forecasting — ARIMA vs Prophet",
+    "description": "Time-series modelling of daily oil price data comparing ARIMA against Facebook Prophet, with stationarity testing, ARIMA parameter tuning via grid search, residual diagnostics, and a 24-month forecast horizon.",
+    "details": [
+      "Ran stationarity testing (ADF) on the raw series and after first-differencing, then grid-searched ARIMA orders by AIC — (4, 2, 6) came out best.",
+      "Validated residuals with Ljung-Box (autocorrelation) and Jarque-Bera (normality) diagnostics rather than trusting the fit blindly.",
+      "ARIMA beat Prophet on every held-out test metric: 15.13% MAPE vs 19.43%, 24.30 vs 31.77 RMSE, 19.33 vs 24.72 MAE — Prophet's strength (automatic seasonality/holiday handling) mattered less here than ARIMA's tighter fit to oil price's own autocorrelation structure."
+    ],
+    "tags": [
+      "Python",
+      "ARIMA",
+      "Prophet",
+      "Statsmodels",
+      "Pandas",
+      "NumPy"
+    ],
+    "featured": false,
+    "sourceLinks": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/taruni2409/oil-price-time-series"
+      }
+    ],
+    "liveUrl": "",
+    "note": ""
+  },
+  {
+    "title": "ADE20K Semantic Segmentation with U-Net",
+    "description": "A lightweight U-Net trained for 5-class semantic segmentation (4 foreground classes + background) on an ADE20K subset, decoding COCO-style RLE masks and benchmarked against a background-only baseline to show why pixel accuracy alone is a misleading metric for imbalanced segmentation.",
+    "details": [
+      "Decoded compressed COCO RLE annotations into pixel masks and handled severe class imbalance (most pixels in any scene are background) before training.",
+      "A trivial \"always predict background\" baseline scores 93.1% pixel accuracy — which sounds great until you check mean IoU excluding background, which is exactly 0%, because it never once predicts a real foreground class.",
+      "The trained Small U-Net scores slightly lower on raw pixel accuracy (91.5%) but achieves a real 12.6% mean IoU excluding background — the honest metric that actually reflects whether the model learned to segment anything, not just predict the majority class."
+    ],
+    "tags": [
+      "Python",
+      "PyTorch",
+      "U-Net",
+      "Semantic Segmentation",
+      "Computer Vision"
+    ],
+    "featured": false,
+    "sourceLinks": [
+      {
+        "label": "GitHub",
+        "url": "https://github.com/taruni2409/ADE20K-Semantic-Segmentation"
       }
     ],
     "liveUrl": "",

@@ -8,6 +8,7 @@ export interface SourceLink {
 export interface Project {
   title: string;
   description: string;
+  details?: string[];
   tags: string[];
   featured: boolean;
   award?: string;
