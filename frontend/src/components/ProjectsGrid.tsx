@@ -175,13 +175,16 @@ export default function ProjectsGrid({ projects }: { projects: Project[] }) {
                     <div
                       className={`absolute right-2.5 top-1/2 -translate-y-1/2 flex items-center justify-center w-6 h-6 rounded-full border transition-all duration-200 pointer-events-none ${
                         isExpanded
-                          ? "border-accent/50 bg-accent/10 text-accent rotate-180"
+                          ? "border-accent/50 bg-accent/10 text-accent scale-90"
                           : "border-border text-fg-faint group-hover:border-accent/40 group-hover:text-accent group-hover:scale-110"
                       }`}
                       aria-hidden
                     >
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M6 9l6 6 6-6" />
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M9 11.24V7.5a1.5 1.5 0 0 1 3 0v3.74" />
+                        <path d="M12 7.5v-2a1.5 1.5 0 0 1 3 0v6" />
+                        <path d="M15 9v-1a1.5 1.5 0 0 1 3 0v6" />
+                        <path d="M18 14v-2a1.5 1.5 0 0 1 3 0v4a7 7 0 0 1-7 7h-1.5a7 7 0 0 1-6.1-3.6l-2.3-4.1a1.5 1.5 0 1 1 2.6-1.5L8 14" />
                       </svg>
                     </div>
                   )}
