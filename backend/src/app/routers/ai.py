@@ -34,7 +34,7 @@ ABOUT TARUNI (core facts — always use these even if context is empty):
 Taruni Nallamothu is an AI/ML Engineer & Data Engineer based in London, UK, with over three years
 of experience building Generative AI, RAG, agentic AI, and data engineering systems.
 Key highlights:
-- Google Certified: Associate Cloud Engineer | Microsoft Certified: Azure Data Scientist Associate
+- Google Certified: Associate Cloud Engineer | Microsoft Certified: Azure Data Scientist Associate | AWS Certified: Machine Learning Engineer – Associate
 - At Hansvonlehwalt: builds RAG pipelines, agentic multi-agent AI workflows, and conversational AI using Azure OpenAI and Azure AI Foundry
 - At Tata Consultancy Services: engineered data and ML pipelines on Azure Databricks processing 500GB+ of enterprise data daily across 1M+ validated records
 - Built NovaBank, an AI customer support intelligence platform (retail-banking case study): fine-tuned a DistilBERT intent classifier to 90.59% F1 and an XGBoost SLA-breach predictor to 77.98% recall, with a Gemini-powered RAG pipeline over ChromaDB
@@ -48,7 +48,7 @@ RESPONSE RULES:
 - Refer to Taruni in third person ("She", "Taruni") — you represent her, you are not her
 - Cite exact numbers and metrics whenever available
 - For greetings ("hi", "hello", "hey", "howdy", "good morning", etc.) respond warmly, introduce yourself as Pumpkin and offer 2–3 things the visitor can ask about Taruni (experience, projects, skills)
-- For broad intro questions ("who is Taruni", "tell me about her"), lead with the Google/Microsoft certifications + Generative AI/RAG work at Hansvonlehwalt + data engineering at TCS
+- For broad intro questions ("who is Taruni", "tell me about her"), lead with the Google/Microsoft/AWS certifications + Generative AI/RAG work at Hansvonlehwalt + data engineering at TCS
 - Keep responses concise: 2–3 sentences for simple questions, structured paragraphs for detailed ones
 - For questions completely unrelated to Taruni's professional life, say: "That's outside what I know about Taruni — feel free to reach her directly at taruninallamothu24@gmail.com"
 - Do not fabricate specific facts (numbers, dates, company names) not present in context or the ABOUT section
@@ -137,7 +137,7 @@ _HYDE_PROMPT = (
 # improving precision. Skip it for them; reserve HyDE for genuinely vague queries.
 _HYDE_SKIP_KEYWORDS = (
     "experience", "work", "job", "role", "company", "tcs", "shell", "hertfordshire", "intern",
-    "project", "built", "build", "ecocast", "leafcare", "certif", "google", "microsoft",
+    "project", "built", "build", "ecocast", "leafcare", "certif", "google", "microsoft", "aws",
     "skill", "stack", "tech", "language", "framework", "python", "sql", "azure", "gcp",
     "education", "degree", "university", "gpa", "master",
     "contact", "email", "reach", "hire", "linkedin", "resume", "cv",
@@ -214,7 +214,7 @@ def _build_rag_queries(req: ChatRequest) -> list[str]:
     elif any(kw in stripped for kw in ["educat", "degree", "study", "university", "hertfordshire", "school", "master"]):
         queries.append("education degree University of Hertfordshire V.R Siddhartha Engineering College")
     elif any(kw in stripped for kw in ["award", "win", "certif", "achiev", "special", "stand out", "impress"]):
-        queries.append("Google Microsoft certification cloud engineer data scientist achievement strengths")
+        queries.append("Google Microsoft AWS certification cloud engineer data scientist machine learning achievement strengths")
     elif any(kw in stripped for kw in ["contact", "email", "reach", "hire", "linkedin", "resume", "cv"]):
         queries.append("contact email LinkedIn GitHub resume CV download")
     elif any(kw in stripped for kw in ["quote", "saying", "wisdom", "words", "philosophy", "live by"]):
@@ -447,7 +447,7 @@ class ChatRequest(BaseModel):
 _PERSONA_GUIDANCE = {
     "recruiter": (
         "The visitor is a RECRUITER or hiring manager. Lead with impact, outcomes, and fit: "
-        "availability, target roles, standout achievements (Google/Microsoft cloud certifications, "
+        "availability, target roles, standout achievements (Google/Microsoft/AWS cloud certifications, "
         "90.59% F1 intent classifier and 77.98% recall SLA-breach predictor on NovaBank, "
         "500GB+ daily ETL at TCS), and how Taruni works with teams. Keep it crisp and "
         "results-focused, quantify wherever possible, and proactively surface availability and how to reach her."

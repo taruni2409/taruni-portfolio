@@ -74,7 +74,13 @@
       "MLflow",
       "Azure Data Factory",
       "Synapse Analytics",
-      "Azure SQL"
+      "Azure SQL",
+      "Amazon SageMaker",
+      "AWS Lambda",
+      "Amazon S3",
+      "AWS Glue",
+      "AWS IAM",
+      "Amazon CloudWatch"
     ]
   },
   {
@@ -128,7 +134,8 @@
     "category": "Certifications",
     "items": [
       "Google Certified: Associate Cloud Engineer",
-      "Microsoft Certified: Azure Data Scientist Associate"
+      "Microsoft Certified: Azure Data Scientist Associate",
+      "AWS Certified: Machine Learning Engineer – Associate"
     ]
   }
 ]

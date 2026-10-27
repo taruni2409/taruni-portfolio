@@ -25,14 +25,14 @@ import { experience } from "@/data/experience";
 export const metadata = {
   title: "Taruni Nallamothu — AI/ML Engineer & Data Engineer",
   description:
-    "AI/ML Engineer & Data Engineer specializing in Generative AI, RAG, agentic AI systems, and scalable data pipelines on Azure. Google & Microsoft Certified. Previously at Tata Consultancy Services.",
+    "AI/ML Engineer & Data Engineer specializing in Generative AI, RAG, agentic AI systems, and scalable data pipelines on Azure. Google, Microsoft & AWS Certified. Previously at Tata Consultancy Services.",
   alternates: { canonical: "https://taruni-portfolio.vercel.app/" },
   openGraph: {
     type: "website",
     url: "https://taruni-portfolio.vercel.app/",
     title: "Taruni Nallamothu — AI/ML Engineer & Data Engineer",
     description:
-      "AI/ML Engineer & Data Engineer specializing in Generative AI, RAG, agentic AI systems, and scalable data pipelines on Azure. Google & Microsoft Certified.",
+      "AI/ML Engineer & Data Engineer specializing in Generative AI, RAG, agentic AI systems, and scalable data pipelines on Azure. Google, Microsoft & AWS Certified.",
   },
 };
 
@@ -43,7 +43,7 @@ const jsonLd = {
   url: "https://taruni-portfolio.vercel.app",
   jobTitle: "AI/ML Engineer & Data Engineer",
   description:
-    "AI/ML Engineer & Data Engineer specializing in Generative AI, RAG, agentic AI systems, and scalable data pipelines on Azure. Google & Microsoft Certified.",
+    "AI/ML Engineer & Data Engineer specializing in Generative AI, RAG, agentic AI systems, and scalable data pipelines on Azure. Google, Microsoft & AWS Certified.",
   email: "taruninallamothu24@gmail.com",
   sameAs: [
     "https://www.linkedin.com/in/taruninallamothu24/",

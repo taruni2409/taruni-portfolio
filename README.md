@@ -684,6 +684,6 @@ The only action required for any update — portfolio data, new blog post, or co
 
 ---
 
-Built by [Taruni Nallamothu](https://www.linkedin.com/in/taruninallamothu24/) — MSc Data Science, University of Hertfordshire · Google & Microsoft Certified · formerly Tata Consultancy Services.
+Built by [Taruni Nallamothu](https://www.linkedin.com/in/taruninallamothu24/) — MSc Data Science, University of Hertfordshire · Google, Microsoft & AWS Certified · formerly Tata Consultancy Services.
 
 → [GitHub](https://github.com/taruni2409) · [LinkedIn](https://www.linkedin.com/in/taruninallamothu24/)

@@ -50,7 +50,7 @@ const inter = Inter({
 const SITE_URL = "https://taruni-portfolio.vercel.app";
 const SITE_TITLE = "Taruni Nallamothu — AI/ML Engineer & Data Engineer";
 const SITE_DESC =
-  "AI/ML Engineer & Data Engineer specializing in Generative AI, RAG, agentic AI systems, and scalable data pipelines on Azure. Google & Microsoft Certified.";
+  "AI/ML Engineer & Data Engineer specializing in Generative AI, RAG, agentic AI systems, and scalable data pipelines on Azure. Google, Microsoft & AWS Certified.";
 const OG_IMAGE = `${SITE_URL}/og-image.png`;
 
 export const metadata: Metadata = {
