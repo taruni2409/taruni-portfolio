@@ -1050,7 +1050,7 @@ figcaption[data-rehype-pretty-code-title] + pre {
 
   /* Show contact info block at top */
   body::before {
-    content: "Taruni Nallamothu  ·  taruninallamothu24@gmail.com  ·  linkedin.com/in/taruninallamothu24  ·  github.com/taruni2409";
+    content: "Taruni Nallamothu  ·  taruninallamothu2409@gmail.com  ·  linkedin.com/in/taruninallamothu24  ·  github.com/taruni2409";
     display: block;
     font-size: 9pt;
     color: #555;

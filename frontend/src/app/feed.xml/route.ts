@@ -7,7 +7,7 @@ const SITE_URL   = "https://taruni-portfolio.vercel.app";
 const SITE_TITLE = "Taruni Nallamothu — Blog";
 const SITE_DESC  = "Notes on data engineering, machine learning, and building analytics systems.";
 const AUTHOR     = "Taruni Nallamothu";
-const AUTHOR_EMAIL = "taruninallamothu24@gmail.com";
+const AUTHOR_EMAIL = "taruninallamothu2409@gmail.com";
 const API        = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
 
 function escapeXml(str: string) {

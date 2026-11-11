@@ -59,7 +59,7 @@ export default function LeadCaptureCard({ messages, persona }: LeadCaptureCardPr
       if (res.ok) {
         const data = await res.json();
         if (!data.email_sent) {
-          setError("Your info was saved but the email couldn't be sent right now. Please email Taruni directly at taruninallamothu24@gmail.com.");
+          setError("Your info was saved but the email couldn't be sent right now. Please email Taruni directly at taruninallamothu2409@gmail.com.");
         } else {
           setSubmitted(true);
         }

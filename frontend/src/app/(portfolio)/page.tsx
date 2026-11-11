@@ -44,7 +44,7 @@ const jsonLd = {
   jobTitle: "AI/ML Engineer & Data Engineer",
   description:
     "AI/ML Engineer & Data Engineer specializing in Generative AI, RAG, agentic AI systems, and scalable data pipelines on Azure. Google, Microsoft & AWS Certified.",
-  email: "taruninallamothu24@gmail.com",
+  email: "taruninallamothu2409@gmail.com",
   sameAs: [
     "https://www.linkedin.com/in/taruninallamothu24/",
     "https://github.com/taruni2409",

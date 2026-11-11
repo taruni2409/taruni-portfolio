@@ -37,7 +37,7 @@ class Settings(BaseSettings):
     google_oauth_client_secret: str = ""
 
     # Gmail digest recipient (Taruni's email for weekly digest + lead-capture intros)
-    gmail_digest_recipient: str = "venkatphanindra5@gmail.com"
+    gmail_digest_recipient: str = "taruninallamothu2409@gmail.com"
 
     # Google Calendar settings
     calendar_id: str = "primary"
