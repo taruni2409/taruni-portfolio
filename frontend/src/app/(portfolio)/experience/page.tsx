@@ -5,7 +5,7 @@ import ScrollReveal from "@/components/ScrollReveal";
 export const metadata = {
   title: "Experience",
   description:
-    "Close to three years building Generative AI, RAG, and data engineering systems — Hansvonlehwalt, Tata Consultancy Services. From 500GB+ daily enterprise pipelines to agentic AI on Azure OpenAI.",
+    "Over five years across IT consulting, data engineering, and AI/ML — Hansvonlehwalt, Tata Consultancy Services, APCRDA. From 500GB+ daily enterprise pipelines to agentic AI on Azure OpenAI.",
   alternates: { canonical: "https://taruni-portfolio.vercel.app/experience" },
   openGraph: {
     type: "website" as const,

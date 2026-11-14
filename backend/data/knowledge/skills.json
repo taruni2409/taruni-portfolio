@@ -3,12 +3,19 @@
     "category": "Programming & Full-Stack Development",
     "items": [
       "Python",
+      "SQL / T-SQL",
+      "PySpark",
+      "Pandas",
+      "NumPy",
+      "SciPy",
+      "Statsmodels",
       "FastAPI",
       "Flask",
       "REST APIs",
       "Microservices Architecture",
-      "SQL / T-SQL",
-      "PySpark",
+      "Model Serving",
+      "Pytest",
+      "Unit Testing",
       "Next.js",
       "React",
       "TypeScript",
@@ -41,8 +48,30 @@
     ]
   },
   {
+    "category": "GenAI Agents & Safety",
+    "items": [
+      "LangChain",
+      "LangGraph",
+      "Model Context Protocol (MCP)",
+      "Agent Orchestration",
+      "Tool / Function Calling",
+      "Vector Databases",
+      "ChromaDB",
+      "Conversational Memory / State",
+      "RAG Evaluation",
+      "Retrieval Metrics",
+      "Faithfulness",
+      "Hallucination Detection",
+      "Prompt Injection Defenses",
+      "LLM Guardrails",
+      "Responsible AI",
+      "Explainability"
+    ]
+  },
+  {
     "category": "Machine Learning & Forecasting",
     "items": [
+      "Deep Learning",
       "PyTorch",
       "TensorFlow",
       "Keras",
@@ -54,61 +83,105 @@
       "SHAP",
       "GARCH",
       "ARIMA",
-      "Statsmodels",
       "LSTM",
       "Convolutional Neural Networks (CNN)",
       "Time-Series Forecasting",
-      "Sentiment Analysis",
-      "Pandas",
-      "NumPy"
+      "Sentiment Analysis"
     ]
   },
   {
-    "category": "Cloud & AI Platforms",
+    "category": "Data Science & Statistics",
+    "items": [
+      "Statistical Modelling",
+      "Classification",
+      "Feature Engineering",
+      "Feature Stores",
+      "Hyperparameter Tuning",
+      "Cross-Validation",
+      "A/B Testing",
+      "Hypothesis Testing",
+      "Statistical Inference",
+      "Experiment Design",
+      "Causal Inference",
+      "ROC-AUC",
+      "F1",
+      "Precision / Recall"
+    ]
+  },
+  {
+    "category": "Azure Cloud & AI",
     "items": [
       "Azure OpenAI",
       "Azure AI Foundry",
       "Azure Machine Learning",
       "Azure AI / Cognitive Search",
       "Azure Databricks",
-      "MLflow",
       "Azure Data Factory",
+      "ADLS Gen2",
       "Synapse Analytics",
       "Azure SQL",
-      "Amazon SageMaker",
-      "AWS Lambda",
-      "Amazon S3",
-      "AWS Glue",
-      "AWS IAM",
-      "Amazon CloudWatch"
+      "Microsoft Fabric"
     ]
   },
   {
-    "category": "MLOps & Infrastructure",
+    "category": "AWS & Google Cloud",
     "items": [
+      "Amazon SageMaker",
+      "Amazon Bedrock",
+      "AWS Lambda",
+      "Amazon S3",
+      "AWS Glue",
+      "Amazon Athena",
+      "Amazon Kinesis",
+      "Amazon ECR",
+      "Amazon EKS",
+      "Amazon CloudWatch",
+      "AWS IAM",
+      "AWS CodePipeline",
+      "Google Cloud Platform (GCP)"
+    ]
+  },
+  {
+    "category": "MLOps & LLMOps",
+    "items": [
+      "MLflow",
       "Docker",
       "Docker Compose",
       "Kubernetes",
-      "Azure DevOps",
+      "Git",
+      "GitHub",
       "GitHub Actions",
+      "Azure DevOps",
       "CI/CD",
-      "Model Serving",
       "Inference Pipelines",
+      "Model Registry",
       "Model Versioning",
+      "Model Monitoring",
+      "Model Drift",
+      "Data Drift",
+      "Automated Model Testing",
+      "Quality Gates",
+      "Deployment Strategies",
+      "Model Rollback",
+      "Terraform",
+      "CloudFormation",
+      "Infrastructure as Code",
       "Redis",
       "Kafka",
       "Streamlit"
     ]
   },
   {
-    "category": "Monitoring & Security",
+    "category": "Monitoring, Security & Operations",
     "items": [
       "Azure Monitor",
       "Application Insights",
       "Observability",
       "Distributed Tracing",
       "RBAC",
-      "Azure Active Directory"
+      "Azure Active Directory",
+      "Incident / Ticket Management",
+      "Stakeholder Communication"
     ]
   },
   {
@@ -116,17 +189,34 @@
     "items": [
       "Apache Spark",
       "Delta Lake",
+      "Delta Tables",
+      "Unity Catalog",
       "ETL/ELT",
       "Medallion Architecture",
+      "CDC",
+      "Incremental Loading",
+      "Pipeline Orchestration",
       "Airflow",
+      "Data Lineage",
+      "Data Governance",
+      "Data Quality",
       "Data Warehousing",
       "Dimensional Modelling",
+      "Query Optimisation",
       "SQL Server",
       "MongoDB",
       "MySQL",
-      "Delta Tables",
-      "ChromaDB",
-      "Vector Search",
+      "Vector Search"
+    ]
+  },
+  {
+    "category": "BI & Reporting",
+    "items": [
+      "Power BI",
+      "DAX",
+      "Microsoft Fabric",
+      "Data Marts",
+      "KPI Reporting",
       "Excel"
     ]
   },
